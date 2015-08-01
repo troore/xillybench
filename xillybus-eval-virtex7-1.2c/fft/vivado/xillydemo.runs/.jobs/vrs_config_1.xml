@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Runs Version="1" Minor="0">
+	<Run Id="fifo_8x2048_synth_1" LaunchDir="/home/xuechao/Projects/xillybus-eval-virtex7-1.2c/fft/vivado/xillydemo.runs/fifo_8x2048_synth_1" FlowId="Vivado Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="fifo_32x512_synth_1" LaunchDir="/home/xuechao/Projects/xillybus-eval-virtex7-1.2c/fft/vivado/xillydemo.runs/fifo_32x512_synth_1" FlowId="Vivado Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="pcie_k7_vivado_synth_1" LaunchDir="/home/xuechao/Projects/xillybus-eval-virtex7-1.2c/fft/vivado/xillydemo.runs/pcie_k7_vivado_synth_1" FlowId="Vivado Synthesis" FromStepId="vivado" ToStepId="vivado"/>
+	<Run Id="synth_1" LaunchDir="/home/xuechao/Projects/xillybus-eval-virtex7-1.2c/fft/vivado/xillydemo.runs/synth_1" FlowId="Vivado Synthesis" FromStepId="vivado" ToStepId="vivado">
+		<Parent Id="fifo_8x2048_synth_1"/>
+		<Parent Id="fifo_32x512_synth_1"/>
+		<Parent Id="pcie_k7_vivado_synth_1"/>
+	</Run>
+</Runs>
+

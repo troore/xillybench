@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="synth_1" LaunchPart="xc7vx485tffg1761-2" LaunchTime="1438325756">
+  <File Type="VDS-TIMING-PB" Name="xillydemo_timing_summary_synth.pb"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="xillydemo_timing_summary_synth.rpt"/>
+  <File Type="RDS-DCP" Name="xillydemo.dcp"/>
+  <File Type="RDS-UTIL-PB" Name="xillydemo_utilization_synth.pb"/>
+  <File Type="RDS-UTIL" Name="xillydemo_utilization_synth.rpt"/>
+  <File Type="RDS-RDS" Name="xillydemo.vds"/>
+  <File Type="PA-TCL" Name="xillydemo.tcl"/>
+  <File Type="RUN-STRAT" Name="$PDATADIR/runs/synth_1/synth_1.psg"/>
+  <File Type="VDS-HWDEF" Name="$PSDKDIR/SDK/SDK_Export/hw/xillydemo.hwdef"/>
+  <File Type="RUN-SRCS" Name="$PDATADIR/runs/synth_1/sources.xml"/>
+  <File Type="RUN-CONSTRS" Name="$PDATADIR/runs/synth_1/constrs_in.xml"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PPRDIR/../src/xillydemo.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../src/xillybus.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../src/xillybus_core.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../../vivado-essentials/pcie_k7_8x.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../../vivado-essentials/pcie_k7_8x_pipe_clock.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3_94_17_s_pp_V_1.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3_94_17_s_pp_V_1.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_sitodp_32ns_64_3.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_sitodp_32ns_64_3.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fmul_32ns_32ns_32_3_max_dsp.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fmul_32ns_32ns_32_3_max_dsp.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_faddfsub_32ns_32ns_32_3_full_dsp.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_faddfsub_32ns_32ns_32_3_full_dsp.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/fft_nrvs_two_arrays.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/fft_nrvs_two_arrays.v"/>
+        <Attr Name="ImportTime" Val="1438051032"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/sin_cos_range_redux_cordic.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/sin_cos_range_redux_cordic.v"/>
+        <Attr Name="ImportTime" Val="1438051032"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3_94_17_s_pps_V.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3_94_17_s_pps_V.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_a_real.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_a_real.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper.v"/>
+        <Attr Name="ImportTime" Val="1438051032"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3small_125_53_17_s_pp_V_1.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3small_125_53_17_s_pp_V_1.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/sin_cos_range_redux_cordic_hls_ref_4oPi_table_256_V.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/sin_cos_range_redux_cordic_hls_ref_4oPi_table_256_V.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_sitofp_32ns_32_3.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_sitofp_32ns_32_3.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fptrunc_64ns_32_3.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fptrunc_64ns_32_3.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3_94_17_s.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3_94_17_s.v"/>
+        <Attr Name="ImportTime" Val="1438051032"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fadd_32ns_32ns_32_3_full_dsp.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fadd_32ns_32ns_32_3_full_dsp.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/sin_cos_range_redux_cordic_hls_cordic_ctab_table_128_V.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/sin_cos_range_redux_cordic_hls_cordic_ctab_table_128_V.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_p_str3.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_p_str3.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fsub_32ns_32ns_32_3_full_dsp.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fsub_32ns_32ns_32_3_full_dsp.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3small_125_53_17_s.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3small_125_53_17_s.v"/>
+        <Attr Name="ImportTime" Val="1438051032"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_ddiv_64ns_64ns_64_10.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_ddiv_64ns_64ns_64_10.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_dmul_64ns_64ns_64_4_max_dsp.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_dmul_64ns_64ns_64_4_max_dsp.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fpext_32ns_64_3.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fpext_32ns_64_3.v"/>
+        <Attr Name="ImportTime" Val="1438051033"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/vivado-essentials/pcie_k7_vivado_pipe_clock.v">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../vivado-essentials/pcie_k7_vivado_pipe_clock.v"/>
+        <Attr Name="ImportTime" Val="1438049714"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="xillydemo"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2014">
+      <Desc>Vivado Synthesis Defaults</Desc>
+    </StratHandle>
+    <Step Id="synth_design"/>
+  </Strategy>
+  <BlockFileSet Type="BlockSrcs" Name="pcie_k7_vivado"/>
+  <BlockFileSet Type="BlockSrcs" Name="fifo_32x512"/>
+  <BlockFileSet Type="BlockSrcs" Name="fifo_8x2048"/>
+</GenRun>

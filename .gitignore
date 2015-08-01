@@ -1,0 +1,7 @@
+*.o
+*.jou
+*.log
+*.app
+.autopilot
+syn
+impl

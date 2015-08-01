@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Product Version: Vivado v2014.1 (64-bit)              -->
+<!--                                                         -->
+<!-- Copyright (c) 2001-2013 Xilinx Inc, All rights reserved -->
+
+<Project Version="7" Minor="0" Path="/home/xuechao/Projects/xillybus-eval-virtex7-1.2c/fft/vivado/xillydemo.xpr">
+  <DefaultLaunch Dir="$PRUNDIR"/>
+  <Configuration>
+    <Option Name="Id" Val="0965c856e1b545b985f6d8474e230edb"/>
+    <Option Name="Part" Val="xc7vx485tffg1761-2"/>
+    <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
+    <Option Name="BoardPart" Val=""/>
+    <Option Name="SourceMgmtMode" Val="DisplayOnly"/>
+    <Option Name="ActiveSimSet" Val="sim_1"/>
+    <Option Name="DefaultLib" Val="xil_defaultlib"/>
+  </Configuration>
+  <FileSets Version="1" Minor="31">
+    <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+      <Filter Type="Srcs"/>
+      <File Path="$PPRDIR/../src/xillydemo.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../src/xillybus.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../src/xillybus_core.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../vivado-essentials/pcie_k7_8x.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../vivado-essentials/pcie_k7_8x_pipe_clock.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3_94_17_s_pp_V_1.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3_94_17_s_pp_V_1.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_sitodp_32ns_64_3.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_sitodp_32ns_64_3.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fmul_32ns_32ns_32_3_max_dsp.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fmul_32ns_32ns_32_3_max_dsp.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_faddfsub_32ns_32ns_32_3_full_dsp.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_faddfsub_32ns_32ns_32_3_full_dsp.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/fft_nrvs_two_arrays.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/fft_nrvs_two_arrays.v"/>
+          <Attr Name="ImportTime" Val="1438051032"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/sin_cos_range_redux_cordic.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/sin_cos_range_redux_cordic.v"/>
+          <Attr Name="ImportTime" Val="1438051032"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3_94_17_s_pps_V.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3_94_17_s_pps_V.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_a_real.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_a_real.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper.v"/>
+          <Attr Name="ImportTime" Val="1438051032"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3small_125_53_17_s_pp_V_1.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3small_125_53_17_s_pp_V_1.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/sin_cos_range_redux_cordic_hls_ref_4oPi_table_256_V.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/sin_cos_range_redux_cordic_hls_ref_4oPi_table_256_V.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_sitofp_32ns_32_3.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_sitofp_32ns_32_3.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fptrunc_64ns_32_3.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fptrunc_64ns_32_3.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3_94_17_s.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3_94_17_s.v"/>
+          <Attr Name="ImportTime" Val="1438051032"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fadd_32ns_32ns_32_3_full_dsp.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fadd_32ns_32ns_32_3_full_dsp.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/sin_cos_range_redux_cordic_hls_cordic_ctab_table_128_V.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/sin_cos_range_redux_cordic_hls_cordic_ctab_table_128_V.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_p_str3.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_p_str3.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fsub_32ns_32ns_32_3_full_dsp.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fsub_32ns_32ns_32_3_full_dsp.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/big_mult_v3small_125_53_17_s.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/big_mult_v3small_125_53_17_s.v"/>
+          <Attr Name="ImportTime" Val="1438051032"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_ddiv_64ns_64ns_64_10.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_ddiv_64ns_64ns_64_10.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_dmul_64ns_64ns_64_4_max_dsp.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_dmul_64ns_64ns_64_4_max_dsp.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/verilog/xillybus_wrapper_fpext_32ns_64_3.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../../hls-fft-1.0/coprocess/example/syn/verilog/xillybus_wrapper_fpext_32ns_64_3.v"/>
+          <Attr Name="ImportTime" Val="1438051033"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/imports/vivado-essentials/pcie_k7_vivado_pipe_clock.v">
+        <FileInfo>
+          <Attr Name="ImportPath" Val="$PPRDIR/../../vivado-essentials/pcie_k7_vivado_pipe_clock.v"/>
+          <Attr Name="ImportTime" Val="1438049714"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="DesignMode" Val="RTL"/>
+        <Option Name="TopModule" Val="xillydemo"/>
+        <Option Name="ExtraSearchPath" Val="/home/xuechao/Projects/xillybus-eval-virtex7-1.2c/core"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+      <Filter Type="Constrs"/>
+      <Config>
+        <Option Name="ConstrsType" Val="XDC"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1">
+      <Config>
+        <Option Name="DesignMode" Val="RTL"/>
+        <Option Name="TopAutoSet" Val="TRUE"/>
+        <Option Name="SrcSet" Val="sources_1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="fifo_8x2048" Type="BlockSrcs" RelSrcDir="$PSRCDIR/fifo_8x2048">
+      <File Path="$PPRDIR/../../vivado-essentials/fifo_8x2048/fifo_8x2048.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="fifo_8x2048"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="fifo_32x512" Type="BlockSrcs" RelSrcDir="$PSRCDIR/fifo_32x512">
+      <File Path="$PPRDIR/../../vivado-essentials/fifo_32x512/fifo_32x512.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="fifo_32x512"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="pcie_k7_vivado" Type="BlockSrcs" RelSrcDir="$PSRCDIR/pcie_k7_vivado">
+      <File Path="$PPRDIR/../../vivado-essentials/pcie_k7_vivado/pcie_k7_vivado.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="pcie_k7_vivado"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+  </FileSets>
+  <Runs Version="1" Minor="9">
+    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7vx485tffg1761-2" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" State="current" Dir="$PRUNDIR/synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2014">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+    </Run>
+    <Run Id="fifo_8x2048_synth_1" Type="Ft3:Synth" SrcSet="fifo_8x2048" Part="xc7vx485tffg1761-2" ConstrsSet="fifo_8x2048" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/fifo_8x2048_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2014">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+    </Run>
+    <Run Id="fifo_32x512_synth_1" Type="Ft3:Synth" SrcSet="fifo_32x512" Part="xc7vx485tffg1761-2" ConstrsSet="fifo_32x512" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/fifo_32x512_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2014">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+    </Run>
+    <Run Id="pcie_k7_vivado_synth_1" Type="Ft3:Synth" SrcSet="pcie_k7_vivado" Part="xc7vx485tffg1761-2" ConstrsSet="pcie_k7_vivado" Description="Vivado Synthesis Defaults" Dir="$PRUNDIR/pcie_k7_vivado_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2014">
+          <Desc>Vivado Synthesis Defaults</Desc>
+        </StratHandle>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+    </Run>
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7vx485tffg1761-2" ConstrsSet="constrs_1" Description="Vivado Implementation Defaults" State="current" SynthRun="synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2014">
+          <Desc>Vivado Implementation Defaults</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+    </Run>
+    <Run Id="fifo_8x2048_impl_1" Type="Ft2:EntireDesign" Part="xc7vx485tffg1761-2" ConstrsSet="fifo_8x2048" Description="Vivado Implementation Defaults" SynthRun="fifo_8x2048_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2014">
+          <Desc>Vivado Implementation Defaults</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+    </Run>
+    <Run Id="fifo_32x512_impl_1" Type="Ft2:EntireDesign" Part="xc7vx485tffg1761-2" ConstrsSet="fifo_32x512" Description="Vivado Implementation Defaults" SynthRun="fifo_32x512_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2014">
+          <Desc>Vivado Implementation Defaults</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+    </Run>
+    <Run Id="pcie_k7_vivado_impl_1" Type="Ft2:EntireDesign" Part="xc7vx485tffg1761-2" ConstrsSet="pcie_k7_vivado" Description="Vivado Implementation Defaults" SynthRun="pcie_k7_vivado_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2014">
+          <Desc>Vivado Implementation Defaults</Desc>
+        </StratHandle>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+    </Run>
+  </Runs>
+</Project>
