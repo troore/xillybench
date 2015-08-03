@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vivadoHLSLog:LogRoot xmlns:vivadoHLSLog="www.xilinx.com/vivadoHLSLog">
+  <errorLogs>
+    <logs>
+      <synLog/>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </errorLogs>
+  <warningLogs>
+    <logs>
+      <synLog>
+        <logs message="@W [RTGEN-101] Legalizing port name 'xillybus_wrapper/out' to 'xillybus_wrapper/out_r'." projectName="coprocess" solutionName="example" date="2015-07-30T08:11:07.536+0800" type="Warning"/>
+        <logs message="@W [RTGEN-101] Legalizing port name 'xillybus_wrapper/in' to 'xillybus_wrapper/in_r'." projectName="coprocess" solutionName="example" date="2015-07-30T08:11:07.531+0800" type="Warning"/>
+        <logs message="@W [RTGEN-101] Legalizing port name 'dct_base/output' to 'dct_base/output_r'." projectName="coprocess" solutionName="example" date="2015-07-30T08:11:07.527+0800" type="Warning"/>
+        <logs message="@W [RTGEN-101] Legalizing port name 'dct_base/input' to 'dct_base/input_r'." projectName="coprocess" solutionName="example" date="2015-07-30T08:11:07.523+0800" type="Warning"/>
+        <logs message="@W [RTGEN-101] Legalizing port name 'dct_opt/output' to 'dct_opt/output_r'." projectName="coprocess" solutionName="example" date="2015-07-30T08:11:07.518+0800" type="Warning"/>
+        <logs message="@W [RTGEN-101] Legalizing port name 'dct_opt/input' to 'dct_opt/input_r'." projectName="coprocess" solutionName="example" date="2015-07-30T08:11:07.465+0800" type="Warning"/>
+        <logs message="@W [RTGEN-101] Legalizing port name 'read_data_opt/input' to 'read_data_opt/input_r'." projectName="coprocess" solutionName="example" date="2015-07-30T08:11:07.461+0800" type="Warning"/>
+      </synLog>
+      <simLog/>
+      <mgLog/>
+      <packageLog/>
+      <csimLog/>
+    </logs>
+  </warningLogs>
+</vivadoHLSLog:LogRoot>

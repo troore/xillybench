@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="xilly_debug.c" path="/home/shuowang/bin/VC707_July24/prj/matrix_1/hls-matrix_July29/coprocess/example/src/xilly_debug.c"/>
+    <originFiles name="main.c" path="/home/shuowang/bin/VC707_July24/prj/matrix_1/hls-matrix_July29/coprocess/example/src/main.c"/>
+  </source>
+  <testbench/>
+</autopilotfilemapping:AutoPilotFileMapping>

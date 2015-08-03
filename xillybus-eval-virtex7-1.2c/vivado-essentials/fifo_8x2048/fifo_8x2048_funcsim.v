@@ -1,10 +1,10 @@
 // Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2014.1 (lin64) Build 881834 Fri Apr  4 14:00:25 MDT 2014
-// Date        : Fri Jul 31 14:53:31 2015
+// Date        : Mon Aug  3 23:00:18 2015
 // Host        : cecaraw running 64-bit openSUSE 13.2 (Harlequin) (x86_64)
 // Command     : write_verilog -force -mode funcsim
-//               /home/xuechao/Projects/xillybus-eval-virtex7-1.2c/vivado-essentials/fifo_8x2048/fifo_8x2048_funcsim.v
+//               /home/xuechao/Projects/xillybench/xillybus-eval-virtex7-1.2c/vivado-essentials/fifo_8x2048/fifo_8x2048_funcsim.v
 // Design      : fifo_8x2048
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.

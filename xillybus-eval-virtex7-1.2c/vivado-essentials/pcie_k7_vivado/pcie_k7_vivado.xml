@@ -2671,6 +2671,61 @@
   <spirit:model>
     <spirit:views>
       <spirit:view>
+        <spirit:name>xilinx_verilogsynthesis</spirit:name>
+        <spirit:displayName>Verilog Synthesis</spirit:displayName>
+        <spirit:envIdentifier>verilogSource:vivado.xilinx.com:synthesis</spirit:envIdentifier>
+        <spirit:language>verilog</spirit:language>
+        <spirit:modelName>pcie_k7_vivado_pcie2_top</spirit:modelName>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_verilogsynthesis_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>customizationCRC</spirit:name>
+            <spirit:value>ae4dd0d5</spirit:value>
+          </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>customizationCRCversion</spirit:name>
+            <spirit:value>4</spirit:value>
+          </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>GENtimestamp</spirit:name>
+            <spirit:value>Mon Aug 03 07:38:38 UTC 2015</spirit:value>
+          </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>StaleAtRelink</spirit:name>
+            <spirit:value>false</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+      <spirit:view>
+        <spirit:name>xilinx_verilogsynthesiswrapper</spirit:name>
+        <spirit:displayName>Verilog Synthesis Wrapper</spirit:displayName>
+        <spirit:envIdentifier>verilogSource:vivado.xilinx.com:synthesis.wrapper</spirit:envIdentifier>
+        <spirit:language>verilog</spirit:language>
+        <spirit:fileSetRef>
+          <spirit:localName>xilinx_verilogsynthesiswrapper_view_fileset</spirit:localName>
+        </spirit:fileSetRef>
+        <spirit:parameters>
+          <spirit:parameter>
+            <spirit:name>customizationCRC</spirit:name>
+            <spirit:value>ae4dd0d5</spirit:value>
+          </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>customizationCRCversion</spirit:name>
+            <spirit:value>4</spirit:value>
+          </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>GENtimestamp</spirit:name>
+            <spirit:value>Mon Aug 03 07:38:38 UTC 2015</spirit:value>
+          </spirit:parameter>
+          <spirit:parameter>
+            <spirit:name>StaleAtRelink</spirit:name>
+            <spirit:value>false</spirit:value>
+          </spirit:parameter>
+        </spirit:parameters>
+      </spirit:view>
+      <spirit:view>
         <spirit:name>xilinx_examples</spirit:name>
         <spirit:displayName>Examples</spirit:displayName>
         <spirit:envIdentifier>:vivado.xilinx.com:examples</spirit:envIdentifier>
@@ -2689,7 +2744,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Jul 28 02:15:14 UTC 2015</spirit:value>
+            <spirit:value>Mon Aug 03 14:26:24 UTC 2015</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -2716,7 +2771,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Jul 28 02:15:16 UTC 2015</spirit:value>
+            <spirit:value>Mon Aug 03 14:26:27 UTC 2015</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -2760,62 +2815,7 @@
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Jul 28 02:15:17 UTC 2015</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>StaleAtRelink</spirit:name>
-            <spirit:value>false</spirit:value>
-          </spirit:parameter>
-        </spirit:parameters>
-      </spirit:view>
-      <spirit:view>
-        <spirit:name>xilinx_verilogsynthesis</spirit:name>
-        <spirit:displayName>Verilog Synthesis</spirit:displayName>
-        <spirit:envIdentifier>verilogSource:vivado.xilinx.com:synthesis</spirit:envIdentifier>
-        <spirit:language>verilog</spirit:language>
-        <spirit:modelName>pcie_k7_vivado_pcie2_top</spirit:modelName>
-        <spirit:fileSetRef>
-          <spirit:localName>xilinx_verilogsynthesis_view_fileset</spirit:localName>
-        </spirit:fileSetRef>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>ae4dd0d5</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRCversion</spirit:name>
-            <spirit:value>4</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Jul 28 02:16:59 UTC 2015</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>StaleAtRelink</spirit:name>
-            <spirit:value>false</spirit:value>
-          </spirit:parameter>
-        </spirit:parameters>
-      </spirit:view>
-      <spirit:view>
-        <spirit:name>xilinx_verilogsynthesiswrapper</spirit:name>
-        <spirit:displayName>Verilog Synthesis Wrapper</spirit:displayName>
-        <spirit:envIdentifier>verilogSource:vivado.xilinx.com:synthesis.wrapper</spirit:envIdentifier>
-        <spirit:language>verilog</spirit:language>
-        <spirit:fileSetRef>
-          <spirit:localName>xilinx_verilogsynthesiswrapper_view_fileset</spirit:localName>
-        </spirit:fileSetRef>
-        <spirit:parameters>
-          <spirit:parameter>
-            <spirit:name>customizationCRC</spirit:name>
-            <spirit:value>ae4dd0d5</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>customizationCRCversion</spirit:name>
-            <spirit:value>4</spirit:value>
-          </spirit:parameter>
-          <spirit:parameter>
-            <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Tue Jul 28 02:16:59 UTC 2015</spirit:value>
+            <spirit:value>Mon Aug 03 14:26:28 UTC 2015</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>StaleAtRelink</spirit:name>
@@ -10916,162 +10916,6 @@
   </spirit:choices>
   <spirit:fileSets>
     <spirit:fileSet>
-      <spirit:name>xilinx_examples_view_fileset</spirit:name>
-      <spirit:file>
-        <spirit:name>example_design/EP_MEM.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/PIO_EP_MEM_ACCESS.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/PIO_EP.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/PIO_RX_ENGINE.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/PIO_TO_CTRL.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/PIO_TX_ENGINE.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/PIO.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/pcie_app_7x.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/xilinx_pcie_2_1_ep_7x.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>hierarchy.txt</spirit:name>
-        <spirit:userFileType>text</spirit:userFileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/xilinx_pcie_7x_ep_x8g1_VC707.xdc</spirit:name>
-        <spirit:userFileType>xdc</spirit:userFileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/support/pcie_k7_vivado_support.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>example_design/support/pcie_k7_vivado_pipe_clock.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-    </spirit:fileSet>
-    <spirit:fileSet>
-      <spirit:name>xilinx_examplessimulation_view_fileset</spirit:name>
-      <spirit:file>
-        <spirit:name>simulation/dsport/pci_exp_expect_tasks.vh</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/dsport/pci_exp_usrapp_cfg.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/dsport/pci_exp_usrapp_com.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/dsport/pci_exp_usrapp_pl.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/dsport/pci_exp_usrapp_rx.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/dsport/pci_exp_usrapp_tx.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/functional/sys_clk_gen_ds.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/functional/sys_clk_gen.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/dsport/pcie_axi_trn_bridge.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/functional/board.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/functional/board_common.vh</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/tests/sample_tests1.vh</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/tests/tests.vh</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/dsport/pcie_2_1_rport_7x.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-      <spirit:file>
-        <spirit:name>simulation/dsport/xilinx_pcie_2_1_rport_7x.v</spirit:name>
-        <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
-      </spirit:file>
-    </spirit:fileSet>
-    <spirit:fileSet>
-      <spirit:name>xilinx_examplesscriptext_view_fileset</spirit:name>
-    </spirit:fileSet>
-    <spirit:fileSet>
-      <spirit:name>xilinx_examplesscript_view_fileset</spirit:name>
-      <spirit:file>
-        <spirit:name>pcie_k7_vivado_ex.tcl</spirit:name>
-        <spirit:fileType>tclSource</spirit:fileType>
-      </spirit:file>
-    </spirit:fileSet>
-    <spirit:fileSet>
       <spirit:name>xilinx_verilogsynthesis_view_fileset</spirit:name>
       <spirit:file>
         <spirit:name>source/pcie_k7_vivado_pipe_eq.v</spirit:name>
@@ -11268,6 +11112,162 @@
         <spirit:name>synth/pcie_k7_vivado.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
         <spirit:logicalName>xil_defaultlib</spirit:logicalName>
+      </spirit:file>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_examples_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>example_design/EP_MEM.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/PIO_EP_MEM_ACCESS.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/PIO_EP.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/PIO_RX_ENGINE.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/PIO_TO_CTRL.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/PIO_TX_ENGINE.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/PIO.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/pcie_app_7x.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/xilinx_pcie_2_1_ep_7x.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>hierarchy.txt</spirit:name>
+        <spirit:userFileType>text</spirit:userFileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/xilinx_pcie_7x_ep_x8g1_VC707.xdc</spirit:name>
+        <spirit:userFileType>xdc</spirit:userFileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/support/pcie_k7_vivado_support.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>example_design/support/pcie_k7_vivado_pipe_clock.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_examplessimulation_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>simulation/dsport/pci_exp_expect_tasks.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/dsport/pci_exp_usrapp_cfg.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/dsport/pci_exp_usrapp_com.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/dsport/pci_exp_usrapp_pl.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/dsport/pci_exp_usrapp_rx.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/dsport/pci_exp_usrapp_tx.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/functional/sys_clk_gen_ds.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/functional/sys_clk_gen.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/dsport/pcie_axi_trn_bridge.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/functional/board.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/functional/board_common.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/tests/sample_tests1.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/tests/tests.vh</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/dsport/pcie_2_1_rport_7x.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+      <spirit:file>
+        <spirit:name>simulation/dsport/xilinx_pcie_2_1_rport_7x.v</spirit:name>
+        <spirit:fileType>verilogSource</spirit:fileType>
+        <spirit:exportedName>pcie_k7_vivado_pcie2_top</spirit:exportedName>
+      </spirit:file>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_examplesscriptext_view_fileset</spirit:name>
+    </spirit:fileSet>
+    <spirit:fileSet>
+      <spirit:name>xilinx_examplesscript_view_fileset</spirit:name>
+      <spirit:file>
+        <spirit:name>pcie_k7_vivado_ex.tcl</spirit:name>
+        <spirit:fileType>tclSource</spirit:fileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>

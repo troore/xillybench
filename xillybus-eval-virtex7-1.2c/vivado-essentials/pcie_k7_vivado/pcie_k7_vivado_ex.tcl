@@ -3,7 +3,7 @@
 #-------------------------------------------------------------
 
 # Declare source IP directory
-set srcIpDir "/home/xuechao/xillybus-eval-virtex7-1.2c/vivado-essentials/pcie_k7_vivado"
+set srcIpDir "/home/xuechao/Projects/xillybench/xillybus-eval-virtex7-1.2c/vivado-essentials/pcie_k7_vivado"
 
 # Create project
 create_project -name pcie_k7_vivado_example -force
@@ -99,7 +99,7 @@ set_property TOP [lindex [find_top] 0] [current_fileset]
 update_compile_order -fileset [current_fileset]
 update_compile_order -fileset [current_fileset -simset]
 
-set dfile /home/xuechao/xillybus-eval-virtex7-1.2c/vivado-essentials/pcie_k7_vivado/oepdone.txt
+set dfile /home/xuechao/Projects/xillybench/xillybus-eval-virtex7-1.2c/vivado-essentials/pcie_k7_vivado/oepdone.txt
 set doneFile [open $dfile w]
 puts $doneFile "Open Example Project DONE"
 close $doneFile
