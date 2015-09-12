@@ -92,18 +92,17 @@ void gen_mm_inputs(int *a, int *b, int n)
 int check_results(int *m1, int *m2, int n)
 {
 	int i, j;
-	int flag = 1;
+	int err_no = 0;
 
-	for (i = 0; i < n && flag; i++)
-	{
-		for (j = 0; j < n && flag; j++)
-		{
-			if (m1[i * n + j] != m2[i * n + j])
-				flag = 0;
+	for (i = 0; i < n; i++) {
+		for (j = 0; j < n; j++) {
+			if (m1[i * n + j] != m2[i * n + j]) {
+				printf("%d: %d %d\n", err_no, m1[i * n + j], m2[i * n + j]);
+			}
 		}
 	}
 
-	return flag;
+	return err_no;
 }
 
 

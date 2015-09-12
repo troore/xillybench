@@ -8,5 +8,6 @@ syn
 impl
 csim
 sim
+bit
 vivado
 vivado-ip-repo
