@@ -6,3 +6,7 @@
 .autopilot
 syn
 impl
+csim
+sim
+vivado
+vivado-ip-repo
