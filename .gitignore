@@ -11,3 +11,7 @@ sim
 bit
 vivado
 vivado-ip-repo
+
+# Statistics
+*.dat
+*.log
