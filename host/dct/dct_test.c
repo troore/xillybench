@@ -1,18 +1,5 @@
 #include "dct.h"
-
-#include <sys/time.h>
-
-// ms
-double dtime()
-{
-	double tmseconds = 0.0;
-	struct timeval mytime;
-
-	gettimeofday(&mytime, (struct timezone*)0);
-	tmseconds = (double)(mytime.tv_sec + mytime.tv_usec * 1.0e-6);
-
-	return tmseconds * 1000.0;
-}
+#include "timer.h"
 
 int main() {
 	short a[DW * N], b[DW * N];
