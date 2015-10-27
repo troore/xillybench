@@ -44,7 +44,7 @@ void dct_2d(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
 }
 */
 
-void read_data(short input[N], short buf[DCT_SIZE][DCT_SIZE])
+void read_data(dct_data_t input[N], dct_data_t buf[DCT_SIZE][DCT_SIZE])
 {
 	int r, c;
 
@@ -54,7 +54,7 @@ void read_data(short input[N], short buf[DCT_SIZE][DCT_SIZE])
 	}
 }
 
-void write_data(short buf[DCT_SIZE][DCT_SIZE], short output[N])
+void write_data(dct_data_t buf[DCT_SIZE][DCT_SIZE], dct_data_t output[N])
 {
 	int r, c;
 
@@ -64,8 +64,8 @@ void write_data(short buf[DCT_SIZE][DCT_SIZE], short output[N])
 	}
 }
 
-void dct_2d(short in_block[DCT_SIZE][DCT_SIZE],
-			short out_block[DCT_SIZE][DCT_SIZE])
+void dct_2d(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
+			dct_data_t out_block[DCT_SIZE][DCT_SIZE])
 {
 	int i;
 	
@@ -74,8 +74,8 @@ void dct_2d(short in_block[DCT_SIZE][DCT_SIZE],
 	}
 }
 
-void transpose(short in_block[DCT_SIZE][DCT_SIZE],
-			   short out_block[DCT_SIZE][DCT_SIZE])
+void transpose(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
+			   dct_data_t out_block[DCT_SIZE][DCT_SIZE])
 {
 	int i, j;
 	
@@ -84,8 +84,8 @@ void transpose(short in_block[DCT_SIZE][DCT_SIZE],
 			out_block[i][j] = in_block[j][i];
 }
 
-void block_memcpy(short in_block[DCT_SIZE][DCT_SIZE],
-			   short out_block[DCT_SIZE][DCT_SIZE])
+void block_memcpy(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
+			   dct_data_t out_block[DCT_SIZE][DCT_SIZE])
 {
 	int i, j;
 	
@@ -94,12 +94,12 @@ void block_memcpy(short in_block[DCT_SIZE][DCT_SIZE],
 			out_block[i][j] = in_block[i][j];
 }
 
-void dct(short input[DW * N], short output[DW * N])
+void dct(dct_data_t input[DW * N], dct_data_t output[DW * N])
 {
 	int i;
    
-	short buf_2d_in[D][DCT_SIZE][DCT_SIZE];
-	short buf_2d_out[D][DCT_SIZE][DCT_SIZE];
+	dct_data_t buf_2d_in[D][DCT_SIZE][DCT_SIZE];
+	dct_data_t buf_2d_out[D][DCT_SIZE][DCT_SIZE];
 
 	dct_data_t row_outbuf[D][DCT_SIZE][DCT_SIZE];
 	dct_data_t col_outbuf[D][DCT_SIZE][DCT_SIZE], col_inbuf[D][DCT_SIZE][DCT_SIZE];

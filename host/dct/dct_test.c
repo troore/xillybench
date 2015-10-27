@@ -1,8 +1,11 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "dct.h"
 #include "timer.h"
 
 int main() {
-	short a[DW * N], b[DW * N];
+	dct_data_t a[DW * N], b[DW * N];
 	int retval = 0, i, j;
 	FILE *fp;
 
