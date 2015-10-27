@@ -14,6 +14,10 @@ pthread_mutex_t thread_counter_mutex;
 pthread_cond_t thread_counter_cv;
 int thread_counter;
 
+#ifdef FPGA
+int fdr, fdw;
+#endif
+
 typedef struct {
 	dct_data_t *buf_2d_in;
 	dct_data_t *row_outbuf;
@@ -160,16 +164,9 @@ void *half_dct_2d_pth_1(void *params)
 	Params *p = (Params *)params;
 
 #ifdef FPGA
-	int fdr, fdw;
 	dct_data_t *in, *out;
 	int len;
 
-	fdr = open("/dev/xillybus_read_8", O_RDONLY);
-	fdw = open("/dev/xillybus_write_8", O_WRONLY);
-	if ((fdr < 0) || (fdw < 0)) {
-		perror("Failed to open Xillybus device file(s)");
-		exit(1);
-	}
 	len = SFN * DCT_SIZE * DCT_SIZE;
 	in = (dct_data_t *)malloc((1 + len) * sizeof(dct_data_t));
 	in[0] = 1;
@@ -198,9 +195,6 @@ void *half_dct_2d_pth_1(void *params)
 
 #ifdef FPGA
 	free(in);
-
-	close(fdr);
-	close(fdw);
 #endif
 
 	return NULL;
@@ -212,16 +206,9 @@ void *half_dct_2d_pth_0(void *params)
 	TP0Params *p = (TP0Params *)params;
 
 #ifdef FPGA
-	int fdr, fdw;
 	dct_data_t *in, *out;
 	int len;
 
-	fdr = open("/dev/xillybus_read_32", O_RDONLY);
-	fdw = open("/dev/xillybus_write_32", O_WRONLY);
-	if ((fdr < 0) || (fdw < 0)) {
-		perror("Failed to open Xillybus device file(s)");
-		exit(1);
-	}
 	len = SFN * DCT_SIZE * DCT_SIZE;
 	in = (dct_data_t *)malloc((1 + len) * sizeof(dct_data_t));
 	in[0] = 0;
@@ -252,9 +239,6 @@ void *half_dct_2d_pth_0(void *params)
 
 #ifdef FPGA
 	free(in);
-
-	close(fdr);
-	close(fdw);
 #endif
 
 	return NULL;
@@ -300,6 +284,17 @@ void dct(dct_data_t input[DW * N], dct_data_t output[DW * N])
 	pthread_t thread_id[D];
 	Params thread_args[D];
 	TP0Params tp0_thread_args;
+
+#ifdef FPGA
+//	int fdr, fdw;
+
+	fdr = open("/dev/xillybus_read_32", O_RDONLY);
+	fdw = open("/dev/xillybus_write_32", O_WRONLY);
+	if ((fdr < 0) || (fdw < 0)) {
+		perror("Failed to open Xillybus device file(s)");
+		exit(1);
+	}
+#endif
    
 //	int buf_2d_in[D][DCT_SIZE][DCT_SIZE];
 //	int buf_2d_out[D][DCT_SIZE][DCT_SIZE];
@@ -351,6 +346,11 @@ void dct(dct_data_t input[DW * N], dct_data_t output[DW * N])
 
 	pthread_join(thread_id[1], NULL);
 	pthread_join(thread_id[0], NULL);
+
+#ifdef FPGA
+	close(fdr);
+	close(fdw);
+#endif
 	
 	//post operations
 	dct_2d(col_inbuf1, col_outbuf1);
