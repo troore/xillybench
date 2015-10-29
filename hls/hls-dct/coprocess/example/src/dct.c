@@ -25,7 +25,7 @@ void dct_2d(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
 {
 	unsigned i;
 	unsigned k;
-	for (k = 0; k < DW; k++) {
+	for (k = 0; k < /*DW*/SFN; k++) {
 	// DCT rows
 Row_DCT_Loop:
 	for(i = 0; i < DCT_SIZE; i++) {

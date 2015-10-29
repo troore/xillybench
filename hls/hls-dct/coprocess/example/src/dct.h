@@ -3,6 +3,7 @@
 
 //#define DW 16
 #define DW 10000
+#define SFN 2000
 //#define N 1024/DW
 #define N 64
 #define NUM_TRANS 16

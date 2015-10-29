@@ -1,5 +1,5 @@
-#ifndef __DCT_H__
-#define __DCT_H__
+#ifndef __DCT_CO_H_
+#define __DCT_CO_H_
 
 //#define DW 16
 #define DW 10000

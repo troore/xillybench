@@ -24,7 +24,7 @@ LDFLAGS_PTH := $(LDFLAGS_BASE) -lpthread
 
 CFLAGS := -g -Wall
 CFLAGS += -I../timer
-CFLAGS += -DFPGA
+#CFLAGS += -DFPGA
 
 dct.out: $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS_BASE)

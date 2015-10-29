@@ -42,3 +42,15 @@ void half_dct_2d_1(dct_data_t *in_block, dct_data_t *out_block)
 	}
 }
 
+void half_dct_2d_test(dct_data_t *in_block, dct_data_t *out_block, int sfn)
+{
+	int k, i;
+
+	for (k = 0; k < sfn; k++) {
+		for (i = 0; i < DCT_SIZE; i++) {
+			dct_1d(in_block + k * DCT_SIZE * DCT_SIZE + i * DCT_SIZE,
+					out_block + k * DCT_SIZE * DCT_SIZE + i * DCT_SIZE);
+		}
+	}
+}
+

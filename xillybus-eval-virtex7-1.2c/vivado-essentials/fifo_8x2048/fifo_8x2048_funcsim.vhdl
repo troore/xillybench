@@ -1,7 +1,7 @@
 -- Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2014.1 (lin64) Build 881834 Fri Apr  4 14:00:25 MDT 2014
--- Date        : Tue Oct 27 23:26:59 2015
+-- Date        : Thu Oct 29 19:01:04 2015
 -- Host        : cecaraw running 64-bit openSUSE 13.2 (Harlequin) (x86_64)
 -- Command     : write_vhdl -force -mode funcsim
 --               /home/xuechao/Projects/xillybench/xillybus-eval-virtex7-1.2c/vivado-essentials/fifo_8x2048/fifo_8x2048_funcsim.vhdl

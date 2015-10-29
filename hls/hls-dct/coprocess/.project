@@ -90,7 +90,12 @@
 		<link>
 			<name>testbench</name>
 			<type>2</type>
-			<location>/home/shuowang/bin/VC707/prj/DCT_July29/hls-dct_wrapper_both/coprocess/.apc/.tb</location>
+			<location>/home/xuechao/Projects/xillybench/hls/hls-dct/coprocess/.apc/.tb</location>
+		</link>
+		<link>
+			<name>dct_2d_test/constraints</name>
+			<type>2</type>
+			<location>/home/xuechao/Projects/xillybench/hls/hls-dct/coprocess/dct_2d_test/.tcls</location>
 		</link>
 		<link>
 			<name>example/constraints</name>
@@ -98,9 +103,34 @@
 			<location>/home/shuowang/bin/VC707/prj/DCT_July29/hls-dct_wrapper_both/coprocess/example/.tcls</location>
 		</link>
 		<link>
-			<name>source/main.c</name>
+			<name>source/dct_2d.c</name>
 			<type>1</type>
-			<location>/home/shuowang/bin/VC707/prj/DCT_July29/hls-dct_wrapper_both/coprocess/example/src/main.c</location>
+			<location>/home/xuechao/Projects/xillybench/hls/hls-dct/coprocess/dct_2d_test/src/dct_2d.c</location>
+		</link>
+		<link>
+			<name>source/xilly_debug.c</name>
+			<type>1</type>
+			<location>/home/xuechao/Projects/xillybench/hls/hls-dct/coprocess/dct_2d_test/src/xilly_debug.c</location>
+		</link>
+		<link>
+			<name>source/xilly_wrapper_test.c</name>
+			<type>1</type>
+			<location>/home/xuechao/Projects/xillybench/hls/hls-dct/coprocess/dct_2d_test/src/xilly_wrapper_test.c</location>
+		</link>
+		<link>
+			<name>dct_2d_test/constraints/.xml.directive</name>
+			<type>1</type>
+			<location>/home/xuechao/Projects/xillybench/hls/hls-dct/coprocess/dct_2d_test/dct_2d_test.directive</location>
+		</link>
+		<link>
+			<name>dct_2d_test/constraints/directives.tcl</name>
+			<type>1</type>
+			<location>/home/xuechao/Projects/xillybench/hls/hls-dct/coprocess/dct_2d_test/directives.tcl</location>
+		</link>
+		<link>
+			<name>dct_2d_test/constraints/script.tcl</name>
+			<type>1</type>
+			<location>/home/xuechao/Projects/xillybench/hls/hls-dct/coprocess/dct_2d_test/script.tcl</location>
 		</link>
 		<link>
 			<name>example/constraints/.xml.directive</name>
