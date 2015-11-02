@@ -1,0 +1,26 @@
+<AutoPilot:solution xmlns:AutoPilot="com.autoesl.autopilot.solution">
+    <config>
+        <config_interface all="ap_fifo" expose_global="1"/>
+        <schedule model="xillybus_wrapper"/>
+    </config>
+    <ExportDesign askAgain="true" evaluate="false" rtl="verilog" formatName="ipcatalog">
+        <Format formatName="ipcatalog"/>
+    </ExportDesign>
+    <name>
+        <value string="solution1"/>
+    </name>
+    <project>
+        <value string="fpga_base_prj"/>
+    </project>
+    <targetInfo>
+        <TargetInfo value="xc7vx485t:ffg1761:-2"/>
+    </targetInfo>
+    <libraryList>
+        <library value="xilinx/virtex7/virtex7" name="DefaultPlatform"/>
+        <library value="xilinx/virtex7/virtex7_fpv6" name="DefaultPlatform"/>
+    </libraryList>
+    <clockList>
+        <clock name="default" default="false" period="10"/>
+    </clockList>
+</AutoPilot:solution>
+
