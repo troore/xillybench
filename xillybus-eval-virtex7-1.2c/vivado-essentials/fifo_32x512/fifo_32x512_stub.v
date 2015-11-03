@@ -1,7 +1,7 @@
 // Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2014.1 (lin64) Build 881834 Fri Apr  4 14:00:25 MDT 2014
-// Date        : Sun Nov  1 22:16:44 2015
+// Date        : Mon Nov  2 21:35:13 2015
 // Host        : cecaraw running 64-bit openSUSE 13.2 (Harlequin) (x86_64)
 // Command     : write_verilog -force -mode synth_stub
 //               /home/xuechao/Projects/xillybench/xillybus-eval-virtex7-1.2c/vivado-essentials/fifo_32x512/fifo_32x512_stub.v
