@@ -105,7 +105,6 @@ int main(int argc, char *argv[]) {
 
 	stop = dtime();
 	elapsed_time = stop - start;
-	printf("%d %d\n", nw, nr);
 	printf("Write time: %.3lfms\n", elapsed_time);
 
 	free(in);

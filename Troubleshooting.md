@@ -30,3 +30,7 @@ mm cannot be synthesized by vivado when "N" is larger (e.g., 2^7), and the optim
 	}
 
 2. The "read" in the pthread version mm/mm_pth.c cannot respond. The motivation of this example is to separate "write" and "read" in two threads.
+
+**[2015-11-05]**
+
+dct_half cannot be HLSed when SFN achieves 100000. It is stuck at "cheking synthesizability".

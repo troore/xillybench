@@ -2,7 +2,7 @@
 #define __DCT_2D_H_
 
 //#define DW 10000
-#define SFN 1000000
+#define SFN 100000
 #define DCT_SIZE 8
 
 #define N 64

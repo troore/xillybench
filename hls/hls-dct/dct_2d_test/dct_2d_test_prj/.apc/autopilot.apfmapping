@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
-  <source>
-    <originFiles name="xilly_debug.c" path="/home/xuechao/Projects/xillybench/hls/xilly_debug/xilly_debug.c"/>
-    <originFiles name="dct_2d.c" path="/home/xuechao/Projects/xillybench/hls/hls-dct/dct_2d_test/src/dct_2d.c"/>
-    <originFiles name="xilly_wrapper_test.c" path="/home/xuechao/Projects/xillybench/hls/hls-dct/dct_2d_test/src/xilly_wrapper_test.c"/>
-  </source>
-  <testbench/>
-</autopilotfilemapping:AutoPilotFileMapping>

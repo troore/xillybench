@@ -1,16 +1,16 @@
-TARGETS := mm.out mm_co.out mm_wr.out mm_pth.out
+TARGETS := mm_host.out mm_co.out mm_wr.out mm_pth.out
 
-OBJS := mm.o ../timer/timer.o
-OBJS_CO = $(subst mm,mm_co,$(OBJS))
-OBJS_WR = $(subst mm,mm_wr,$(OBJS))
-OBJS_PTH = $(subst mm,mm_pth,$(OBJS))
+OBJS := mm_host.o ../timer/timer.o
+OBJS_CO = $(subst host,co,$(OBJS))
+OBJS_WR = $(subst host,wr,$(OBJS))
+OBJS_PTH = $(subst host,pth,$(OBJS))
 
 CFLAGS := -g -Wall -I../timer
 
 #CFLAGS += -DXILLY
 #CFLAGS += -DGOLDEN
 
-mm.out: $(OBJS)
+mm_host.out: $(OBJS)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 mm_wr.out: $(OBJS_WR)
@@ -26,4 +26,4 @@ mm_co.out: $(OBJS_CO)
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	rm -rf $(TARGETS) $(OBJS) $(OBJS_CO) $(OBJS_WR)
+	rm -rf *.o $(TARGETS)

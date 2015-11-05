@@ -14,14 +14,14 @@ void xillybus_wrapper(int *in, int *out) {
 
 //	sfn = *in++;
 //	len = sfn * DCT_SIZE * DCT_SIZE;
-	for (i = 0; i < DCT_SIZE * DCT_SIZE; i++) {
+	for (i = 0; i < N; i++) {
 		a[i] = (int)*in++;
 	} 
 
 //	half_dct_2d_test(a, b, sfn);
 	half_dct_2d_test(a, b);
 
-	for (i = 0; i < DCT_SIZE * DCT_SIZE; i++) {
+	for (i = 0; i < N; i++) {
 	//	b[i] = 3;
 //		b[i] = a[i];
 		*out++ = (int)b[i];

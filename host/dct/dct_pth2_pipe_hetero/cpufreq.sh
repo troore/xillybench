@@ -1,0 +1,1 @@
+/home/xuechao/cpufreq.sh
