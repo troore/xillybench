@@ -1,6 +1,9 @@
-#include "dct.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
 
-#include "time.h"
+#include "dct.h"
 
 void dct_1d(dct_data_t *src, dct_data_t *dst)
 {
@@ -23,33 +26,36 @@ void dct_2d(dct_data_t *in_block, dct_data_t *out_block)
 {
 	dct_data_t row_outbuf[DCT_SIZE * DCT_SIZE];
 //	dct_data_t col_outbuf[DCT_SIZE][DCT_SIZE], col_inbuf[DCT_SIZE][DCT_SIZE];
+	int fdr, fdw;
 	unsigned i, j;
 	int h;
 
-	for (h = 0; h < SFN; h++) {
+	fdr = open("/dev/xillybus_read_32", O_RDONLY);
+	fdw = open("/dev/xillybus_write_32", O_WRONLY);
+	if ((fdr < 0) || (fdw < 0)) {
+		perror("Failed to open Xillybus device file(s)");
+		exit(1);
+	}
+	write(fdw, (void *)in_block, N * sizeof(dct_data_t));
+	read(fdr, (void *)row_outbuf, N * sizeof(dct_data_t));
+
 	// DCT rows
+	/*
 	for(i = 0; i < DCT_SIZE; i++) {
 		dct_1d(in_block + i * DCT_SIZE, row_outbuf + i * DCT_SIZE);
 	}
-	/*
+	*/
+	for (h = 0; h < SFN; h++) {
 	// Transpose data in order to re-use 1D DCT code
 	for (j = 0; j < DCT_SIZE; j++)
 		for(i = 0; i < DCT_SIZE; i++) {
 		//	col_inbuf[j][i] = row_outbuf[i][j];
 			out_block[j * DCT_SIZE + i] = row_outbuf[i * DCT_SIZE + j];
 		}
-		*/
-	/*
-	// DCT columns
-	for (i = 0; i < DCT_SIZE; i++) {
-		dct_1d(col_inbuf[i], col_outbuf[i]);
 	}
-	// Transpose data back into natural order
-	for (j = 0; j < DCT_SIZE; j++)
-		for(i = 0; i < DCT_SIZE; i++)
-			out_block[j][i] = col_outbuf[i][j];
-	 */
-	}
+
+	close(fdr);
+	close(fdw);
 }
 
 void read_data(dct_data_t *input, dct_data_t *buf)

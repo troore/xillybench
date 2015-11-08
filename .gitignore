@@ -1,3 +1,4 @@
+# Intermediate
 *.o
 *.out
 *.jou
@@ -15,3 +16,8 @@ vivado-ip-repo
 # Statistics
 *.dat
 *.log
+*Input*
+*Output*
+*Real
+*Imag
+testsuite

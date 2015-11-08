@@ -9,17 +9,17 @@ Found rapl component at cid 2
 Starting measurements...
 
 
-Stopping measurements, took 0.100s, gathering results...
+Stopping measurements, took 1.299s, gathering results...
 
 Scaled energy measurements:
-rapl:::PACKAGE_ENERGY:PACKAGE0              0.549530 J	(Average Power 5.5W)
+rapl:::PACKAGE_ENERGY:PACKAGE0              8.458344 J	(Average Power 6.5W)
 rapl:::PP1_ENERGY:PACKAGE0                  0.000000 J	(Average Power 0.0W)
-rapl:::PP0_ENERGY:PACKAGE0                  0.156708 J	(Average Power 1.6W)
+rapl:::PP0_ENERGY:PACKAGE0                  3.384033 J	(Average Power 2.6W)
 
 Energy measurement counts:
-rapl:::PACKAGE_ENERGY_CNT:PACKAGE0             36014	0x008cae
+rapl:::PACKAGE_ENERGY_CNT:PACKAGE0            554326	0x087556
 rapl:::PP1_ENERGY_CNT:PACKAGE0                     0	00000000
-rapl:::PP0_ENERGY_CNT:PACKAGE0                 10270	0x00281e
+rapl:::PP0_ENERGY_CNT:PACKAGE0                221776	0x036250
 
 Scaled Fixed values:
 rapl:::THERMAL_SPEC:PACKAGE0                  95.000 W

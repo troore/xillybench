@@ -1,0 +1,13 @@
+1 MANIFEST
+2 readme.txt
+3 autoconf.c
+4 build.bat
+5 chipio.c
+6 chipio.h
+7 des.c
+8 des.h
+9 initsrch.c
+10 keyblock.c
+11 keyblock.h
+12 search.c
+13 search.h

@@ -1,0 +1,2867 @@
+--ffd0 0015103933880020001 Page 1 of MANIFEST
+7bf681 1 MANIFEST
+ec8ce7 2 readme.txt
+05e777 3 autoconf.c
+cedb16 4 build.bat
+a0056e 5 chipio.c
+151f75 6 chipio.h
+1a8e30 7 des.c
+11db2a 8 des.h
+0aac3f 9 initsrch.c
+0f78d8 10 keyblock.c
+f699dd 11 keyblock.h
+ba96cf 12 search.c
+5127f6 13 search.h
+
+--e562 0004451557280020002 Page 1 of readme.txt
+e0af5a
+1aaf5a
+d44c86 ·········README FOR DES SEARCH ENGINE CONTROLLER SOFTWARE
+afaf5a
+29825e ·························April 23, 1998
+4aaf5a
+0eaf5a
+fb3fcf Written 1998 by Cryptography Research (http://www.cryptography.com)
+216a64 for the Electronic Frontier Foundation (EFF). ·Placed in the public
+4ad8d3 domain by Cryptography Research and EFF.
+a7af5a
+50ff62 This is unsupported free software. ·Use and distribute at your own
+e0daf4 risk. U.S. law may regulate the use and/or export of this program.
+ffeaa2 Foreign laws may also apply.
+f7af5a
+b4af5a
+34af5a
+fa176f ---------------------------------------------------------------------
+b1a6ff Section 1: ·Compiling the Programs.
+79af5a
+801f81 Compiling the programs should be easy. ·Using 32-bit Microsoft Visual
+a26186 C++ for Windows compile as shown below. ·For Borland C++ or other
+1d3a41 compilers, replace "cl" with the compiler name (e.g., bcc). ·On a 16-
+7c7812 bit DOS compiler with a large search array, the large memory model
+3f769d (Borland's "-ml" flag) is required or the system will run out of
+392d57 memory.
+62af5a
+ce209c ···> cl search.c keyblock.c chipio.c des.c
+fcc3fb ···> cl initsrch.c keyblock.c
+6b758b ···> cl autoconf.c chipio.c
+7057a9 ···> cl testvec.c sim.c des.c
+42af5a
+b8af5a
+1caf5a
+ea176f ---------------------------------------------------------------------
+93e4fb Section 2: ·Auto-Configuring the Search Array.
+80af5a
+19d9c3 The auto-configuration program is an important part of the DES
+292f7e Cracker. ·Because there are a large number of chips in the system, it
+9fb6be is inevitable that a few fail. ·By automatically removing defective
+
+0d0b4b units, it is not necessary to repair the system when failures do
+4f9dc9 occur.
+a8af5a
+018826 The program "autoconf.exe" will automatically identify the
+6f723b configuration of a search array. ·With the I/O port base address at
+cd7d24 210 hex, simply run the program with the command:
+5daf5a
+75065b ···> autoconf search.cfg -t
+98af5a
+c7e245 Note that the "-t" flag performs register testing (recommended if the
+dfdfea search system might contain defective chips that need to be avoided).
+e003e2 If the I/O port is at an address other than 210, specify the address.
+ff49ba The "-v" flag provides verbose output. ·For example:
+c1af5a
+2faf9f ···> autoconf search.cfg 210 -t -v
+26af5a
+185f44 When autoconf completes, it will print the total number of chips to
+bae103 the screen and save the configuration information to the
+f44721 configuration file. ·The configuration can be edited (e.g., with
+942a9c grep) to remove defective units not caught with autoconf.
+8daf5a
+70e81e (Note that this first release does not implement search unit testing·
+7f1a7b code except for the register tests.)·
+74af5a
+d9af5a
+47af5a
+cd176f ---------------------------------------------------------------------
+2611d1 Section 3: ·Initializing a Search.
+40af5a
+7c71c4 The search parameters have to be specified before a key can be found.
+0b480d The program initsrch creates a "search context" file that contains
+443422 these search parameters and a list of the regions of keyspace that
+
+--8d6f 0009a4c5f7080020002 Page 2 of readme.txt
+6d2d23 remain to be searched.
+f3af5a
+757db9 The search parameters can either be entered into initsrch or
+03be37 specified on the command line. ·To enter them manually, run initsrch
+b17249 with no parameters:
+34af5a
+f0a5ad ···> initsrch
+d4af5a
+83b591 The program will then prompt for the search context file. ·Press
+a473ca enter for the default filename ("search.ctx").
+98af5a
+953b91 Next, the program will prompt for a search mode. ·Five modes are·
+096098 supported and are described in the following sections.·
+30af5a
+45b5a1 ···K - Known plaintext
+442856 ···E - ECB ASCII text
+019879 ···C - CBC ASCII text
+31e1fd ···B - Blaze challenge
+ddbb69 ···M - Manual parameter specification
+e9af5a
+5eaf5a
+2edf4c 1. ·Known plaintext searching
+ccaf5a
+06f1ec This is the simplest (and most common) mode of operation. ·If a
+4dd2c9 complete DES plaintext/ciphertext pair is known, this mode can be
+0f91b5 used to quickly search for the key. ·When prompted, enter the
+c281eb plaintext in hexadecimal form (e.g., "123456789ABCDEF0") and press
+95792f enter. ·Next, enter the ciphertext, also in hexadecimal. The program
+6fb05a will then create a search context file and exit.
+d1af5a
+fcaf5a
+68cc8f 2. ·ECB ASCII text searching
+9aaf5a
+6e7074 If your target message is known to be ASCII text and was encrypted
+1edff6 using DES ECB mode, enter two different ciphertexts. ·The program
+d92df0 will create the search context file and exit. ·The program is
+234bf0 configured to include all letters ("a-z" and "A-Z"), numbers ("0-9"),
+470b54 and common punctuation (ASCII zero, tab, linefeed carriage return,
+0ded96 space, and common punctuation (!"'(),-.^_). ·For other character
+98fbc6 sets, use the manual parameter specification option.
+f8af5a
+bcaf5a
+a7fe29 3. ·CBC ASCII text searching
+caaf5a
+f85465 If your message is ASCII text and was encrypted using DES CBC mode,
+bae166 this option lets you specify an initialization vector and two
+aa45de ciphertext messages. ·The CBC mode ASCII option uses the same ASCII
+6c4548 text characters as ECB ASCII.
+09af5a
+18af5a
+706ad7 4. ·The Blaze challenge
+0caf5a
+20b2e8 Matt Blaze's DES challenge involves searching for a key such that a
+4f29b1 repeated plaintext byte produces a repeated ciphertext byte. ·This
+98ce02 option will search for keys that meet the challenge. Simply specify
+2851f0 the desired repeated ciphertext byte.
+68af5a
+6baf5a
+fba0ab 5. ·Manual parameter specification
+e2af5a
+f4f30d The manual parameter mode allows direct control over the search
+a1c03a parameters. The manual mode requires entering more data than the
+f21978 other modes; it is often easier to pipe input from a script file,
+3cab72 e.g.:
+6caf5a
+114c2d ···> initsrch < search.scr
+5baf5a
+b6c924 First, enter the plaintext vector. ·This is 64 hex digits long and
+984fe4 specifies the bytes that can appear in "valid" plaintexts. The most
+caf7a9 significant bit of the left-hand digit specifies whether ASCII 255
+ea0906 can appear, and the least significant bit of the last digit specifies
+9ad545 whether ASCII zero can appear. For example, the plaintext vector for
+
+--0018 00065d8074680020002 Page 3 of readme.txt
+569be0 the ASCII text modes is:
+45af5a
+328424 ···0000000000000000000000000000000007FFFFFFC7FFFFFE8FFF738700002601
+47af5a
+6294a7 Next, enter the initialization vector for the first DES, if any.
+6b8f16 This will be XORed onto the first plaintext before its validity is
+5587b3 checked.
+b6af5a
+f4fd67 Next, enter the two ciphertexts (ciphertext 0 and ciphertext 1).
+aaf9a7 These may be the same or different.
+a2af5a
+d4a2dd Next, enter the plaintext byte mask. ·This sets bits that should be
+f36fe4 ignored in the plaintext. ·For example, if the left-hand byte of the
+cac85d plaintext is unknown or can have any value, the plaintext byte mask
+379f87 would be set to 80 (hex).
+11af5a
+9d87cc Finally, enter the searchInfo byte. Bit 1 of this byte specifies
+97a928 whether CBC mode should be used. ·If so, the first ciphertext will be
+595ef9 XORed onto candidate plaintexts produced by decrypting the second
+2dff09 ciphertext. ·Bit 2 of searchInfo specifies whether the extraXor
+13de86 operation should be done. This operation XORs the right half of the
+8aac2c plaintext onto the left half before it is checked. ·(For the Blaze
+06de4f challenge, the desired plaintext has a single byte repeated. ·The
+13ab4a extraXor operation will set the left half of the plaintext to zero if
+c6781e the plaintext is good. ·The plaintextByteMask can then be set to 0x0F
+e2b3f0 to ignore the right half and the plaintextVector has only the bit for
+521d7e ASCII zero set.)
+39af5a
+1baf5a
+4c288d 5. ·The search context file
+8daf5a
+179dcb The search context file contains a header, the search parameters, and
+8f1477 2^24 bits corresponding to the unsearched key regions. ·The search
+91edfe parameters are: plaintextVector (32 bytes), plaintextXorMask (8
+55d722 bytes), ciphertext0 (8 bytes), ciphertext1 (8 bytes),
+3583fb plaintextByteMask (1 byte), and searchInfo (1 byte). ·Each search
+421808 region includes 2^32 keys. The first bit (the MSB of the first key
+c79bf0 region byte) corresponds to the keys 00000000000000 through
+462847 000000FFFFFFFF, in 56-bit notation. ·(To produce the 56-bit form of a
+f21751 64-bit DES key, delete the eight parity bits.)
+d6af5a
+efaf5a
+f5af5a
+48176f ---------------------------------------------------------------------
+81999d Section 4: ·Running a Search.
+c1af5a
+05ae2f The most common way to run a search is to type:
+5caf5a
+057f42 ···> search search.cfg search.ctx logfile -q
+2faf5a
+80edd9 The "-q" flag requests quiet output, which prints less information to
+e101f1 the screen. ·The search.cfg file is produced by autoconf, and
+2200bc search.ctx is produced by initsrch. ·The logfile will contain a list
+f4a0ec of candidate keys encountered.
+12af5a
+223e71 If a search is stopped partway through, work done in partially-
+0c0b95 completed key regions is lost, but completed regions are noted in the
+a252e6 search context file. ·Note that a complete search will produce a
+433e44 rather large amount of data in the logfile. ·If hard disk space is
+649464 limited, it may be desirable to stop the search occasionally (for
+9ad667 example, daily) to purge the logfile.
+c2af5a
+5daf5a
+1eaf5a
+8b176f ---------------------------------------------------------------------
+f98443 Section 5: ·Porting to other platforms.
+d9af5a
+9aa861 When porting to other platforms, some code changes or additions may
+9a17dd be required. ·The following may not be found on all systems:
+49af5a
+0946df ······stricmp: ···This is a case-insensitive strcmp found on many
+659051 ··········compilers. ·If it isn't present, you can either use strcmp
+
+--a334 0019f8825ad80020002 Page 4 of readme.txt
+70faf5 ··········(though commands will become case sensitive) or write one.
+4daf5a
+57970a ······SEEK_SET: ··A constant (equal to zero) used to tell fseek()
+bdc708 ··········to go to a fixed offset. ·Usually defined in stdio.h
+02af5a
+ca5e28 ······kbhit(void): ·Returns true if a key has been pressed. (Used to
+662151 ··········check for commands during searches.)
+bbaf5a
+6d2832 ······getch(void): ·Reads a keystroke from the keyboard.
+4daf5a
+c13802 ······inportb(unsigned portNum): ·Reads a byte from an I/O port. Used
+5c2f71 ··········only by chipio.c. ·On other platforms, inportb may need to
+27977e ··········be emulated. ·(For Visual C++, inportb is implemented in
+3c461d ··········chipio.c as inline assembly language.)
+97af5a
+9e58f5 ······outportb(int portNum, int value): ·Sends a byte to an I/O port.
+59dbb1 ··········Used only by chipio.c. ·On other platforms, outportb may
+3bb05f ··········need to be emulated. ·(For Visual C++, outportb is
+0f88ab ··········implemented in chipio.c as inline assembly language.)
+a3af5a
+1eaf5a
+bbaf5a
+f7176f ---------------------------------------------------------------------
+a166bf Section 6: ·Final comments
+15af5a
+05182b As this code goes to press, there was little opportunity for testing
+a3aa2b and the code has not undergone any of the assurance, code review, or
+a4419d testing processes we normally use. ·When working on the code, you
+57167e you may find a few bugs. ·Feedback, as always, is appreciated.
+9baf5a
+dba0c7 Paul Kocher, Josh Jaffe, and everyone else at Cryptography Research
+969732 would like to thank John Gilmore and the EFF for funding this unique
+1930dc project, and AWT for their expert hardware work!
+37af5a
+9faf5a
+
+--8884 0008b9a267780020003 Page 1 of autoconf.c
+8d2d03 /*****************************************************************************
+caf463 ·* autoconf.c ·······························································*
+4740b6 ·* ····················Search Engine Controller Program ·····················*
+c429eb ·* ··········································································*
+6c09fc ·* ···Written 1998 by Cryptography Research (http://www.cryptography.com) ···*
+938aaf ·* ······and Paul Kocher for the Electronic Frontier Foundation (EFF). ······*
+b9caeb ·* ······Placed in the public domain by Cryptography Research and EFF. ······*
+184992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+2129eb ·* ··········································································*
+6cc755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+5529eb ·* ··········································································*
+03489b ·*****************************************************************************
+5129eb ·* ··········································································*
+3215cb ·* ··IMPLEMENTATION NOTES: ··················································*
+f829eb ·* ··········································································*
+dfa8b8 ·* ··This program automatically determines the configuration of a search ····*
+491db9 ·* ··array. ·Additional diagnostic code should be added to detect common ····*
+2e87f9 ·* ··chip failures (once these are known). ··································*
+fe29eb ·* ··········································································*
+26489b ·*****************************************************************************
+3b29eb ·* ··········································································*
+286eef ·* ··REVISION HISTORY: ······················································*
+5429eb ·* ··········································································*
+4528d9 ·* ··Version 1.0: ·Initial release by Cryptography Research to EFF. ·········*
+3b486f ·* ················Note: Detailed diagnostic tests not implemented yet. ·····*
+c829eb ·* ··········································································*
+34d8c3 ·*****************************************************************************/
+29af5a
+05bcd3 #define SOFTWARE_VERSION "1.0"
+9aa5c9 #define SOFTWARE_DATE ···"04-21-1998"
+86af5a
+d7af5a
+d4bea3 #include <stdlib.h>
+a4feb2 #include <stdio.h>
+ddbb5f #include <assert.h>
+e5c737 #include <memory.h>
+ed0a8b #include <time.h>
+f8b1cb #include <ctype.h>
+d91519 #include "chipio.h"
+7baf5a
+822d85 #define MAX_CHIPS_PER_BOARD ·64
+e191af #define MAX_BOARDS ··········256
+59af5a
+9e708e static void EXIT_ERR(char *s) { fprintf(stderr, s); exit(1); }
+619101 void AutoconfigureScan(FILE *fp, int fullScan, int verbose);
+c0e5e4 int QuickCheckRegister(int board, int chip, int register, int value);
+cd6c9b void AddSearchUnits(FILE *fp, int board, int chip, int unit, int isGood);
+6693c5 long DoFullScan(FILE *fp, int board, int* chips, int verbose);
+a7af5a
+fcaf5a
+ac164b int main(int argc, char **argv) {
+413850 ··int testLoops = -1;
+1087d8 ··int baseIoPort = 0x210;
+2dadb6 ··int i, nextArg, fullScan;
+792659 ··int verbose = 0;
+51bc33 ··char buffer[200];
+4779c7 ··char *fileSpec;
+58b166 ··FILE *fp;
+9ec1cd ··char *helpMsg = "Usage: autoconf search.cfg [baseIoPort] [-v] [-t#]\n\n"
+c24b8d ················" ·········-v: ·Verbose operation\n"
+deec61 ················" ·search.cfg: ·The output file for the config info.\n"
+eccff8 ················" ·baseIoPort: ·Hex base port of I/O card (default=210 hex)\n"
+aa6d8e ················" ········-t#: ·Extra testing (see below)\n"
+be1228 ················"\nUse the -t# to do more than a quick test for chips.\n"
+25a0c7 ················" ········-t0: ·Do full read/write test of chip registers\n"
+4e10f3 ················" ········-t#: ·Do # iterations of a full system test\n";
+16af5a
+b0ddd7 ··printf("\nDES Search Engine Configurer (Ver %s, %s). May be export "
+84ffaa ·········"controlled.\nWritten 1998 by Cryptography Research "
+bc2e08 ·········"(http://www.cryptography.com) for EFF.\n"
+75c4fd ·········"This is unsupported "
+8b1151 ·········"free software: Use and distribute at your own risk.\n"
+
+--bbb9 0003461923980020003 Page 2 of autoconf.c
+d1805d ·········"-------------------------------------------"
+ef04bf ·········"---------------------------------\n\n\n",
+5aa1fb ·········SOFTWARE_VERSION, SOFTWARE_DATE);
+6daf5a
+aebc9a ··if (argc < 2 || argv[1][0] == '-')
+a78298 ····EXIT_ERR(helpMsg);
+03e776 ··fileSpec = argv[1];
+ba353d ··for (nextArg = 2; nextArg < argc; nextArg++) {
+7715da ····if (argv[nextArg][0] == '-' || argv[nextArg][0] == '/') {
+83cfff ······if (toupper(argv[nextArg][1]) == 'T') {
+1f2647 ········sscanf(argv[nextArg]+2, "%d", &testLoops);
+fbac1e ········if (testLoops < 0)
+dc4adf ··········testLoops = 0;
+4cb396 ······} else if (toupper(argv[nextArg][1]) == 'V')
+1e568e ········verbose = 1;
+7d3dfa ······else
+e18d34 ········EXIT_ERR("Bad parameter (run with no parameters for help)\n");
+6d6a79 ····} else {
+a869b6 ······sscanf(argv[nextArg], "%x", &baseIoPort);
+7c26c3 ······if (baseIoPort <= 0)
+1e8d34 ········EXIT_ERR("Bad parameter (run with no parameters for help)\n");
+b76fe7 ····}
+31df1c ··}
+41af5a
+aa398a ··if (verbose) printf("Test parameters:\n");
+190e23 ··if (verbose) printf(" ··BaseIOPort = %x\n", baseIoPort);
+7ae35c ··if (verbose) printf(" ··outfile = \"%s\"\n", fileSpec);
+d9d292 ··if (verbose) if (testLoops < 0) printf(" ··Quick scan only\n");
+b06835 ··if (verbose) if (testLoops== 0) printf(" ··Full register scan\n");
+b9142f ··if (verbose) if (testLoops > 0) printf(" ··%d DES tests\n", testLoops);
+d9af5a
+64078e ··fp = fopen(fileSpec, "w");
+d9b291 ··if (fp == NULL)
+a8eee0 ····EXIT_ERR("Error opening output file.\n");
+7a575c ··fprintf(fp, "%% Auto-generated search system config file\n");
+98932f ··fprintf(fp, "PORT=%x\n", baseIoPort);
+baaf5a
+253c81 ··SetBaseAddress(baseIoPort);
+d96af7 ··fullScan = (testLoops < 0) ? 0 : 1;
+91bad4 ··AutoconfigureScan(fp, fullScan, verbose);
+aced24 ··fclose(fp);
+faaf5a
+368f0d ··for (i = 0; i < testLoops; i++) {
+b2c130 ····printf("Doing DES test %d of %d.\n", i+1, testLoops);
+62bb1a ····fp = fopen(fileSpec, "w+");
+a541c7 ····if (fp == NULL)
+00495c ······EXIT_ERR("Error reopening output file.\n");
+864529 ····fgets(buffer, 190, fp); ·····························/* skip header line */
+ef7769 ····fgets(buffer, 190, fp); ·······························/* skip port line */
+5d2f5d ····fprintf(stderr, "*** Detailed test not implemented !!!\n");
+b0b174 ····fclose(fp);
+65df1c ··}
+91c86a ··return (0);
+57efe6 }
+bdaf5a
+e4af5a
+8daf5a
+e238e5 /*
+65e484 ·* ·Automatically figure out the configuration of the search system.
+d66bac ·* ·Thus function assumes that SetBaseAddress() has already been called.
+dd495d ·*/
+84fb6d void AutoconfigureScan(FILE *fp, int fullScan, int verbose) {
+6e4007 ··int board, chip, chipCount, value;
+67b920 ··long totalChips = 0;
+65021b ··int chips[MAX_CHIPS_PER_BOARD];
+2baf5a
+dca3b4 ··if (verbose) printf("**** DOING AUTOCONFIGURE SCAN ****\n");
+f9378a ··for (board = 0; board < MAX_BOARDS; board++) {
+08dfb2 ····printf("CHECKING BOARD 0x%02X: ", board);
+06442d ····fflush(stdout);
+3680db ····chipCount = 0;
+34211c ····for (chip = 0; chip < MAX_CHIPS_PER_BOARD; chip++) {
+
+--1d3d 0008613f79280020003 Page 3 of autoconf.c
+1e563d ······/* TEST FIRST BYTE OF CIPHERTEXT 0 (REGISTER 0x28) */
+79c8a7 ······value = rand() & 0xFF;
+527510 ······if (QuickCheckRegister(board, chip, 0x28, value) == 0 ||
+5acc0c ··········QuickCheckRegister(board, chip, 0x28, value^255) == 0) {
+78875d ········chips[chip] = 0;
+8c328b ········if (verbose) printf("\n ··BOARD 0x%02X CHIP 0x%02X: Not found.",
+e9d006 ················board, chip);
+b0cfc7 ······} else {
+41dd81 ········chips[chip] = 1;
+dad3c2 ········chipCount++;
+f287c8 ········if (verbose) printf("\n ··BOARD 0x%02X CHIP 0x%02X: FOUND",board,chip);
+903982 ········if (fullScan) {
+b2986b ··········if (verbose) printf("\n ··CHIP 0x%02X: Halting chip for test", chip);
+61fde4 ··········SetRegister(board, chip, REG_PTXT_BYTE_MASK, 0xFF);
+d17fb0 ········}
+8842cc ······}
+e96fe7 ····}
+47f418 ····if (verbose) printf("\n");
+347082 ····printf(" ·Found %4d chips total.\n", chipCount);
+90af5a
+fdcb4a ····/* DO DETAILED REGISTER SCAN IF REQUESTED */
+e9eef1 ····if (fullScan && chipCount) {
+45f0b8 ······totalChips = DoFullScan(fp, board, chips, verbose);
+e46a79 ····} else {
+0db79b ······chipCount = 0;
+e2f9e5 ······for (chip = 0; chip < MAX_CHIPS_PER_BOARD; chip++) {
+77b833 ········if (chips[chip]) {
+
+b0d098 ··········chipCount++;
+2b3758 ··········totalChips++;
+065ead ··········AddSearchUnits(fp, board, chip, -1, 1);
+237fb0 ········}
+cd42cc ······}
+516fe7 ····}
+f5df1c ··}
+21397d ··if (verbose) printf("*** AUTOCONFIGURE SCAN COMPLETE ***\n");
+05c77d ··printf("Found %ld chips total.\n", totalChips);
+daefe6 }
+f1af5a
+c3af5a
+66ddaa int QuickCheckRegister(int board, int chip, int reg, int value) {
+ff8085 ··SetRegister(board, chip, reg, value);
+953c2d ··if (GetRegister(board, chip, reg) != value)
+25943a ····return (0);
+30d4d1 ··return (1);
+ffefe6 }
+a1af5a
+dcaf5a
+8cc043 void AddSearchUnits(FILE *fp, int board, int chip, int unit, int isGood) {
+5717e0 ··int i;
+98af5a
+e9b306 ··if (unit < 0) {
+e154b0 ····for (i = 0; i < SEARCH_UNITS_PER_CHIP; i++)
+265e78 ······AddSearchUnits(fp, board, chip, i, 1);
+3349d8 ··} else {
+1fac09 ····fprintf(fp, "%s=0x%02X 0x%02X 0x%02X\n", isGood ? "UNIT" : "FAIL",
+11229d ············board, chip, unit);
+5adf1c ··}
+98efe6 }
+feaf5a
+0eaf5a
+777b47 long DoFullScan(FILE *fp, int board, int* chips, int verbose) {
+8eff49 ··int chip, reg, seed, value, i, j;
+33160d ··int units[24];
+0fb920 ··long totalChips = 0;
+ccaf5a
+24d7a0 ··if (verbose) printf(" ··--- Register scan on board 0x%02X ---\n", board);
+deaf5a
+623f7a ··/* PICK A SEED & USE IT TWICE (ONCE WHEN SETTING & ONCE WHEN CHECKING */
+a172a5 ··seed = (int)time(NULL);
+f4af5a
+bb775e ··/*** SET REGISTERS ***/
+86db8d ··srand(seed);
+
+--ff7e 00105deab4880020003 Page 4 of autoconf.c
+bc3f58 ··for (chip = 0; chip < MAX_CHIPS_PER_BOARD; chip++) {
+d05448 ····if (chips[chip] == 0)
+325f6a ······continue;
+8c9858 ····if (verbose) printf(" ··BOARD 0x%02X CHIP 0x%02X: Setting regs.\n",
+d05be4 ············board, chip);
+eab177 ····for (reg = 0; reg <= 0xFF; reg++) {
+e5beec ······if ((reg >= 0x39 && reg < 0x40) || (reg > 0x40 && (reg & 7) == 7))
+7ca511 ············continue;
+cec87b ········value = rand() & 255;
+9aca50 ········SetRegister(board, chip, reg, value);
+7e6fe7 ····}
+e2df1c ··}
+ebaf5a
+60d84d ··/*** CHECK REGISTERS ***/
+57db8d ··srand(seed);
+843f58 ··for (chip = 0; chip < MAX_CHIPS_PER_BOARD; chip++) {
+1a5448 ····if (chips[chip] == 0)
+7d5f6a ······continue;
+d51775 ····for (i = 0; i < 24; i++)
+d30734 ······units[i] = 1;
+d4a885 ····if (verbose) printf(" ··BOARD 0x%02X CHIP 0x%02X: Checking...\n",
+6c5be4 ············board, chip);
+5ab177 ····for (reg = 0; reg <= 0xFF; reg++) {
+00beec ······if ((reg >= 0x39 && reg < 0x40) || (reg > 0x40 && (reg & 7) == 7))
+17a511 ············continue;
+205f9e ······value = rand() & 255;
+2da5d1 ······i = GetRegister(board, chip, reg);
+3acb31 ······SetRegister(board, chip, reg, value ^ 255);
+39b29a ······j = GetRegister(board, chip, reg);
+c71a0d ······if (i != value || j != (value ^ 255)) {
+cb5495 ········if (chips[chip])
+b7125b ··········printf("\n *** BOARD 0x%02X, CHIP 0x%02X FAILED ***\n ·Details: ",
+0ba711 ··················board, chip);
+6d08d0 ········if (reg < 0x40)
+056181 ··········chips[chip] = 0;
+a31e5b ········else
+d464e9 ··········units[(reg - 0x40)/8] = 0;
+0e6b2c ········if (i != value || j != value)
+15f088 ··········printf("\n ·Board 0x%02X Chip 0x%02X Reg 0x%02X bad:",
+
+dd88d1 ············board, chip, reg);
+6e3a74 ········if (i != value)
+1e6ac7 ··········printf(" ·Got 0x%02X, not %02X.", i, value);
+c746af ········if (j != (value ^ 255))
+1547f8 ··········printf(" ·Got 0x%02X, not %02X.", j, value ^ 255);
+d8cfc7 ······} else {
+8bef4b ········if (verbose)
+dfa942 ··········printf("\n ··Reg 0x%02X good (Read 0x%02X)", reg, value);
+
+8742cc ······}
+676fe7 ····}
+b15448 ····if (chips[chip] == 0)
+e1b2b4 ······printf("\n ·-- CHIP FAILED --\n");
+bf83c8 ····else {
+2ca741 ······for (i = 0; i < 24; i++)
+2e958f ········AddSearchUnits(fp, board, chip, i, units[i]);
+3688b7 ······totalChips++;
+e46fe7 ····}
+ccdf1c ··}
+c00cbb ··return (totalChips);
+47efe6 }
+deaf5a
+05af5a
+
+--4dcb 001b8acf45a80020004 Page 1 of build.bat
+eb1685 rem Sample build script (using Microsoft Visual C++)
+89af5a
+a05793 cl search.c keyblock.c chipio.c des.c
+049d12 cl initsrch.c keyblock.c
+818947 cl autoconf.c chipio.c
+110940 cl testvec.c sim.c des.c
+b8af5a
+--27e3 000793f2b7c80020005 Page 1 of chipio.c
+8d2d03 /*****************************************************************************
+a07c89 ·* chipio.c ·································································*
+87350a ·* ············Search Engine Low-Level Hardware Interface Module ············*
+be29eb ·* ··········································································*
+3309fc ·* ···Written 1998 by Cryptography Research (http://www.cryptography.com) ···*
+b28aaf ·* ······and Paul Kocher for the Electronic Frontier Foundation (EFF). ······*
+aecaeb ·* ······Placed in the public domain by Cryptography Research and EFF. ······*
+6c4992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+6d29eb ·* ··········································································*
+95c755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+f329eb ·* ··········································································*
+12489b ·*****************************************************************************
+0e29eb ·* ··········································································*
+596eef ·* ··REVISION HISTORY: ······················································*
+6629eb ·* ··········································································*
+2f28d9 ·* ··Version 1.0: ·Initial release by Cryptography Research to EFF. ·········*
+d929eb ·* ··········································································*
+3dd8c3 ·*****************************************************************************/
+49af5a
+c8feb2 #include <stdio.h>
+ab1465 #include <conio.h>
+efbea3 #include <stdlib.h>
+4e1519 #include "chipio.h"
+24af5a
+fc411c static int CURRENT_BOARD ····= -1;
+0ce1ec static int CURRENT_CHIP ·····= -1;
+b3ed93 static int CURRENT_PORT_CNFG = -1;
+766981 static int IO_BASE_ADDRESS = 0x210;
+29af5a
+ec08d9 #define IO_PORTA_ADDRESS (IO_BASE_ADDRESS+0)
+823310 #define IO_PORTB_ADDRESS (IO_BASE_ADDRESS+1)
+40fc87 #define IO_PORTC_ADDRESS (IO_BASE_ADDRESS+2)
+5f8cee #define IO_CNFG_ADDRESS ·(IO_BASE_ADDRESS+3)
+7d9f2f #define CNFG_OUTPUT ··0x80
+b52497 #define CNFG_INPUT ···0x82
+5aaf5a
+3c4951 #define CTRL_BASE ·······0x1B ·····/* base value onto which others are XORed */
+663867 #define CTRL_RST ········0x20
+e7dec1 #define CTRL_RDB ········0x10
+8a8735 #define CTRL_WRB ········0x08
+777b8e #define CTRL_ALE ········0x04
+dd9757 #define CTRL_ADRSEL2 ····0x02 ······/* in documentation is also called CNTR1 */
+e884f1 #define CTRL_ADRSEL1 ····0x01 ······/* in documentation is also called CNTR0 */
+49af5a
+8738e5 /*
+4ce308 ·* ·DELAYS CAN BE ADDED TO DEAL WITH BUS LOADING/CAPACITANCE/ETC.
+59495d ·*/
+aee62f #define DELAY_FACTOR 100L
+67ac33 #define DELAY_ADDRESS_SETTLE ··0*DELAY_FACTOR
+e5126b #define DELAY_DATA_SETTLE ·····0*DELAY_FACTOR
+b62102 #define DELAY_RST_HOLD ········0*DELAY_FACTOR
+3a8807 #define DELAY_RST_RECOVER ·····0*DELAY_FACTOR
+c48418 #define DELAY_RDB_HOLD ········0*DELAY_FACTOR
+c82d1d #define DELAY_RDB_RECOVER ·····0*DELAY_FACTOR
+439bf5 #define DELAY_WRB_HOLD ········0*DELAY_FACTOR
+7532f0 #define DELAY_WRB_RECOVER ·····0*DELAY_FACTOR
+97157a #define DELAY_ALE_SETTLE ······0*DELAY_FACTOR
+07d8af #define DELAY_ADRSEL2_SETTLE ··0*DELAY_FACTOR
+b9874e #define DELAY_ADRSEL1_SETTLE ··0*DELAY_FACTOR
+ecaf5a
+d72e32 #define ioDelay(delayTime) ····{} ····················/* insert delay if rqd */
+d5af5a
+08af5a
+fcc96f #ifdef _MSC_VER
+f438e5 /*
+6a5039 ·* ·Microsoft C++ Direct I/O Functions
+b0495d ·*/
+aa4429 static int inportb(int portNum) {
+4599d0 ··unsigned char rval;
+5a8d6b ··unsigned short portNumShort = (unsigned short)portNum;
+acaf5a
+7948ba ··_asm { mov dx,portNumShort }
+--80c3 000e63846a280020005 Page 2 of chipio.c
+05a1b8 ··_asm { in al,dx }
+390458 ··_asm { mov rval, al }
+5b76c9 ··return (rval);
+aeefe6 }
+09af5a
+0f9285 static void outportb(int portNum, int val) {
+3355b6 ··unsigned char valChar = (unsigned char)val;
+0b8d6b ··unsigned short portNumShort = (unsigned short)portNum;
+64af5a
+ac005a ··_asm { mov dx, portNumShort }
+6893dc ··_asm { mov al, valChar }
+1affc5 ··_asm { out dx, al }
+a5efe6 }
+987454 #endif
+e0af5a
+f0af5a
+04d629 static void ConfigureIO_Port(int inputOrOutput) {
+37d170 ··outportb(IO_CNFG_ADDRESS, inputOrOutput);
+a43113 ··CURRENT_PORT_CNFG = inputOrOutput;
+7eaf5a
+226c42 ··/* ·Warning:
+022fbb ···*
+38d9be ···* ·Changing the IO port state causes a tiny glitch to go out on the
+61e818 ···* ·PC-DIO card. ·This is enough to ocasionally trigger the ALE, which
+0f2e99 ···* ·causes read/write errors. ·To avoid this, always explicitly
+dcbbe3 ···* ·re-select the chip after switching port directions.
+8cf9a6 ···*/
+96e4d4 ··CURRENT_CHIP = -1;
+71efe6 }
+dcaf5a
+bbaf5a
+334e16 static void SetAddress(int addressValue) {
+b354f5 ··outportb(IO_PORTA_ADDRESS, addressValue);
+85efe6 }
+1caf5a
+49af5a
+2952e2 static void SetData(int dataValue) {
+e81c12 ··outportb(IO_PORTB_ADDRESS, dataValue);
+20efe6 }
+6aaf5a
+08af5a
+1db8ab static int GetData(void) {
+5899a6 ··return (inportb(IO_PORTB_ADDRESS));
+67efe6 }
+98af5a
+ebaf5a
+c6415d static void SetControl(int controlPortValue) {
+186000 ··/*
+9f0c74 ···* Possible optimization: Don't send value if already correct.
+a1f9a6 ···*/
+029b83 ··outportb(IO_PORTC_ADDRESS, controlPortValue);
+b4efe6 }
+83af5a
+a8b6a1 static void selectBoard(int board) {
+23c7b8 ··SetAddress(board);
+92b28f ··SetControl(CTRL_BASE ^ CTRL_ADRSEL1); ···/* put board ID onto address pins */
+bcec59 ··ioDelay(max(DELAY_ADDRESS_SETTLE, DELAY_ADRSEL1_SETTLE)); ·········/* wait */
+2baf5a
+485205 ··SetControl(CTRL_BASE ^ CTRL_ADRSEL1 ^ CTRL_ALE); ·········/* pull ALE high */
+d81486 ··ioDelay(DELAY_ALE_SETTLE); ········································/* wait */
+14af5a
+797450 ··SetControl(CTRL_BASE ^ CTRL_ADRSEL1); ····················/* pull ALE back */
+fc1486 ··ioDelay(DELAY_ALE_SETTLE); ········································/* wait */
+36af5a
+7c9619 ··SetControl(CTRL_BASE); ····································/* ADRSEL1 done */
+b11e79 ··ioDelay(DELAY_ADRSEL1_SETTLE);
+39af5a
+647dd7 ··CURRENT_BOARD = board;
+14d3d3 ··CURRENT_CHIP ·= -1;
+c4efe6 }
+5baf5a
+e6af5a
+--bfd3 000429a03bf80020005 Page 3 of chipio.c
+bc4c68 static void selectChip(int chip) {
+72cb81 ··SetAddress(chip); ··········································/* select chip */
+3ca47d ··ioDelay(DELAY_ADDRESS_SETTLE); ····································/* wait */
+caaf5a
+1ad034 ··SetControl(CTRL_BASE ^ CTRL_ALE); ························/* pull ALE high */
+fc1486 ··ioDelay(DELAY_ALE_SETTLE); ········································/* wait */
+f4af5a
+917415 ··SetControl(CTRL_BASE); ···································/* pull ALE back */
+9b1486 ··ioDelay(DELAY_ALE_SETTLE); ········································/* wait */
+85af5a
+fb6496 ··CURRENT_CHIP = chip;
+4fefe6 }
+d6af5a
+8baf5a
+d13072 void SetBaseAddress(int address) {
+eee199 ··IO_BASE_ADDRESS = address;
+21efe6 }
+34af5a
+a7af5a
+1a38e5 /*
+2c052d ·* ·RESET A SINGLE BOARD
+8a775e ·*
+810727 ·* ·This function resets an entire board. It is not optimized for speed.
+c18338 ·* ·It is necessary to delay after calling this function until the board
+30b84c ·* ·reset completes.
+11495d ·*/
+6aa7b4 int ResetBoard(int board) {
+66af5a
+65da81 ··/* Configure the IO card (doesn't matter if for data input or output) */
+0488b6 ··ConfigureIO_Port(CNFG_INPUT); ····················/* configure the IO port */
+3c750b ··ConfigureIO_Port(CNFG_OUTPUT); ···················/* configure the IO port */
+0daf5a
+23fbb6 ··selectBoard(board); ···································/* select the board */
+3daf5a
+350fd9 ··SetControl(CTRL_BASE ^ CTRL_RST); ······················/* RESET THE BOARD */
+fd9c65 ··ioDelay(DELAY_RST_HOLD); ··········································/* wait */
+c33f1e ··SetControl(CTRL_BASE); ··································/* stop resetting */
+63941c ··ioDelay(DELAY_RST_RECOVER); ·······································/* wait */
+09af5a
+274a62 ··CURRENT_BOARD = -1; ···················/* reset this on next IO to be safe */
+15e381 ··CURRENT_CHIP ·= -1; ······························/* reset this to be safe */
+56c86a ··return (0);
+52efe6 }
+65af5a
+46af5a
+dd070c void SetRegister(int board, int chip, int reg, int value) {
+b637bb ··if (CURRENT_PORT_CNFG != CNFG_OUTPUT) ·····/* set IO data lines for output */
+a221ba ····ConfigureIO_Port(CNFG_OUTPUT);
+5277f8 ··if (CURRENT_BOARD != board) ················/* make sure board is selected */
+5e72c3 ····selectBoard(board);
+
+cad37b ··if (CURRENT_CHIP != chip) ···················/* make sure chip is selected */
+ae038d ····selectChip(chip);
+afaf5a
+72a826 ··SetAddress(reg); ······························/* select the right address */
+2e3549 ··SetData(value); ········································/* output the data */
+1d964b ··SetControl(CTRL_BASE ^ CTRL_ADRSEL2); ·························/* pull low */
+a0fc7b ··ioDelay(max(max(DELAY_ADDRESS_SETTLE,DELAY_DATA_SETTLE), ··········/* wait */
+8a43b6 ··········DELAY_ADRSEL2_SETTLE));
+bb7938 ··SetControl(CTRL_BASE ^ CTRL_WRB ^ CTRL_ADRSEL2); ··········/* pull WRB low */
+72a1d3 ··ioDelay(DELAY_WRB_HOLD); ·······································/* hold it */
+623cfe ··SetControl(CTRL_BASE ^ CTRL_ADRSEL2); ···············/* let WRB high again */
+060257 ··ioDelay(DELAY_WRB_RECOVER); ·······································/* wait */
+3ab463 ··SetControl(CTRL_BASE); ······························/* let WRB high again */
+ab684d ··ioDelay(DELAY_ADRSEL2_SETTLE); ····································/* wait */
+c6efe6 }
+dcaf5a
+2890e3 int GetRegister(int board, int chip, int reg) {
+7a07b4 ··int rval;
+c6af5a
+0af350 ··if (CURRENT_PORT_CNFG != CNFG_INPUT) ·······/* set IO data lines for input */
+f6b51f ····ConfigureIO_Port(CNFG_INPUT);
+4277f8 ··if (CURRENT_BOARD != board) ················/* make sure board is selected */
+--7ae2 001a1c4541e80020005 Page 4 of chipio.c
+5772c3 ····selectBoard(board);
+c0d37b ··if (CURRENT_CHIP != chip) ···················/* make sure chip is selected */
+2c038d ····selectChip(chip);
+c8af5a
+e2a826 ··SetAddress(reg); ······························/* select the right address */
+8f23d4 ··SetControl(CTRL_BASE ^ CTRL_ADRSEL2); ·················/* pull adrsel2 low */
+2275ff ··ioDelay(max(DELAY_ADDRESS_SETTLE, DELAY_ADRSEL2_SETTLE)); ·········/* wait */
+6fe7c0 ··SetControl(CTRL_BASE ^ CTRL_RDB ^ CTRL_ADRSEL2); ··········/* pull RDB low */
+fa8603 ··ioDelay(DELAY_RDB_HOLD);
+5ec058 ··rval = GetData();
+bbc573 ··SetControl(CTRL_BASE ^ CTRL_ADRSEL2); ·····················/* let RDB high */
+c22935 ··ioDelay(DELAY_RDB_RECOVER);
+6dafb3 ··SetControl(CTRL_BASE); ································/* let ADRSEL2 high */
+9ae0ca ··ioDelay(DELAY_ADRSEL2_SETTLE);
+25af5a
+2b76c9 ··return (rval);
+60efe6 }
+17af5a
+90b207 int CheckRegister(int board, int chip, int reg, int value) {
+4717e0 ··int i;
+25af5a
+9a0cd1 ··i = GetRegister(board, chip, reg);
+6a76cd ··if (i != value)
+c2400d ····return (-1);
+fac86a ··return (0);
+15efe6 }
+a1af5a
+--5810 001b3720ca780020006 Page 1 of chipio.h
+8d2d03 /*****************************************************************************
+1a43fa ·* chipio.h ·································································*
+7c1e7f ·* ························Header file for chipio.c ·························*
+c629eb ·* ··········································································*
+7709fc ·* ···Written 1998 by Cryptography Research (http://www.cryptography.com) ···*
+218aaf ·* ······and Paul Kocher for the Electronic Frontier Foundation (EFF). ······*
+e6caeb ·* ······Placed in the public domain by Cryptography Research and EFF. ······*
+8b4992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+1329eb ·* ··········································································*
+3fc755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+2329eb ·* ··········································································*
+2d489b ·*****************************************************************************
+3229eb ·* ··········································································*
+046eef ·* ··REVISION HISTORY: ······················································*
+2b29eb ·* ··········································································*
+ad28d9 ·* ··Version 1.0: ·Initial release by Cryptography Research to EFF. ·········*
+ba29eb ·* ··········································································*
+08d8c3 ·*****************************************************************************/
+a7af5a
+f51920 #ifndef __CHIPIO_H
+e6d6b9 #define __CHIPIO_H
+d8af5a
+a32deb #define SEARCH_UNITS_PER_CHIP 24
+b9af5a
+96c928 #define REG_PTXT_VECTOR ·····(0x00)
+5821cd #define REG_PTXT_XOR_MASK ···(0x20)
+9db3c1 #define REG_CIPHERTEXT0 ·····(0x28)
+211752 #define REG_CIPHERTEXT1 ·····(0x30)
+25db81 #define REG_PTXT_BYTE_MASK ··(0x38)
+2b107b #define REG_SEARCHINFO ······(0x3F)
+6db9aa #define REG_SEARCH_KEY(x) ···(0x40 + 8*(x))
+c4701d #define REG_SEARCH_STATUS(x) (0x47+8*(x))
+69af5a
+4bea1c void SetBaseAddress(int address);
+6bbdbf int ResetBoard(int board);
+b4274a void SetRegister(int board, int chip, int reg, int value);
+ba59e9 int GetRegister(int board, int chip, int reg);
+6ea7fa int CheckRegister(int board, int chip, int reg, int value);
+f8af5a
+147454 #endif
+b3af5a
+--176a 0002909cb8180020007 Page 1 of des.c
+8d2d03 /*****************************************************************************
+9240d0 ·* des.c ····································································*
+a8bcaa ·* ················Software Model of ASIC DES Implementation ················*
+9b29eb ·* ··········································································*
+6ed9a2 ·* ··Written 1995-8 by Cryptography Research (http://www.cryptography.com) ··*
+b2c441 ·* ··Original version by Paul Kocher. Placed in the public domain in 1998. ··*
+d34992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+4829eb ·* ··········································································*
+25c755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+df29eb ·* ··········································································*
+ce489b ·*****************************************************************************
+8229eb ·* ··········································································*
+6015cb ·* ··IMPLEMENTATION NOTES: ··················································*
+2829eb ·* ··········································································*
+217602 ·* ··This DES implementation adheres to the FIPS PUB 46 spec and produces ···*
+a5ad64 ·* ··standard output. ·The internal operation of the algorithm is slightly ··*
+bd2a2b ·* ··different from FIPS 46. ·For example, bit orderings are reversed ·······*
+fd1be6 ·* ··(the right-hand bit is now labelled as bit 0), the S tables have ·······*
+bab9c7 ·* ··rearranged to simplify implementation, and several permutations have ···*
+e3c21e ·* ··been inverted. ·For simplicity and to assist with testing of hardware ··*
+c52d8b ·* ··implementations, code size and performance optimizations are omitted. ··*
+5d29eb ·* ··········································································*
+3c489b ·*****************************************************************************
+1929eb ·* ··········································································*
+e76eef ·* ··REVISION HISTORY: ······················································*
+d229eb ·* ··········································································*
+ccc443 ·* ··Version 1.0: ·Initial release ·-- PCK. ·································*
+7bb74c ·* ··Version 1.1: ·Altered DecryptDES exchanges to match EncryptDES. -- PCK ·*
+425c27 ·* ··Version 1.2: ·Minor edits and beautifications. ·-- PCK ·················*
+03d930 ·* ··Version 1.3: ·Changes and edits for EFF DES Cracker project. ···········*
+ad29eb ·* ··········································································*
+83d8c3 ·*****************************************************************************/
+e8af5a
+bffeb2 #include <stdio.h>
+45bea3 #include <stdlib.h>
+2e324c #include <string.h>
+0a2bac #include "des.h"
+32af5a
+557461 static void ComputeRoundKey(bool roundKey[56], bool key[56]);
+2884a3 static void RotateRoundKeyLeft(bool roundKey[56]);
+9bccfa static void RotateRoundKeyRight(bool roundKey[56]);
+611504 static void ComputeIP(bool L[32], bool R[32], bool inBlk[64]);
+3707da static void ComputeFP(bool outBlk[64], bool L[32], bool R[32]);
+46017b static void ComputeF(bool fout[32], bool R[32], bool roundKey[56]);
+3694fe static void ComputeP(bool output[32], bool input[32]);
+ab7fae static void ComputeS_Lookup(int k, bool output[4], bool input[6]);
+6aabe7 static void ComputePC2(bool subkey[48], bool roundKey[56]);
+a3fd9c static void ComputeExpansionE(bool expandedBlock[48], bool R[32]);
+ba2f30 static void DumpBin(char *str, bool *b, int bits);
+8c43bc static void Exchange_L_and_R(bool L[32], bool R[32]);
+87af5a
+27a0e5 static int EnableDumpBin = 0;
+02af5a
+bdaf5a
+ceaf5a
+964d6c /**********************************************************************/
+dec68f /* ···································································*/
+933c1a /* ···························DES TABLES ·····························*/
+46c68f /* ···································································*/
+094d6c /**********************************************************************/
+3daf5a
+b1af5a
+7538e5 /*
+f6556a ·* ·IP: Output bit table_DES_IP[i] equals input bit i.
+a3495d ·*/
+51c166 static int table_DES_IP[64] = {
+4f9d69 ····39, ·7, 47, 15, 55, 23, 63, 31,
+b9c827 ····38, ·6, 46, 14, 54, 22, 62, 30,
+f038ae ····37, ·5, 45, 13, 53, 21, 61, 29,
+5c6de0 ····36, ·4, 44, 12, 52, 20, 60, 28,
+86b247 ····35, ·3, 43, 11, 51, 19, 59, 27,
+29e709 ····34, ·2, 42, 10, 50, 18, 58, 26,
+--e1e6 00020a1a00d80020007 Page 2 of des.c
+a5829e ····33, ·1, 41, ·9, 49, 17, 57, 25,
+c511ff ····32, ·0, 40, ·8, 48, 16, 56, 24
+b482f7 };
+a1af5a
+0caf5a
+6738e5 /*
+b248ca ·* ·FP: Output bit table_DES_FP[i] equals input bit i.
+11495d ·*/
+eadd2a static int table_DES_FP[64] = {
+225b71 ····57, 49, 41, 33, 25, 17, ·9, ·1,
+d98cd9 ····59, 51, 43, 35, 27, 19, 11, ·3,
+e79996 ····61, 53, 45, 37, 29, 21, 13, ·5,
+6eb571 ····63, 55, 47, 39, 31, 23, 15, ·7,
+c50e3f ····56, 48, 40, 32, 24, 16, ·8, ·0,
+91d997 ····58, 50, 42, 34, 26, 18, 10, ·2,
+8dccd8 ····60, 52, 44, 36, 28, 20, 12, ·4,
+514da9 ····62, 54, 46, 38, 30, 22, 14, ·6
+6f82f7 };
+47af5a
+20af5a
+8038e5 /*
+3cda05 ·* ·PC1: Permutation choice 1, used to pre-process the key
+d4495d ·*/
+c00c38 static int table_DES_PC1[56] = {
+8bb89e ····27, 19, 11, 31, 39, 47, 55,
+8728e4 ····26, 18, 10, 30, 38, 46, 54,
+9c8d2c ····25, 17, ·9, 29, 37, 45, 53,
+e21d56 ····24, 16, ·8, 28, 36, 44, 52,
+37bf91 ····23, 15, ·7, ·3, 35, 43, 51,
+a62feb ····22, 14, ·6, ·2, 34, 42, 50,
+5c91e6 ····21, 13, ·5, ·1, 33, 41, 49,
+fad02f ····20, 12, ·4, ·0, 32, 40, 48
+b082f7 };
+55af5a
+dfaf5a
+8438e5 /*
+45f37a ·* ·PC2: Map 56-bit round key to a 48-bit subkey
+0a495d ·*/
+047fcf static int table_DES_PC2[48] = {
+498889 ····24, 27, 20, ·6, 14, 10, ·3, 22,
+2e30a5 ·····0, 17, ·7, 12, ·8, 23, 11, ·5,
+c23fa5 ····16, 26, ·1, ·9, 19, 25, ·4, 15,
+3ce272 ····54, 43, 36, 29, 49, 40, 48, 30,
+646356 ····52, 44, 37, 33, 46, 35, 50, 41,
+207786 ····28, 53, 51, 55, 32, 45, 39, 42
+aa82f7 };
+ffaf5a
+d1af5a
+d838e5 /*
+1cdb31 ·* ·E: Expand 32-bit R to 48 bits.
+76495d ·*/
+ac6a87 static int table_DES_E[48] = {
+fae6fb ····31, ·0, ·1, ·2, ·3, ·4, ·3, ·4,
+f62634 ·····5, ·6, ·7, ·8, ·7, ·8, ·9, 10,
+95d06b ····11, 12, 11, 12, 13, 14, 15, 16,
+4b7fa0 ····15, 16, 17, 18, 19, 20, 19, 20,
+cf4d0d ····21, 22, 23, 24, 23, 24, 25, 26,
+d09708 ····27, 28, 27, 28, 29, 30, 31, ·0
+4082f7 };
+4faf5a
+eeaf5a
+ae38e5 /*
+bcc34a ·* ·P: Permutation of S table outputs
+b7495d ·*/
+365137 static int table_DES_P[32] = {
+15f612 ····11, 17, ·5, 27, 25, 10, 20, ·0,
+d0b9f8 ····13, 21, ·3, 28, 29, ·7, 18, 24,
+18cde3 ····31, 22, 12, ·6, 26, ·2, 16, ·8,
+9b60a7 ····14, 30, ·4, 19, ·1, ·9, 15, 23
+4482f7 };
+ceaf5a
+20af5a
+--f1a0 000f7378b1880020007 Page 3 of des.c
+bc38e5 /*
+8e6f34 ·* ·S Tables: Introduce nonlinearity and avalanche
+a3495d ·*/
+a11e19 static int table_DES_S[8][64] = {
+3cd69a ····/* table S[0] */
+e4846d ········{ ··13, ·1, ·2, 15, ·8, 13, ·4, ·8, ·6, 10, 15, ·3, 11, ·7, ·1, ·4,
+c965af ············10, 12, ·9, ·5, ·3, ·6, 14, 11, ·5, ·0, ·0, 14, 12, ·9, ·7, ·2,
+95d5b0 ·············7, ·2, 11, ·1, ·4, 14, ·1, ·7, ·9, ·4, 12, 10, 14, ·8, ·2, 13,
+8c3ee1 ·············0, 15, ·6, 12, 10, ·9, 13, ·0, 15, ·3, ·3, ·5, ·5, ·6, ·8, 11 ·},
+11d2b1 ····/* table S[1] */
+d54b6a ········{ ···4, 13, 11, ·0, ·2, 11, 14, ·7, 15, ·4, ·0, ·9, ·8, ·1, 13, 10,
+98df4d ·············3, 14, 12, ·3, ·9, ·5, ·7, 12, ·5, ·2, 10, 15, ·6, ·8, ·1, ·6,
+35f575 ·············1, ·6, ·4, 11, 11, 13, 13, ·8, 12, ·1, ·3, ·4, ·7, 10, 14, ·7,
+7b6234 ············10, ·9, 15, ·5, ·6, ·0, ·8, 15, ·0, 14, ·5, ·2, ·9, ·3, ·2, 12 ·},
+d2decc ····/* table S[2] */
+1ef108 ········{ ··12, 10, ·1, 15, 10, ·4, 15, ·2, ·9, ·7, ·2, 12, ·6, ·9, ·8, ·5,
+9bd582 ·············0, ·6, 13, ·1, ·3, 13, ·4, 14, 14, ·0, ·7, 11, ·5, ·3, 11, ·8,
+7f0bbf ·············9, ·4, 14, ·3, 15, ·2, ·5, 12, ·2, ·9, ·8, ·5, 12, 15, ·3, 10,
+9a7505 ·············7, 11, ·0, 14, ·4, ·1, 10, ·7, ·1, ·6, 13, ·0, 11, ·8, ·6, 13 ·},
+68dae7 ····/* table S[3] */
+305c4d ········{ ···2, 14, 12, 11, ·4, ·2, ·1, 12, ·7, ·4, 10, ·7, 11, 13, ·6, ·1,
+d80156 ·············8, ·5, ·5, ·0, ·3, 15, 15, 10, 13, ·3, ·0, ·9, 14, ·8, ·9, ·6,
+37f5dc ·············4, 11, ·2, ·8, ·1, 12, 11, ·7, 10, ·1, 13, 14, ·7, ·2, ·8, 13,
+ded332 ············15, ·6, ·9, 15, 12, ·0, ·5, ·9, ·6, 10, ·3, ·4, ·0, ·5, 14, ·3 ·},
+5fc636 ····/* table S[4] */
+ef4850 ········{ ···7, 13, 13, ·8, 14, 11, ·3, ·5, ·0, ·6, ·6, 15, ·9, ·0, 10, ·3,
+14f1a6 ·············1, ·4, ·2, ·7, ·8, ·2, ·5, 12, 11, ·1, 12, 10, ·4, 14, 15, ·9,
+45f43f ············10, ·3, ·6, 15, ·9, ·0, ·0, ·6, 12, 10, 11, ·1, ·7, 13, 13, ·8,
+9ed830 ············15, ·9, ·1, ·4, ·3, ·5, 14, 11, ·5, 12, ·2, ·7, ·8, ·2, ·4, 14 ·},
+49c21d ····/* table S[5] */
+b1ea9b ········{ ··10, 13, ·0, ·7, ·9, ·0, 14, ·9, ·6, ·3, ·3, ·4, 15, ·6, ·5, 10,
+03bd2c ·············1, ·2, 13, ·8, 12, ·5, ·7, 14, 11, 12, ·4, 11, ·2, 15, ·8, ·1,
+bed567 ············13, ·1, ·6, 10, ·4, 13, ·9, ·0, ·8, ·6, 15, ·9, ·3, ·8, ·0, ·7,
+3b8261 ············11, ·4, ·1, 15, ·2, 14, 12, ·3, ·5, 11, 10, ·5, 14, ·2, ·7, 12 ·},
+c3ce60 ····/* table S[6] */
+69a636 ········{ ··15, ·3, ·1, 13, ·8, ·4, 14, ·7, ·6, 15, 11, ·2, ·3, ·8, ·4, 14,
+38ac1c ·············9, 12, ·7, ·0, ·2, ·1, 13, 10, 12, ·6, ·0, ·9, ·5, 11, 10, ·5,
+6b7311 ·············0, 13, 14, ·8, ·7, 10, 11, ·1, 10, ·3, ·4, 15, 13, ·4, ·1, ·2,
+a8b1aa ·············5, 11, ·8, ·6, 12, ·7, ·6, 12, ·9, ·0, ·3, ·5, ·2, 14, 15, ·9 ·},
+ceca4b ····/* table S[7] */
+68cf66 ········{ ··14, ·0, ·4, 15, 13, ·7, ·1, ·4, ·2, 14, 15, ·2, 11, 13, ·8, ·1,
+7baacb ·············3, 10, 10, ·6, ·6, 12, 12, 11, ·5, ·9, ·9, ·5, ·0, ·3, ·7, ·8,
+4d2f45 ·············4, 15, ·1, 12, 14, ·8, ·8, ·2, 13, ·4, ·6, ·9, ·2, ·1, 11, ·7,
+3f2777 ············15, ·5, 12, 11, ·9, ·3, ·7, 14, ·3, 10, 10, ·0, ·5, ·6, ·0, 13 ·}
+1882f7 };
+34af5a
+55af5a
+e6af5a
+fcaf5a
+d34d6c /**********************************************************************/
+dec68f /* ···································································*/
+fbcabf /* ····························DES CODE ······························*/
+ffc68f /* ···································································*/
+474d6c /**********************************************************************/
+8eaf5a
+5baf5a
+2a38e5 /*
+0fb080 ·* ·EncryptDES: Encrypt a block using DES. Set verbose for debugging info.
+4d770b ·* ·(This loop does both loops on the "DES Encryption" page of the flowchart.)
+22495d ·*/
+da5620 void EncryptDES(bool key[56], bool outBlk[64], bool inBlk[64], int verbose) {
+062b1c ··int i,round;
+909aa1 ··bool R[32], L[32], fout[32];
+6fbfaf ··bool roundKey[56];
+d8af5a
+9b1294 ··EnableDumpBin = verbose; ·····················/* set debugging on/off flag */
+3ccb2a ··DumpBin("input(left)", inBlk+32, 32);
+728fb2 ··DumpBin("input(right)", inBlk, 32);
+490a8e ··DumpBin("raw key(left )", key+28, 28);
+d75585 ··DumpBin("raw key(right)", key, 28);
+ffaf5a
+f7c1be ··/* Compute the first roundkey by performing PC1 */
+--1527 00053c1ed1980020007 Page 4 of des.c
+47b264 ··ComputeRoundKey(roundKey, key);
+53af5a
+0295d4 ··DumpBin("roundKey(L)", roundKey+28, 28);
+840a5f ··DumpBin("roundKey(R)", roundKey, 28);
+48af5a
+e81340 ··/* Compute the initial permutation and divide the result into L and R */
+1ad1a8 ··ComputeIP(L,R,inBlk);
+aeaf5a
+7777ba ··DumpBin("after IP(L)", L, 32);
+cc7699 ··DumpBin("after IP(R)", R, 32);
+baaf5a
+1ff437 ··for (round = 0; round < 16; round++) {
+4421bf ····if (verbose)
+a491a0 ······printf("-------------- BEGIN ENCRYPT ROUND %d -------------\n", round);
+838034 ····DumpBin("round start(L)", L, 32);
+628117 ····DumpBin("round start(R)", R, 32);
+d2af5a
+8b7fc3 ····/* Rotate roundKey halves left once or twice (depending on round) */
+aec8ba ····RotateRoundKeyLeft(roundKey);
+9b1467 ····if (round != 0 && round != 1 && round != 8 && round != 15)
+1950e7 ······RotateRoundKeyLeft(roundKey);
+003cd7 ····DumpBin("roundKey(L)", roundKey+28, 28);
+bb1bd4 ····DumpBin("roundKey(R)", roundKey, 28);
+82af5a
+e0033b ····/* Compute f(R, roundKey) and exclusive-OR onto the value in L */
+14d969 ····ComputeF(fout, R, roundKey);
+5c54e7 ····DumpBin("f(R,key)", fout, 32);
+4a4739 ····for (i = 0; i < 32; i++)
+2ba9e6 ······L[i] ^= fout[i];
+a5a5ab ····DumpBin("L^f(R,key)", L, 32);
+56af5a
+7a68b4 ····Exchange_L_and_R(L,R);
+3aaf5a
+a3a140 ····DumpBin("round end(L)", L, 32);
+fca063 ····DumpBin("round end(R)", R, 32);
+4b21bf ····if (verbose)
+a24514 ······printf("--------------- END ROUND %d --------------\n", round);
+66df1c ··}
+d9af5a
+5e8e68 ··Exchange_L_and_R(L,R);
+87af5a
+71370b ··/* Combine L and R then compute the final permutation */
+77cf94 ··ComputeFP(outBlk,L,R);
+468b91 ··DumpBin("FP out( left)", outBlk+32, 32);
+cbf675 ··DumpBin("FP out(right)", outBlk, 32);
+b0efe6 }
+43af5a
+15af5a
+01af5a
+e038e5 /*
+1e9b68 ·* ·DecryptDES: Decrypt a block using DES. Set verbose for debugging info.
+6fa5c7 ·* ·(This loop does both loops on the "DES Decryption" page of the flowchart.)
+1a495d ·*/
+b66de8 void DecryptDES(bool key[56], bool outBlk[64], bool inBlk[64], int verbose) {
+b82b1c ··int i,round;
+299aa1 ··bool R[32], L[32], fout[32];
+f9bfaf ··bool roundKey[56];
+24af5a
+5a1294 ··EnableDumpBin = verbose; ·····················/* set debugging on/off flag */
+96cb2a ··DumpBin("input(left)", inBlk+32, 32);
+4b8fb2 ··DumpBin("input(right)", inBlk, 32);
+f60a8e ··DumpBin("raw key(left )", key+28, 28);
+395585 ··DumpBin("raw key(right)", key, 28);
+82af5a
+8cc1be ··/* Compute the first roundkey by performing PC1 */
+a4b264 ··ComputeRoundKey(roundKey, key);
+dcaf5a
+5f95d4 ··DumpBin("roundKey(L)", roundKey+28, 28);
+300a5f ··DumpBin("roundKey(R)", roundKey, 28);
+33af5a
+291340 ··/* Compute the initial permutation and divide the result into L and R */
+53d1a8 ··ComputeIP(L,R,inBlk);
+--1f01 0005e2de84280020007 Page 5 of des.c
+e0af5a
+7177ba ··DumpBin("after IP(L)", L, 32);
+3d7699 ··DumpBin("after IP(R)", R, 32);
+96af5a
+3cf437 ··for (round = 0; round < 16; round++) {
+3d21bf ····if (verbose)
+ff2cb4 ······printf("-------------- BEGIN DECRYPT ROUND %d -------------\n", round);
+
+528034 ····DumpBin("round start(L)", L, 32);
+e78117 ····DumpBin("round start(R)", R, 32);
+22af5a
+d3033b ····/* Compute f(R, roundKey) and exclusive-OR onto the value in L */
+06d969 ····ComputeF(fout, R, roundKey);
+dc54e7 ····DumpBin("f(R,key)", fout, 32);
+b54739 ····for (i = 0; i < 32; i++)
+eca9e6 ······L[i] ^= fout[i];
+dba5ab ····DumpBin("L^f(R,key)", L, 32);
+50af5a
+8e68b4 ····Exchange_L_and_R(L,R);
+e9af5a
+2dc90d ····/* Rotate roundKey halves right once or twice (depending on round) */
+3210bc ····DumpBin("roundKey(L)", roundKey+28, 28); ······/* show keys before shift */
+be1bd4 ····DumpBin("roundKey(R)", roundKey, 28);
+3df5db ····RotateRoundKeyRight(roundKey);
+6711ff ····if (round != 0 && round != 7 && round != 14 && round != 15)
+f97c23 ······RotateRoundKeyRight(roundKey);
+02af5a
+cea140 ····DumpBin("round end(L)", L, 32);
+7ba063 ····DumpBin("round end(R)", R, 32);
+4321bf ····if (verbose)
+f04514 ······printf("--------------- END ROUND %d --------------\n", round);
+3fdf1c ··}
+61af5a
+738e68 ··Exchange_L_and_R(L,R);
+71af5a
+b9370b ··/* Combine L and R then compute the final permutation */
+b9cf94 ··ComputeFP(outBlk,L,R);
+b08b91 ··DumpBin("FP out( left)", outBlk+32, 32);
+c1f675 ··DumpBin("FP out(right)", outBlk, 32);
+7cefe6 }
+59af5a
+9aaf5a
+1daf5a
+a938e5 /*
+bd8d8b ·* ·ComputeRoundKey: Compute PC1 on the key and store the result in roundKey
+6c495d ·*/
+94988e static void ComputeRoundKey(bool roundKey[56], bool key[56]) {
+fe17e0 ··int i;
+afaf5a
+be815b ··for (i = 0; i < 56; i++)
+46d64b ····roundKey[table_DES_PC1[i]] = key[i];
+f3efe6 }
+1aaf5a
+4caf5a
+b3af5a
+af38e5 /*
+3555cb ·* ·RotateRoundKeyLeft: Rotate each of the halves of roundKey left one bit
+42495d ·*/
+af7d60 static void RotateRoundKeyLeft(bool roundKey[56]) {
+e4483e ··bool temp1, temp2;
+c717e0 ··int i;
+88af5a
+9bf689 ··temp1 = roundKey[27];
+3efe1b ··temp2 = roundKey[55];
+bb300b ··for (i = 27; i >= 1; i--) {
+43575a ····roundKey[i] = roundKey[i-1];
+b53242 ····roundKey[i+28] = roundKey[i+28-1];
+7adf1c ··}
+4d7b9f ··roundKey[ 0] = temp1;
+e0cf9d ··roundKey[28] = temp2;
+a8efe6 }
+f3af5a
+5eaf5a
+--1bb7 0002e9cf80d80020007 Page 6 of des.c
+e0af5a
+d338e5 /*
+7dc6ad ·* ·RotateRoundKeyRight: Rotate each of the halves of roundKey right one bit
+f9495d ·*/
+1ab26c static void RotateRoundKeyRight(bool roundKey[56]) {
+7d483e ··bool temp1, temp2;
+1517e0 ··int i;
+c0af5a
+7a5025 ··temp1 = roundKey[0];
+9c4548 ··temp2 = roundKey[28];
+5fe568 ··for (i = 0; i < 27; i++) {
+196cc2 ····roundKey[i] = roundKey[i+1];
+7809da ····roundKey[i+28] = roundKey[i+28+1];
+ecdf1c ··}
+dfa88d ··roundKey[27] = temp1;
+945d11 ··roundKey[55] = temp2;
+e3efe6 }
+2caf5a
+41af5a
+38af5a
+7738e5 /*
+a32903 ·* ·ComputeIP: Compute the initial permutation and split into L and R halves.
+df495d ·*/
+23ac44 static void ComputeIP(bool L[32], bool R[32], bool inBlk[64]) {
+686085 ··bool output[64];
+d417e0 ··int i;
+a3af5a
+77aeaf ··/* Permute
+07f9a6 ···*/
+4e6406 ··for (i = 63; i >= 0; i--)
+adc750 ····output[table_DES_IP[i]] = inBlk[i];
+95af5a
+
+500318 ··/* Split into R and L. ·Bits 63..32 go in L, bits 31..0 go in R.
+70f9a6 ···*/
+daba85 ··for (i = 63; i >= 0; i--) {
+d40368 ····if (i >= 32)
+3ef2b8 ······L[i-32] = output[i];
+60842c ····else
+b070b5 ······R[i] = output[i];
+86df1c ··}
+f5efe6 }
+4baf5a
+70af5a
+2aaf5a
+3738e5 /*
+8e4ffe ·* ·ComputeFP: Combine the L and R halves and do the final permutation.
+51495d ·*/
+d193a5 static void ComputeFP(bool outBlk[64], bool L[32], bool R[32]) {
+f342e9 ··bool input[64];
+5c17e0 ··int i;
+08af5a
+2c6c41 ··/* Combine L and R into input[64]
+45f9a6 ···*/
+916406 ··for (i = 63; i >= 0; i--)
+878397 ····input[i] = (i >= 32) ? L[i - 32] : R[i];
+8caf5a
+d3aeaf ··/* Permute
+98f9a6 ···*/
+1c6406 ··for (i = 63; i >= 0; i--)
+85e116 ····outBlk[table_DES_FP[i]] = input[i];
+bcefe6 }
+18af5a
+beaf5a
+a8af5a
+5e38e5 /*
+90810f ·* ·ComputeF: Compute the DES f function and store the result in fout.
+01495d ·*/
+0c2720 static void ComputeF(bool fout[32], bool R[32], bool roundKey[56]) {
+a3f6a2 ··bool expandedBlock[48], subkey[48], sout[32];
+adbbe6 ··int i,k;
+d9af5a
+2e1a04 ··/* Expand R into 48 bits using the E expansion */
+--92d2 000e8f1171f80020007 Page 7 of des.c
+fb99d7 ··ComputeExpansionE(expandedBlock, R);
+e5f0ba ··DumpBin("expanded E", expandedBlock, 48);
+efaf5a
+7693ff ··/* Convert the roundKey into the subkey using PC2 */
+4a7840 ··ComputePC2(subkey, roundKey);
+21d717 ··DumpBin("subkey", subkey, 48);
+39af5a
+e5154c ··/* XOR the subkey onto the expanded block */
+bffcab ··for (i = 0; i < 48; i++)
+2d6512 ····expandedBlock[i] ^= subkey[i];
+fbaf5a
+340740 ··/* Divide expandedBlock into 6-bit chunks and do S table lookups */
+0225c6 ··for (k = 0; k < 8; k++)
+e985c7 ····ComputeS_Lookup(k, sout+4*k, expandedBlock+6*k);
+67af5a
+dbfd35 ··/* To complete the f() calculation, do permutation P on the S table output */
+6d2d52 ··ComputeP(fout, sout);
+b3efe6 }
+0caf5a
+76af5a
+d3af5a
+5538e5 /*
+eb913f ·* ·ComputeP: Compute the P permutation on the S table outputs.
+52495d ·*/
+61f410 static void ComputeP(bool output[32], bool input[32]) {
+3b17e0 ··int i;
+20af5a
+b5339a ··for (i = 0; i < 32; i++)
+3f7688 ····output[table_DES_P[i]] = input[i];
+b1efe6 }
+10af5a
+94af5a
+70af5a
+5b38e5 /*
+8a859b ·* ·Look up a 6-bit input in S table k and store the result as a 4-bit output.
+ad495d ·*/
+49a67e static void ComputeS_Lookup(int k, bool output[4], bool input[6]) {
+9bf3da ··int inputValue, outputValue;
+a5af5a
+ad1a9e ··/* Convert the input bits into an integer */
+6afccb ··inputValue = input[0] + 2*input[1] + 4*input[2] + 8*input[3] +
+f18c1a ··········16*input[4] + 32*input[5];
+3faf5a
+164a3e ··/* Do the S table lookup */
+34b706 ··outputValue = table_DES_S[k][inputValue];
+4baf5a
+0a8aed ··/* Convert the result into binary form */
+0c9a60 ··output[0] = (outputValue & 1) ? 1 : 0;
+3a6aec ··output[1] = (outputValue & 2) ? 1 : 0;
+d9f487 ··output[2] = (outputValue & 4) ? 1 : 0;
+708c7f ··output[3] = (outputValue & 8) ? 1 : 0;
+95efe6 }
+dfaf5a
+78af5a
+d2af5a
+0338e5 /*
+8181cc ·* ·ComputePC2: Map a 56-bit round key onto a 48-bit subkey
+2a495d ·*/
+22796f static void ComputePC2(bool subkey[48], bool roundKey[56]) {
+2817e0 ··int i;
+d0af5a
+17fcab ··for (i = 0; i < 48; i++)
+bec8bc ····subkey[i] = roundKey[table_DES_PC2[i]];
+16efe6 }
+67af5a
+c5af5a
+43af5a
+2838e5 /*
+20459d ·* ·ComputeExpansionE: Compute the E expansion to prepare to use S tables.
+b8495d ·*/
+4bb46d static void ComputeExpansionE(bool expandedBlock[48], bool R[32]) {
+e817e0 ··int i;
+--cf4e 001f263015b80020007 Page 8 of des.c
+e0af5a
+f3fcab ··for (i = 0; i < 48; i++)
+7db971 ····expandedBlock[i] = R[table_DES_E[i]];
+0cefe6 }
+e0af5a
+a1af5a
+d8af5a
+2e38e5 /*
+10f923 ·* ·Exchange_L_and_R: ·Swap L and R
+08495d ·*/
+c895d1 static void Exchange_L_and_R(bool L[32], bool R[32]) {
+5a17e0 ··int i;
+aaaf5a
+36339a ··for (i = 0; i < 32; i++)
+b225db ····L[i] ^= R[i] ^= L[i] ^= R[i]; ················/* exchanges L[i] and R[i] */
+f8efe6 }
+3eaf5a
+84af5a
+60af5a
+0038e5 /*
+489231 ·* ·DumpBin: Display intermediate values if emableDumpBin is set.
+41495d ·*/
+1ddbd9 static void DumpBin(char *str, bool *b, int bits) {
+6e17e0 ··int i;
+56af5a
+648af7 ··if ((bits % 4)!=0 || bits>48) {
+6db2e5 ····printf("Bad call to DumpBin (bits > 48 or bit len not a multiple of 4\n");
+5c646c ····exit(1);
+42df1c ··}
+8eaf5a
+413332 ··if (EnableDumpBin) {
+3ff079 ····for (i = strlen(str); i < 14; i++)
+b7c8c3 ······printf(" ");
+655fc3 ····printf("%s: ", str);
+98eac8 ····for (i = bits-1; i >= 0; i--)
+d2de5b ······printf("%d", b[i]);
+8a3177 ····printf(" ");
+de821f ····for (i = bits; i < 48; i++)
+4ec8c3 ······printf(" ");
+6b6b57 ····printf("(");
+a705d7 ····for (i = bits-4; i >= 0; i-=4)
+0bf78c ······printf("%X", b[i]+2*b[i+1]+4*b[i+2]+8*b[i+3]);
+2efa6f ····printf(")\n");
+04df1c ··}
+01efe6 }
+f2af5a
+--5f71 001ba22687980020008 Page 1 of des.h
+8d2d03 /*****************************************************************************
+cb1a06 ·* des.h ····································································*
+0f4b62 ·* ··························Header file for des.c ··························*
+5c29eb ·* ··········································································*
+57d9a2 ·* ··Written 1995-8 by Cryptography Research (http://www.cryptography.com) ··*
+e9c441 ·* ··Original version by Paul Kocher. Placed in the public domain in 1998. ··*
+f64992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+4329eb ·* ··········································································*
+ddc755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+3e29eb ·* ··········································································*
+dd489b ·*****************************************************************************
+8029eb ·* ··········································································*
+246eef ·* ··REVISION HISTORY: ······················································*
+8b29eb ·* ··········································································*
+00c443 ·* ··Version 1.0: ·Initial release ·-- PCK. ·································*
+87f57b ·* ··Version 1.1: ·Changes and edits for EFF DES Cracker project. ···········*
+6029eb ·* ··········································································*
+ffd8c3 ·*****************************************************************************/
+45af5a
+9da019 #ifndef __DES_H
+828311 #define __DES_H
+a3af5a
+c608c5 typedef char bool;
+909629 void EncryptDES(bool key[56], bool outBlk[64], bool inBlk[64], int verbose);
+8e8db3 void DecryptDES(bool key[56], bool outBlk[64], bool inBlk[64], int verbose);
+bcaf5a
+f27454 #endif
+baaf5a
+--5736 0007f67bbbf80020009 Page 1 of initsrch.c
+8d2d03 /*****************************************************************************
+2fe318 ·* initsrch.c ·······························································*
+fa709c ·* ···············DES Search Engine Search Definition Program ···············*
+f829eb ·* ··········································································*
+5d09fc ·* ···Written 1998 by Cryptography Research (http://www.cryptography.com) ···*
+0b8aaf ·* ······and Paul Kocher for the Electronic Frontier Foundation (EFF). ······*
+bccaeb ·* ······Placed in the public domain by Cryptography Research and EFF. ······*
+9a4992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+8c29eb ·* ··········································································*
+72c755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+5329eb ·* ··········································································*
+cf489b ·*****************************************************************************
+cb29eb ·* ··········································································*
+3615cb ·* ··IMPLEMENTATION NOTES: ··················································*
+b629eb ·* ··········································································*
+c6922a ·* ··This program is used to define searches that will be run on the DES ····*
+b77950 ·* ··search array. ·The program creates a search context file containing ····*
+ec6515 ·* ··the ciphertexts, search parameters, and a list of the key regions ······*
+6bec7c ·* ··to search. ·(A key region is the top 24 bits of a key.) ················*
+5829eb ·* ··········································································*
+a5489b ·*****************************************************************************
+4229eb ·* ··········································································*
+d16eef ·* ··REVISION HISTORY: ······················································*
+c329eb ·* ··········································································*
+7828d9 ·* ··Version 1.0: ·Initial release by Cryptography Research to EFF. ·········*
+2c29eb ·* ··········································································*
+aed8c3 ·*****************************************************************************/
+41af5a
+6abcd3 #define SOFTWARE_VERSION "1.0"
+55a5c9 #define SOFTWARE_DATE ···"04-21-1998"
+02af5a
+28af5a
+c5feb2 #include <stdio.h>
+a2bea3 #include <stdlib.h>
+9b1465 #include <conio.h>
+49324c #include <string.h>
+46c737 #include <memory.h>
+2b0a8b #include <time.h>
+93b1cb #include <ctype.h>
+00c94c #include "search.h"
+552ba0 #include "keyblock.h"
+ecaf5a
+5eb216 #define EXIT_ERR(s) { fprintf(stderr, s); exit(1); }
+7146ff static void dumpBin(char *intro, unsigned char *data, int len);
+51ab37 static int unhex(unsigned char *data, char *hex, int byteCount);
+66af5a
+34af5a
+e2164b int main(int argc, char **argv) {
+551309 ··char searchType; ······················/* valid search types are K,C,E,B,M */
+babcdd ··int nextArg = 1;
+7963f8 ··unsigned char plaintext[8];
+fa17e0 ··int i;
+5fd5d9 ··char *c, buf[100];
+8e83f2 ··SEARCH_CTX ctx;
+32154a ··FILE *outfile;
+16817e ··char asciiBytes[] = { ·0, 9, 10, 13,' ','!', '\"', '\'','(',')',',','-','.',
+cbdc95 ···········'0','1','2','3','4','5','6','7','8','9',':',';','?',
+90b0c9 ···········'A','B','C','D','E','F','G','H','I','J','K','L','M',
+ea6651 ···········'N','O','P','Q','R','S','T','U','V','W','X','Y','Z','^','_','`',
+15790e ···········'a','b','c','d','e','f','g','h','i','j','k','l','m',
+78488f ···········'n','o','p','q','r','s','t','u','v','w','x','y','z' };
+c7af5a
+53ee0f ··printf("\nDES Search Definition Util. (Ver %s, %s). May be export "
+5bffaa ·········"controlled.\nWritten 1998 by Cryptography Research "
+cf2e08 ·········"(http://www.cryptography.com) for EFF.\n"
+c5c4fd ·········"This is unsupported "
+051151 ·········"free software: Use and distribute at your own risk.\n"
+50805d ·········"-------------------------------------------"
+d504bf ·········"---------------------------------\n\n\n",
+8aa1fb ·········SOFTWARE_VERSION, SOFTWARE_DATE);
+d7af5a
+7fcf50 ··if (argc == 1) {
+--cfc3 000b6391f9f80020009 Page 2 of initsrch.c
+87048b ····printf("Parameters can be entered on the command line or entered "
+a20e7c ···········"manually.\n\nUsage modes: ·(ctxt=ciphertext, ptxt=plaintext)\n"
+0ea4b3 ···········" ···desbrute search.ctx K (8 bytes ptxt) (8 bytes ctxt)\n"
+b34c3c ···········" ···desbrute search.ctx E (8 bytes ctxt0) (8 bytes ctxt1)\n"
+192ff0 ···········" ···desbrute search.ctx C (8 bytes IV) (8 bytes ctxt0) "
+289890 ·····················"(8 bytes ctxt1)\n"
+ad835b ···········" ···desbrute search.ctx B (1 ctxt byte to repeat)\n"
+42dba1 ···········" ···desbrute search.ctx M (ptxtVec) (IV) (ctxt0) (ctxt1)"
+171870 ·····················"(bMask) (schInf)\n\n"
+2cf69b ···········"Parameters can also be input from a file (e.g., "
+c31498 ···········"\"desbrute < param.in\"\n\n");
+36df1c ··}
+41af5a
+8b3b84 ··/**** OPEN OUTPUT FILE ****/
+142284 ··if (argc > nextArg) {
+b034d4 ····c = argv[nextArg++];
+5449d8 ··} else {
+3da6db ····printf("Enter output file for search context [ENTER=\"search.ctx\"]: ");
+7e0aa5 ····gets(buf);
+7a5331 ····if (*buf == '\0')
+6ea68e ······strcpy(buf, "search.ctx");
+383b52 ····c = buf;
+2bdf1c ··}
+e2744c ··outfile = fopen(c, "wb"); ·····························/* open output file */
+5c046f ··if (outfile == NULL)
+b8eee0 ····EXIT_ERR("Error opening output file.\n");
+27af5a
+28f1d1 ··/**** INITALIZE searchType ****/
+e92284 ··if (argc > nextArg) {
+0534d4 ····c = argv[nextArg++];
+7949d8 ··} else {
+1c4645 ····printf("The array supports a variety of search types:\n");
+893c39 ····printf(" ··K - Known plaintext (standard brute force).\n");
+458386 ····printf(" ··E - ECB ASCII text\n");
+ede877 ····printf(" ··C - CBC ASCII text\n");
+c042f4 ····printf(" ··B - Blaze challenge\n");
+f72546 ····printf(" ··M - Manual parameter specification\n");
+457020 ····printf("Enter search type: ");
+2e98f5 ····fgets(buf, 99, stdin);
+6f3b52 ····c = buf;
+16df1c ··}
+bde55a ··searchType = (char)toupper(c[0]);
+1fb2fb ··if (strchr("KECBM", searchType) == NULL)
+d09d35 ····EXIT_ERR("Unknown search type. ·Exiting.\n");
+caaf5a
+3653c4 ··/**** INITALIZE PARAMETERS FOR KNOWN PLAINTEXT SEARCHES ****/
+b606fd ··if (searchType == 'K') {
+40af5a
+31beaf ····/* Get known plaintext */
+b6f875 ····if (argc > nextArg) {
+66d208 ······c = argv[nextArg++];
+2a6a79 ····} else {
+865acf ······printf("Enter known plaintext (16 hex digits): ");
+44ec56 ······fgets(buf, 99, stdin);
+519eec ······c = buf;
+716fe7 ····}
+3b2686 ····if (unhex(plaintext, c, 8))
+5284f6 ······EXIT_ERR("Invalid plaintext. (Must be 16 hex digits)");
+43af5a
+d154a2 ····/* Get ciphertext 0 (use same for ciphertext 1) */
+99f875 ····if (argc > nextArg) {
+b6d208 ······c = argv[nextArg++];
+206a79 ····} else {
+116433 ······printf("Enter ciphertext (16 hex digits): ");
+ebec56 ······fgets(buf, 99, stdin);
+d79eec ······c = buf;
+306fe7 ····}
+a00e9c ····if (unhex(ctx.ciphertext0, c, 8) || unhex(ctx.ciphertext1, c, 8))
+ed301c ······EXIT_ERR("Invalid ciphertext. (Must be 16 hex digits.)");
+0baf5a
+95b74c ····/* Set ctx */
+b6b998 ····memset(ctx.plaintextVector, 0, sizeof(ctx.plaintextVector));
+--8f53 000bd86da9880020009 Page 3 of initsrch.c
+b10371 ····for (i = 0; i < 8; i++)
+0c2965 ······ctx.plaintextVector[plaintext[i]/8] |= (1 << (plaintext[i] % 8));
+9d09b5 ····ctx.plaintextByteMask = 0x00;
+23175f ····memset(ctx.plaintextXorMask, 0, sizeof(ctx.plaintextXorMask));
+d8f1c6 ····ctx.searchInfo = 16; ···········/* useCBC=0, extraXor=0, boardActiveEn=1 */
+73df1c ··}
+10af5a
+1a6d39 ··/**** INITALIZE PARAMETERS FOR ASCII SEARCHES ****/
+0a4571 ··if (searchType == 'E' || searchType == 'C') {
+b1af5a
+9d92ba ····/* Get IV (only if this is ciphertext mode) */
+dd5306 ····if (searchType == 'C') {
+0ae472 ······if (argc > nextArg) {
+eaa6ab ········c = argv[nextArg++];
+dbcfc7 ······} else {
+04935c ········printf("Enter IV (16 hex digits): ");
+635c62 ········fgets(buf, 99, stdin);
+20cc35 ········c = buf;
+8f42cc ······}
+f77471 ······if (unhex(ctx.plaintextXorMask, c, 8))
+906bc1 ········EXIT_ERR("Invalid IV. (Must be 16 hex digits.)");
+
+e26fe7 ····}
+30af5a
+16b543 ····/* Get ciphertext 0 */
+8cf875 ····if (argc > nextArg) {
+b0d208 ······c = argv[nextArg++];
+b86a79 ····} else {
+1c0a80 ······printf("Enter ciphertext0 (16 hex digits): ");
+c2ec56 ······fgets(buf, 99, stdin);
+
+819eec ······c = buf;
+636fe7 ····}
+d0f3c8 ····if (unhex(ctx.ciphertext0, c, 8))
+ab36df ······EXIT_ERR("Invalid ciphertext0. (Must be 16 hex digits.)");
+c4af5a
+83be07 ····/* Get ciphertext 1 */
+2df875 ····if (argc > nextArg) {
+7ad208 ······c = argv[nextArg++];
+666a79 ····} else {
+a98349 ······printf("Enter ciphertext1 (16 hex digits): ");
+6cec56 ······fgets(buf, 99, stdin);
+e69eec ······c = buf;
+ee6fe7 ····}
+54dfef ····if (unhex(ctx.ciphertext1, c, 8))
+8bf3eb ······EXIT_ERR("Invalid ciphertext1. (Must be 16 hex digits.)");
+82af5a
+14b74c ····/* Set ctx */
+37b998 ····memset(ctx.plaintextVector, 0, sizeof(ctx.plaintextVector));
+6634e6 ····for (i = 0; i < sizeof(asciiBytes); i++)
+f7c77d ······ctx.plaintextVector[asciiBytes[i]/8] |= (1 << (asciiBytes[i] % 8));
+7609b5 ····ctx.plaintextByteMask = 0x00;
+a84bfc ····if (searchType == 'E') {
+c97dd1 ······memset(ctx.plaintextXorMask, 0, sizeof(ctx.plaintextXorMask));
+
+bc0a6e ······ctx.searchInfo = 16; ·········/* useCBC=0, extraXor=0, boardActiveEn=1 */
+476a79 ····} else {
+60ba9b ······/* already set plaintextXorMask = IV */
+
+6e1c50 ······ctx.searchInfo = 17; ·········/* useCBC=1, extraXor=0, boardActiveEn=1 */
+706fe7 ····}
+48df1c ··}
+1baf5a
+ec0b8e ··/**** INITALIZE PARAMETERS FOR BLAZE CHALLENGE ****/
+9f238e ··if (searchType == 'B') {
+6caf5a
+207380 ····/* Get ciphertext byte */
+cbf875 ····if (argc > nextArg) {
+8fd208 ······c = argv[nextArg++];
+266a79 ····} else {
+1db847 ······printf("Enter ciphertext byte (2 hex digits): ");
+cfec56 ······fgets(buf, 99, stdin);
+899eec ······c = buf;
+2c6fe7 ····}
+790aab ····if (unhex(ctx.ciphertext0, c, 1))
+bdc25b ······EXIT_ERR("Invalid ciphertext byte. (Must be 2 hex digits.)");
+--32ca 00084fa6dd680020009 Page 4 of initsrch.c
+e0af5a
+ce0ca4 ····/* Set all ciphertext0 and ciphertext1 bytes to the input byte */
+3f0371 ····for (i = 0; i < 8; i++)
+e93cde ······ctx.ciphertext0[i] = ctx.ciphertext1[i] = ctx.ciphertext0[0];
+1faf5a
+c7b74c ····/* Set ctx */
+9fb998 ····memset(ctx.plaintextVector, 0, sizeof(ctx.plaintextVector));
+8afeec ····ctx.plaintextVector[0] = 1; ·················/* halt on 00000000???????? */
+8805d2 ····ctx.plaintextByteMask = 0x0F; ···············/* halt on 00000000???????? */
+ce175f ····memset(ctx.plaintextXorMask, 0, sizeof(ctx.plaintextXorMask));
+73be5d ····ctx.searchInfo = 2+16; ·········/* useCBC=0, extraXor=1, boardActiveEn=1 */
+91df1c ··}
+a2af5a
+fd55a2 ··/**** INITALIZE PARAMETERS FOR MANUAL MODE ****/
+dc1e07 ··if (searchType == 'M') {
+34af5a
+cca678 ····/* Get plaintextVector */
+21f875 ····if (argc > nextArg) {
+edd208 ······c = argv[nextArg++];
+9a6a79 ····} else {
+ef6b16 ······printf("The plaintextVector specifies which bytes can appear in the\n");
+a9a298 ······printf("plaintext. ·The MSB (of the first byte entered) specifies\n");
+802647 ······printf("whether 0xFF (255) can appear. The LSB is for 0x00.\n\n");
+78b24d ······printf("Enter plaintextVector (64 hex digits): ");
+27ec56 ······fgets(buf, 99, stdin);
+899eec ······c = buf;
+a36fe7 ····}
+61e75f ····if (unhex(ctx.plaintextVector, c, 32))
+e70a17 ······EXIT_ERR("Invalid plaintextVector. (Must be 64 hex digits.)");
+e0af5a
+296737 ····/* Get plaintextXorMask */
+84f875 ····if (argc > nextArg) {
+36d208 ······c = argv[nextArg++];
+aa6a79 ····} else {
+84b7f3 ······printf("The plaintextXorMask is used for the CBC mode IV.\n");
+122794 ······printf("Enter plaintextXorMask (16 hex digits or ENTER=none): ");
+98ec56 ······fgets(buf, 99, stdin);
+
+6b6ee8 ······if (buf[0] == '\0');
+d39be8 ········strcpy(buf, "0000000000000000");
+dc9eec ······c = buf;
+e96fe7 ····}
+64dd72 ····if (unhex(ctx.plaintextXorMask, c, 8))
+9fcece ······EXIT_ERR("Invalid plaintextXorMask. (Must be 16 hex digits.)");
+b1af5a
+fcb543 ····/* Get ciphertext 0 */
+9df875 ····if (argc > nextArg) {
+29d208 ······c = argv[nextArg++];
+146a79 ····} else {
+f00a80 ······printf("Enter ciphertext0 (16 hex digits): ");
+efec56 ······fgets(buf, 99, stdin);
+ab9eec ······c = buf;
+5d6fe7 ····}
+19f3c8 ····if (unhex(ctx.ciphertext0, c, 8))
+b436df ······EXIT_ERR("Invalid ciphertext0. (Must be 16 hex digits.)");
+a7af5a
+afbe07 ····/* Get ciphertext 1 */
+5ff875 ····if (argc > nextArg) {
+cdd208 ······c = argv[nextArg++];
+9d6a79 ····} else {
+918349 ······printf("Enter ciphertext1 (16 hex digits): ");
+adec56 ······fgets(buf, 99, stdin);
+799eec ······c = buf;
+f26fe7 ····}
+cddfef ····if (unhex(ctx.ciphertext1, c, 8))
+5ef3eb ······EXIT_ERR("Invalid ciphertext1. (Must be 16 hex digits.)");
+d6af5a
+67f875 ····if (argc > nextArg) {
+b3d208 ······c = argv[nextArg++];
+d06a79 ····} else {
+ac9ea5 ······printf("The plaintextByteMask specifies which bytes of the plaintext\n");
+ea0847 ······printf("are examined in the output. ·Normally this is zero, but if\n");
+84a104 ······printf("only partial plaintext is available, the unknown bits can\n");
+--7835 00008e1996880020009 Page 5 of initsrch.c
+e2a994 ······printf("be set to 1. For example, if the left-hand plaintext byte\n");
+
+0c1884 ······printf("is unknown, the mask would be 0x80.\n\n");
+35f4f5 ······printf("Enter plaintextByteMask (1 byte): ");
+9fec56 ······fgets(buf, 99, stdin);
+e59eec ······c = buf;
+5c6fe7 ····}
+11d9bc ····if (unhex(&(ctx.plaintextByteMask), c, 1))
+0603d8 ······EXIT_ERR("Invalid plaintextByteMask. (Must be 2 hex digits.)");
+d1af5a
+9cf875 ····if (argc > nextArg) {
+a3d208 ······c = argv[nextArg++];
+c46a79 ····} else {
+60efb7 ······printf("\n\nThe searchInfo byte has two search parameters:\n");
+58f304 ······printf(" ·bit 0x10: boardActiveEnable. ·Set this to one.\n");
+6137c1 ······printf(" ·bit 0x02: extraXor. ·If set, after the decryption is done,\n");
+
+
+6555ba ······printf(" ················the right half is XORed onto the left.\n");
+2b6a7f ······printf(" ················This is for Matt Blaze's challenge.\n");
+7931e2 ······printf(" ·bit 0x01: useCBC. ·If set, the first ciphertext is XORed\n");
+1779e1 ······printf(" ················onto the second plaintext before the second\n");
+7a8401 ······printf(" ················plaintext is checked against the ");
+c4a056 ······printf( ·················"plaintextVector.\n(Higher bits control");
+5295d9 ······printf(" searchActive, which is currently unused.)\n");
+41f125 ······printf("\nEnter searchInfo (1 byte): ");
+6eec56 ······fgets(buf, 99, stdin);
+859eec ······c = buf;
+a16fe7 ····}
+a7ac03 ····if (unhex(&(ctx.searchInfo), c, 1))
+196157 ······EXIT_ERR("Invalid searchInfo. (Must be 2 hex digits.)");
+a5df1c ··}
+42af5a
+c7361b ··printf("\n\n\n------------------------------ SEARCH PARAMETERS ");
+630dc6 ··printf("------------------------------\n");
+ef6965 ··dumpBin(" ·ptxtVector = ", ctx.plaintextVector, 32);
+22cb15 ··dumpBin(" ptxtXorMask = ", ctx.plaintextXorMask, 8);
+dcbce6 ··dumpBin(" ciphertext0 = ", ctx.ciphertext0, 8);
+51ed2d ··dumpBin(" ciphertext1 = ", ctx.ciphertext1, 8);
+48fb0f ··dumpBin("ptxtByteMask = ", &(ctx.plaintextByteMask), 1);
+8fe310 ··dumpBin(" ·searchInfo = ", &(ctx.searchInfo), 1);
+54a225 ··printf("--------------------------------------------");
+90f41b ··printf("-----------------------------------\n");
+dfaf5a
+022e67 ··/**** WRITE SEARCH PARAMETERS TO OUTPUT FILE ****/
+fbeb50 ··printf("\n\nWriting output file...");
+14b77b ··fflush(stdout);
+1a530e ··WriteSearchContext(outfile, &ctx);
+1e55cf ··fclose(outfile);
+46b812 ··printf("Done.\n");
+2bc86a ··return (0);
+faefe6 }
+76af5a
+03af5a
+5e38e5 /*
+915ba9 ·* ·Print a descriptive string followed by a binary value (in hex)
+4c495d ·*/
+15e54b static void dumpBin(char *intro, unsigned char *data, int len) {
+1d17e0 ··int i;
+313b28 ··printf(intro);
+91c199 ··for (i=len-1; i >= 0; i--)
+1bcd57 ····printf("%02X", data[i]);
+79fee8 ··printf("\n");
+c8efe6 }
+c5af5a
+2daf5a
+9f38e5 /*
+
+
+9cf0ab ·* ·Convert an ASCII digit from hex to an int, or return -1 if not hex.
+09495d ·*/
+a55514 static int unhexDigit(char c) {
+4253c4 ··if (c >= '0' && c <= '9')
+cb03d6 ····return (c - '0');
+db8db1 ··if (c >= 'a' && c <= 'f')
+b20ada ····return (c - 'a' + 10);
+0849e3 ··if (c >= 'A' && c <= 'F')
+--2b51 001fdd8d50d80020009 Page 6 of initsrch.c
+0da66f ····return (c - 'A' + 10);
+59a5eb ··return (-1); ························/* return -1 for error: bad hex digit */
+fdefe6 }
+1caf5a
+5eaf5a
+2238e5 /*
+1d22f5 ·* ·Convert a string of hex characters into unsigned chars.
+a4495d ·*/
+62afe2 static int unhex(unsigned char *data, char *hex, int byteCount) {
+01e13a ··int i,j;
+6aaf5a
+e6aea1 ··if (data == NULL || hex == NULL)
+128f8d ····return(-1);
+afaf5a
+852a60 ··/* Remove comments and whitespace */
+97d4c3 ··for (i=j=0; hex[i] != 0 && hex[i] != '%' && hex[i] != '#'; i++)
+f701aa ····if (hex[i] > ' ')
+7c72f3 ······hex[j++] = hex[i];
+
+3bf89c ··hex[j] = '\0';
+a1af5a
+665c18 ··if ((int)strlen(hex) != byteCount*2)
+a3400d ····return (-1);
+e2ed9d ··memset(data, 0, byteCount);
+759629 ··for (i = 0; i < 2*byteCount; i++) {
+36eb9c ····j = unhexDigit(hex[i]);
+6e001d ····if (j < 0)
+47b9b9 ······return (-1);
+bc5824 ····data[byteCount - 1 - i/2] |= j << ((i & 1) ? 0 : 4);
+66df1c ··}
+171eb2 ··for (i = 2*byteCount; i < (int)strlen(hex); i++)
+9e21eb ····if (!isspace(hex[i]))
+1cb9b9 ······return (-1);
+23c86a ··return (0);
+f8efe6 }
+fcaf5a
+baaf5a
+fdaf5a
+--c219 0008a71b2228002000a Page 1 of keyblock.c
+8d2d03 /*****************************************************************************
+535ef1 ·* keyblock.c ·······························································*
+33ec57 ·* ·············Key Block & Search Context Management Functions ·············*
+1c29eb ·* ··········································································*
+bf09fc ·* ···Written 1998 by Cryptography Research (http://www.cryptography.com) ···*
+d58aaf ·* ······and Paul Kocher for the Electronic Frontier Foundation (EFF). ······*
+36caeb ·* ······Placed in the public domain by Cryptography Research and EFF. ······*
+394992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+c629eb ·* ··········································································*
+11c755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+1b29eb ·* ··········································································*
+27489b ·*****************************************************************************
+ee29eb ·* ··········································································*
+a46eef ·* ··REVISION HISTORY: ······················································*
+3129eb ·* ··········································································*
+0b28d9 ·* ··Version 1.0: ·Initial release by Cryptography Research to EFF. ·········*
+4929eb ·* ··········································································*
+b5d8c3 ·*****************************************************************************/
+60af5a
+56feb2 #include <stdio.h>
+a1bea3 #include <stdlib.h>
+9b1465 #include <conio.h>
+76324c #include <string.h>
+e1c737 #include <memory.h>
+0f0a8b #include <time.h>
+88b1cb #include <ctype.h>
+28c94c #include "search.h"
+f92ba0 #include "keyblock.h"
+b6af5a
+817f4a static const char fileHeader[] = "This is a binary file containing the "
+a9dcbc ········"parameters for a DES search followed by 2^24 bits "
+1a7150 ········"indicating which regions of keyspace are left to search.\n\032";
+e8af5a
+1d4171 #define CTX_FILE_KEYBLOCKS_OFFSET (sizeof(fileHeader) + 58)
+
+1391d3 #define MAX_KEY_REGION (1L<<24) ·········/* 2^56 keys / 2^32 keys per region */
+b8708e static void EXIT_ERR(char *s) { fprintf(stderr, s); exit(1); }
+cfaf5a
+839edf static void WriteParams(FILE *fp, SEARCH_CTX *ctx);
+9000a6 static void ReadParams(FILE *fp, SEARCH_CTX *ctx);
+2baf5a
+82af5a
+3938e5 /*
+bda837 ·* ·Create a new search context file from a SEARCH_CTX structure
+54495d ·*/
+f504e1 void WriteSearchContext(FILE *fp, SEARCH_CTX *ctx) {
+91e4cc ··unsigned char temp[1024/8];
+5cac42 ··long i;
+7faf5a
+d261e8 ··fwrite(fileHeader, 1, sizeof(fileHeader), fp);
+0e7f45 ··WriteParams(fp, ctx);
+893148 ··memset(temp, 255, 1024/8);
+64052f ··for (i = 0; i < MAX_KEY_REGION/1024; i++)
+21d22a ····fwrite(temp, 1, sizeof(temp), fp);
+beefe6 }
+73af5a
+e0af5a
+2c38e5 /*
+f292e2 ·* ·Read search params from a FILE_STRUCTURE and get ready for
+c0cc06 ·* ···calls to ReserveKeyRegion and FinishKeyRegion.
+e0495d ·*/
+4ab92d void OpenSearchContext(FILE *fp, SEARCH_CTX *ctx) {
+70180e ··long blocksLeft, n;
+ca17e0 ··int i;
+60649a ··int c;
+fdaf5a
+da1d80 ··rewind(fp);
+ae0183 ··for (i = 0; i < sizeof(fileHeader); i++)
+489aee ····if (fgetc(fp) != fileHeader[i])
+7c9d45 ······EXIT_ERR("Bad file header in search context file.\n");
+42af5a
+e43738 ··ReadParams(fp, ctx);
+8a2eda ··if (ftell(fp) != CTX_FILE_KEYBLOCKS_OFFSET)
+--e4bf 00087902e818002000a Page 2 of keyblock.c
+5346c8 ····EXIT_ERR("Internal error: File length mismatch.");
+52af5a
+43a1af ··/* INITIALIZE THE SEARCH PROCESS PARAMETERS (except for totalUnits) */
+3f0522 ··ctx->nextUnstartedKeyBlock = 0;
+30dd9c ··ctx->totalFinishedKeyBlocks = 0;
+7b09e5 ··ctx->totalUnstartedKeyBlocks = MAX_KEY_REGION;
+36d36a ··ctx->totalPendingKeyBlocks = 0;
+c7af5a
+9cc760 ··/* FIND OUT HOW MANY KEY BLOCKS ARE LEFT */
+e65f7b ··blocksLeft = 0;
+0e785b ··for (n = 0; n < MAX_KEY_REGION/8; n++) {
+4dee98 ····c = fgetc(fp);
+6c373b ····if (c < 0 || c > 255)
+0ba78e ······EXIT_ERR("Error or premature EOF reading search context file.\n");
+2ab9b9 ····blocksLeft += (c&128)/128 + (c&64)/64 + (c&32)/32 + (c&16)/16 +
+e1804b ···········(c&8)/8 + (c&4)/4 + (c&2)/2 + (c&1);
+4bdf1c ··}
+9f5ea0 ··ctx->totalUnstartedKeyBlocks = blocksLeft;
+ad7c26 ··ctx->totalFinishedKeyBlocks = ·MAX_KEY_REGION - blocksLeft;
+4defe6 }
+76af5a
+0aaf5a
+f038e5 /*
+853511 ·* ·Reserve a key region to search. ·When done searching it, the program
+5b54f7 ·* ·should call FinishKeyRegion. ·This function hands out blocks sequentially,
+460a86 ·* ·starting with the first unsearched one in the file context file.
+6a448b ·* ·If all blocks have been allocated and no free ones are left, the
+424769 ·* ·function returns (-1).
+9c495d ·*/
+f9dcfa long ReserveKeyRegion(FILE *fp, SEARCH_CTX *ctx) {
+5c6b50 ··int c,b;
+43af5a
+8242e7 ··if (ctx->nextUnstartedKeyBlock >= MAX_KEY_REGION)
+e48f8d ····return(-1);
+d63ef3 ··if (fseek(fp, CTX_FILE_KEYBLOCKS_OFFSET + ctx->nextUnstartedKeyBlock/8,
+
+f96018 ··········SEEK_SET))
+276a9d ····EXIT_ERR("Error seeking search context file.\n");
+22b482 ··if ((ctx->nextUnstartedKeyBlock & 7) != 0)
+1bee98 ····c = fgetc(fp);
+a7c101 ··while (ctx->nextUnstartedKeyBlock < MAX_KEY_REGION) {
+f208b3 ····b = (int)(ctx->nextUnstartedKeyBlock & 7);
+e956ec ····if (b == 0)
+40d9d8 ······c = fgetc(fp);
+9a373b ····if (c < 0 || c > 255)
+df563d ······EXIT_ERR("Error reading from search context file.\n");
+d20bfd ····if (b == 0 && c == 0) {
+e49e77 ······ctx->nextUnstartedKeyBlock += 8;
+d85f6a ······continue;
+7e6fe7 ····}
+7e9622 ····if ((c << b) & 128)
+5d88e1 ······break;
+7cac89 ····ctx->nextUnstartedKeyBlock++;
+d5df1c ··}
+7042e7 ··if (ctx->nextUnstartedKeyBlock >= MAX_KEY_REGION)
+2d400d ····return (-1);
+204784 ··ctx->totalUnstartedKeyBlocks--;
+30b7db ··ctx->totalPendingKeyBlocks++;
+e6b95c ··return (ctx->nextUnstartedKeyBlock++);
+daefe6 }
+caaf5a
+adaf5a
+1e38e5 /*
+450ed1 ·* ·Finish searching a key region by marking it as completed in the contetx
+156197 ·* ·file.
+33495d ·*/
+d1a6a3 void FinishKeyRegion(FILE *fp, SEARCH_CTX *ctx, long keyRegion) {
+3e6b50 ··int c,b;
+74af5a
+04227a ··if (keyRegion < 0 || keyRegion > MAX_KEY_REGION)
+859a72 ····EXIT_ERR("Bad key region\n");
+4a7978 ··if (fseek(fp, CTX_FILE_KEYBLOCKS_OFFSET + keyRegion/8, SEEK_SET))
+8799f2 ····EXIT_ERR("Error seeking in search context file.\n");
+--82de 001f9fbc7698002000a Page 3 of keyblock.c
+7d83b3 ··b = (int)(keyRegion & 7); ······························/* b = bit in byte */
+6a1425 ··c = getc(fp);
+94e261 ··if (((c << b) & 128) == 0)
+533188 ····printf("WARNING: FinishKeyRegion called, but region already searched!\n");
+783a1e ··else {
+961464 ····if (fseek(fp, CTX_FILE_KEYBLOCKS_OFFSET + keyRegion/8, SEEK_SET))
+bd410b ······EXIT_ERR("Error seeking in search context file.\n");
+010fe7 ····fputc(c & (255 ^ (128>>b)), fp);
+f78f5b ····fflush(fp);
+1af525 ····ctx->totalFinishedKeyBlocks++;
+a8f539 ····ctx->totalPendingKeyBlocks--;
+ccdf1c ··}
+4fefe6 }
+ddaf5a
+53af5a
+c438e5 /*
+bcf380 ·* ·Write a SEARCH_CTX structure to a FILE*
+c1495d ·*/
+54c491 static void WriteParams(FILE *fp, SEARCH_CTX *ctx) {
+303c52 ··fwrite(ctx->plaintextVector, 1, 32, fp); ······················/* 32 bytes */
+c78ca6 ··fwrite(ctx->plaintextXorMask, 1, 8, fp); ······················/* ·8 bytes */
+f37a57 ··fwrite(ctx->ciphertext0, 1, 8, fp); ···························/* ·8 bytes */
+473db4 ··fwrite(ctx->ciphertext1, 1, 8, fp); ···························/* ·8 bytes */
+9945d9 ··fwrite(&(ctx->plaintextByteMask), 1, 1, fp); ··················/* ·1 byte ·*/
+64247e ··fwrite(&(ctx->searchInfo), 1, 1, fp); ·························/* ·1 byte ·*/
+daefe6 }
+60af5a
+8038e5 /*
+6fc898 ·* ·Read a SEARCH_CTX structure from a FILE*
+e7495d ·*/
+782a49 static void ReadParams(FILE *fp, SEARCH_CTX *ctx) {
+3f5e7e ··fread(ctx->plaintextVector, 1, 32, fp); ·······················/* 32 bytes */
+868b1a ··fread(ctx->plaintextXorMask, 1, 8, fp); ·······················/* ·8 bytes */
+fb6dea ··fread(ctx->ciphertext0, 1, 8, fp); ····························/* ·8 bytes */
+7fb838 ··fread(ctx->ciphertext1, 1, 8, fp); ····························/* ·8 bytes */
+c6f5b4 ··fread(&(ctx->plaintextByteMask), 1, 1, fp); ···················/* ·1 byte ·*/
+942460 ··fread(&(ctx->searchInfo), 1, 1, fp); ··························/* ·1 byte ·*/
+42efe6 }
+f9af5a
+--c618 001257315318002000b Page 1 of keyblock.h
+8d2d03 /*****************************************************************************
+aea835 ·* keyblock.h ·······························································*
+d8ed67 ·* ·······················Header file for keyblock.c ························*
+ed29eb ·* ··········································································*
+0209fc ·* ···Written 1998 by Cryptography Research (http://www.cryptography.com) ···*
+4f8aaf ·* ······and Paul Kocher for the Electronic Frontier Foundation (EFF). ······*
+abcaeb ·* ······Placed in the public domain by Cryptography Research and EFF. ······*
+9f4992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+e829eb ·* ··········································································*
+94c755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+a329eb ·* ··········································································*
+73489b ·*****************************************************************************
+0d29eb ·* ··········································································*
+866eef ·* ··REVISION HISTORY: ······················································*
+bd29eb ·* ··········································································*
+5128d9 ·* ··Version 1.0: ·Initial release by Cryptography Research to EFF. ·········*
+8e29eb ·* ··········································································*
+93d8c3 ·*****************************************************************************/
+44af5a
+00c374 #ifndef __KEYBLOCK_H
+1f33ca #define __KEYBLOCK_H
+0caf5a
+334d26 void WriteSearchContext(FILE *fp, SEARCH_CTX *sp);
+55d541 void OpenSearchContext(FILE *fp, SEARCH_CTX *ctx);
+ae3447 long ReserveKeyRegion(FILE *fp, SEARCH_CTX *ctx);
+93a2ae void FinishKeyRegion(FILE *fp, SEARCH_CTX *ctx, long keyRegion);
+75af5a
+1c7454 #endif
+25af5a
+--5629 0005fb2aed48002000c Page 1 of search.c
+8d2d03 /*****************************************************************************
+e284a4 ·* search.c ·································································*
+8540b6 ·* ····················Search Engine Controller Program ·····················*
+2629eb ·* ··········································································*
+8109fc ·* ···Written 1998 by Cryptography Research (http://www.cryptography.com) ···*
+728aaf ·* ······and Paul Kocher for the Electronic Frontier Foundation (EFF). ······*
+64caeb ·* ······Placed in the public domain by Cryptography Research and EFF. ······*
+204992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+9329eb ·* ··········································································*
+b7c755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+a029eb ·* ··········································································*
+5c489b ·*****************************************************************************
+5d29eb ·* ··········································································*
+e46eef ·* ··REVISION HISTORY: ······················································*
+b629eb ·* ··········································································*
+9028d9 ·* ··Version 1.0: ·Initial release by Cryptography Research to EFF. ·········*
+9629eb ·* ··········································································*
+f9d8c3 ·*****************************************************************************/
+6eaf5a
+d4bcd3 #define SOFTWARE_VERSION "1.0"
+89a5c9 #define SOFTWARE_DATE ···"04-21-1998"
+6baf5a
+4baf5a
+c9bea3 #include <stdlib.h>
+70feb2 #include <stdio.h>
+f9bb5f #include <assert.h>
+06b1cb #include <ctype.h>
+05c737 #include <memory.h>
+200a8b #include <time.h>
+48324c #include <string.h>
+8a1465 #include <conio.h>
+c1c94c #include "search.h"
+601519 #include "chipio.h"
+a12ba0 #include "keyblock.h"
+ce2bac #include "des.h"
+a1af5a
+aaaf5a
+3daf5a
+a538e5 /*
+0e1ae3 ·* ·SEARCH_CHIP STRUCTURE: Contains status information about each chip.
+78775e ·*
+d2e2cf ·* ···board: ·The board this chip is on (1 byte).
+f79e01 ·* ···chip: ·The ID of this chip on the board (1 byte).
+057501 ·* ···initialized: ·0=uninitialized, 1=initialized, -1=defective.
+d66102 ·* ···region[]: Specifies the top 24 bits of the key being searched by each
+3c7c40 ·* ·······search unit. A value of -1 means the search unit is idle
+195c24 ·* ·······(idle), and a value of -2 means the search unit is not used.
+ad77ae ·* ···overFlow[]: Specifies the value at which the low 32 bits of the
+cd7f25 ·* ·······key (the key counter) will have gone through all 2^32
+cfc098 ·* ·······possibilities. ·Note: this only has the top 24 bits of the
+3cb9dd ·* ·······counter, which corresponds to key bytes: .. .. .. XX XX XX.. (LSB)
+b10b92 ·* ···lastSeen[]: ·The value last seen in the low 32 bits of the key.
+5b33e4 ·* ·······This has the same encoding as overFlow.
+d3495d ·*/
+92f9cb typedef struct CHIP_CTX {
+7c2fe6 ··unsigned char board, chip;
+4d3673 ··int initialized;
+f01382 ··long region[SEARCH_UNITS_PER_CHIP];
+95dbbf ··long overFlow[SEARCH_UNITS_PER_CHIP];
+ceb33b ··long lastDone[SEARCH_UNITS_PER_CHIP];
+5861b7 ··struct CHIP_CTX *nextChip;
+feb846 } CHIP_CTX;
+76af5a
+38af5a
+1238e5 /*
+a225ec ·* ·GLOBAL VARIABLES
+17495d ·*/
+2329db CHIP_CTX *CHIP_ARRAY = NULL;
+f92415 SEARCH_CTX CTX;
+4acb69 static int QUIET = 0;
+08dcb4 static int VERBOSE = 0;
+5f6c5f static FILE *FP_LOG = NULL;
+--2313 0001e8485cc8002000c Page 2 of search.c
+e0af5a
+1aaf5a
+9938e5 /*
+aae9fc ·* ·FUNCTION PROTOTYPES & MINI FUNCTIONS & MACROS
+2b495d ·*/
+54708e static void EXIT_ERR(char *s) { fprintf(stderr, s); exit(1); }
+c2f311 long ReadConfig(char *configFilespec);
+e0a2be void RunSearch(FILE *ctxFile);
+b5e2b2 void InitializeChip(CHIP_CTX *cp, SEARCH_CTX *ctx);
+0c49e0 void ServiceChip(CHIP_CTX *cp, SEARCH_CTX *ctx, FILE *ctxFile);
+ee873d long GetUnitKeyCounter(int board, int chip, int unit);
+ff0862 void CheckAndPrintKey(CHIP_CTX *cp, SEARCH_CTX *ctx, int unit);
+5f8767 int ServiceKeyboard(SEARCH_CTX *ctx);
+c078a5 int CheckKey(unsigned char key[56], SEARCH_CTX *ctx);
+52af5a
+64af5a
+8538e5 /*
+ee2faa ·* ·ReadConfig(): ·Read the search array configuration file. ·This file
+9198e6 ·* ·····specifies the I/O base port for SetBaseAddress and also the
+643bd0 ·* ·····search units. ·It can contain 3 kinds of lines: comments that
+a271b3 ·* ·····that with '%', base port with "PORT=210" for port 210 hex, and
+
+a1849f ·* ·····"UNIT= 12 32 8" to add a search unit on board 0x12, chip 0x32,
+b97255 ·* ·····and unit 0x08 (all hex). ·The function constructs CHIP_ARRAY
+0ac94c ·* ·····as a linked list of chips.
+0daf98 ·* ··Returns: Total number of search units.
+a0495d ·*/
+54eb8e long ReadConfig(char *configFilespec) {
+79bc33 ··char buffer[200];
+a58685 ··int basePort = -1;
+ae08f4 ··int board, chip, unit, i;
+31e8aa ··int lastBoard = -1, lastChip = -1;
+1ec31e ··long totalUnits = 0;
+c344bc ··CHIP_CTX *cp;
+07b166 ··FILE *fp;
+27af5a
+a2d67e ··cp = CHIP_ARRAY;
+398d09 ··if (cp != NULL)
+
+6860b7 ····EXIT_ERR("Chip array base isn't NULL. (Internal error.)\n");
+7caf5a
+c4a9d2 ··fp = fopen(configFilespec, "rb");
+d2b291 ··if (fp == NULL)
+668f5c ····EXIT_ERR("Error opening configuration filespec.\n");
+8caf5a
+b994bf ··if (!QUIET) printf("Reading configuration file \"%s\".\n", configFilespec);
+5a0a67 ··while (fgets (buffer, 190, fp) != NULL) {
+342761 ····if (buffer[0] == '\0' || buffer[0] == '%')
+205f6a ······continue;
+c04d2e ····if (memcmp(buffer, "PORT=", 5) == 0) {
+c1c6f2 ······basePort = 0;
+9f6771 ······sscanf(buffer+5, "%x", &basePort);
+6ae67c ······if (basePort <= 0)
+42a4e2 ········EXIT_ERR("Defective PORT= in configuration file.\n");
+
+
+b0b41f ······SetBaseAddress(basePort);
+50f03a ······if (!QUIET) printf("Set base port to %x\n", basePort);
+b4da88 ······if (FP_LOG && VERBOSE) fprintf(FP_LOG, "Set base port=0x%x\n", basePort);
+296fe7 ····}
+25d89c ····else if (memcmp(buffer, "UNIT=", 5) == 0 ||
+1c3b05 ············memcmp(buffer, "FAIL=", 5) == 0) {
+3044d4 ······board = chip = unit = -1;
+0a1445 ······sscanf(buffer+5, "%x %x %x", &board, &chip, &unit);
+ca5e35 ······if (board < 0 || chip < 0 || unit < 0)
+f86669 ········EXIT_ERR("Defective UNIT= or FAIL= in configuration file.\n");
+8cae4c ······if (board < lastBoard || (board == lastBoard && chip < lastChip))
+715fa0 ········EXIT_ERR("Bad UNIT= or FAIL= in config: board & chip must decrease\n");
+bf274a ······if (board != lastBoard || chip != lastChip) {
+ca772c ········lastBoard = board;
+3343e1 ········lastChip = chip;
+807e0b ········if (cp == NULL)
+629822 ··········cp = CHIP_ARRAY = malloc(sizeof(CHIP_CTX));
+7905d7 ········else {
+b656fb ··········cp->nextChip = malloc(sizeof(CHIP_CTX));
+1e2825 ··········cp = cp->nextChip;
+--4bd2 0003642e9df8002000c Page 3 of search.c
+e67fb0 ········}
+e237f7 ········cp->board = (unsigned char)board;
+
+927f04 ········cp->chip = (unsigned char)chip;
+902174 ········cp->initialized = 0;
+b11ffd ········for (i = 0; i < SEARCH_UNITS_PER_CHIP; i++)
+2068f5 ··········cp->region[i] = -2;
+48d968 ········cp->nextChip = NULL;
+a342cc ······}
+a2fac6 ······if (cp->region[unit] == -2 && memcmp(buffer, "UNIT=", 5) == 0) {
+
+1b9c12 ········totalUnits++;
+cf72d7 ········cp->region[unit] = -1; ···················/* mark the unit as extant */
+f442cc ······}
+936a79 ····} else {
+d0f07c ······fprintf(stderr, "IGNORING UNKNOWN CONFIG FILE LINE: \"%s\"\n", buffer);
+3c6fe7 ····}
+aadf1c ··}
+56ed24 ··fclose(fp);
+24f7ab ··if (CHIP_ARRAY == NULL)
+ca50bd ····EXIT_ERR("Error: Configuration file does not have any valid units.\n");
+
+fbaf5a
+ba291a ··if (FP_LOG && VERBOSE) {
+
+0f24bf ····fprintf(FP_LOG, "Configuration summary:\n");
+7e5d63 ····for (cp = CHIP_ARRAY; cp != NULL; cp = cp->nextChip) {
+4e1222 ······for (i = 0; i < SEARCH_UNITS_PER_CHIP; i++)
+f6f2e5 ········if (cp->region[i] != -2)
+debb16 ··········fprintf(FP_LOG, "%s=0x%02X 0x%02X 0x%02X\n",
+e33ccd ··················(cp->initialized >= 0) ? "UNIT" : "FAIL",
+bb9127 ···················cp->board, cp->chip, i);
+8d6fe7 ····}
+c4df1c ··}
+19a980 ··if (!QUIET) printf("Config done: Found %ld search units.\n", totalUnits);
+239057 ··if (FP_LOG) fprintf(FP_LOG, "Config found %ld search units.\n", totalUnits);
+d43faf ··return (totalUnits);
+15efe6 }
+0eaf5a
+d8af5a
+0caf5a
+fe79bf void main(int argc, char **argv) {
+c1e020 ··FILE *ctxFile;
+e417e0 ··int i;
+19e624 ··time_t t;
+f944bc ··CHIP_CTX *cp;
+63af5a
+7207b6 ··printf("\nDES Search Engine Controller (Ver %s, %s). May be export "
+a2ffaa ·········"controlled.\nWritten 1998 by Cryptography Research "
+142e08 ·········"(http://www.cryptography.com) for EFF.\n"
+2dc4fd ·········"This is unsupported "
+7b1151 ·········"free software: Use and distribute at your own risk.\n"
+b0805d ·········"-------------------------------------------"
+3b04bf ·········"---------------------------------\n\n\n",
+44a1fb ·········SOFTWARE_VERSION, SOFTWARE_DATE);
+daba53 ··if (argc < 3) {
+cfed02 ····fprintf(stderr,
+18f2f1 ·········"Usage: ·search configFile contextFile [logfile] [-v] [-q]\n"
+da327c ·········" ····configFile: Search array configuration from autoconf\n"
+398e60 ·········" ···contextFile: Search context (from init)\n"
+ddf370 ·········" ·······logfile: Output file with detailed reporting info\n"
+fd94cd ·········" ············-v: verbose output to logfile\n"
+578e57 ·········" ············-q: quiet mode (less output to the screen)\n"
+e1a553 ·········" ·(Note: paramaters must be in the order above.)\n");
+6b646c ····exit(1);
+f5df1c ··}
+0a5434 ··for (i = 3; i < argc; i++) {
+05d081 ····if (i == 3 && argv[i][0] != '-') {
+df3904 ······FP_LOG = fopen(argv[3], "w");
+a1dd6b ······if (FP_LOG == NULL)
+8bc2fe ········EXIT_ERR("Error opening log file.");
+2e14ab ····} else if (stricmp(argv[i], "-v") == 0)
+e593ab ······VERBOSE = 1;
+fe4009 ····else if (stricmp(argv[i], "-q") == 0)
+8b9a4c ······QUIET = 1;
+3683c8 ····else {
+--1911 000b393ee878002000c Page 4 of search.c
+5e813f ······fprintf(stderr, "Unknown parameter \"%s\"\n", argv[i]);
+
+e6c1d2 ······exit(1);
+cc6fe7 ····}
+5edf1c ··}
+b0af5a
+9f305a ··/* READ CONFIGURATION FILE SPECIFYING BASE PORT AND SEARCH UNITS */
+5dff7c ··CTX.totalUnits = ReadConfig(argv[1]);
+13af5a
+76735d ··/* RESET THE SEARCH ARRAY */
+861d2e ··if (!QUIET) printf("Resetting the search array.\n");
+c4969d ··i = -1;
+7e859a ··for (cp = CHIP_ARRAY; cp != NULL; cp = cp->nextChip) {
+e607b1 ····if (i != cp->board) {
+06ae60 ······i = cp->board;
+7b7546 ······ResetBoard(i);
+056fe7 ····}
+99df1c ··}
+71ec6b ··t = time(NULL);
+94af5a
+3da542 ··/* READ SEARCH FILE SPECIFYING SEARCH INFO & REMAINING KEY BLOCKS */
+10ee15 ··ctxFile = fopen(argv[2], "r+b");
+20ff66 ··if (ctxFile == NULL) {
+c0f8b7 ····fprintf(stderr, "Error opening search context file \"%s\"\n", argv[2]);
+4c646c ····exit(1);
+10df1c ··}
+a9af5a
+5d1da1 ··/* MAKE SURE RESET HAD AT LEAST 1 SECOND TO SETTLE. */
+7ab357 ··if (!QUIET) printf("Waiting for reset to settle.\n");
+4458f4 ··while(t + 1 >= time(NULL)) {}
+30af5a
+b65d7f ··/* RUN THE SEARCH! */
+362733 ··RunSearch(ctxFile);
+259966 ··fclose(ctxFile);
+0f33d0 ··if (!QUIET) printf("Exiting.\n");
+86efe6 }
+cdaf5a
+e1af5a
+8538e5 /*
+8f13e5 ·* ·Run the search. Uses the search parameters in the
+ffec91 ·* ······global linked list CHIP_ARRAY and keeps its context info
+c140a5 ·* ······in the global CTX.
+7c495d ·*/
+2fb622 void RunSearch(FILE *ctxFile) {
+2944bc ··CHIP_CTX *cp;
+2d049e ··SEARCH_CTX *ctx = &CTX;
+79c4fb ··int halt = 0;
+d4ceca ··time_t startTime, lastReportTime, t;
+8cd6eb ··long loopCount = 0;
+95431e ··char buffer[128];
+c3af5a
+c9fbd6 ··if (!QUIET) printf("Loading search context file...\n");
+578e14 ··OpenSearchContext(ctxFile, ctx);
+45af5a
+da37ac ··printf("Initialization Successful - Beginning search.\n");
+09a530 ··if (QUIET) printf("Quiet mode: Press ? for help during search.\n");
+7c2a59 ··if (FP_LOG && VERBOSE) fprintf(FP_LOG, "--- Beginning search ---\n");
+46ec5d ··for (cp = CHIP_ARRAY; cp != NULL; cp = cp->nextChip)
+e4084a ····InitializeChip(cp, ctx);
+9abe63 ··startTime = time(NULL);
+155889 ··lastReportTime = 0;
+1daf5a
+b005cf ··while (halt == 0) {
+5ffb77 ····t = time(NULL); ·······························/* report every 5 seconds */
+97eba6 ····if (t/5 != lastReportTime/5) {
+e24d90 ······sprintf(buffer, "%7ld blocks done, %7ld left, %4ld running (time=%7ld).",
+c347d2 ··············ctx->totalFinishedKeyBlocks, ctx->totalUnstartedKeyBlocks +
+
+16efa5 ··············ctx->totalPendingKeyBlocks, ctx->totalPendingKeyBlocks,
+db00a9 ··············(long)(t - startTime));
+889596 ······if (!QUIET) printf(">%s ('?'=help)\n", buffer);
+751c3a ······if (FP_LOG && VERBOSE) fprintf(FP_LOG, "Report: %s\n", buffer);
+e61ab3 ······lastReportTime = t;
+b36fe7 ····}
+--75c4 000ce8281be8002000c Page 5 of search.c
+9d0eaa ····for (cp = CHIP_ARRAY; cp != NULL && halt == 0; cp = cp->nextChip) {
+
+3f8447 ······ServiceChip(cp, ctx, ctxFile);
+f591f1 ······if (ServiceKeyboard(ctx) < 0)
+e6cd41 ········halt = 1;
+4a6fe7 ····}
+b2bd80 ····if (ctx->totalFinishedKeyBlocks == (1L<<24))
+16865f ······halt = 1;
+0b1f76 ····GetRegister(255, 255, 255);
+3b5ff2 ····loopCount++;
+43df1c ··}
+08efe6 }
+92af5a
+c6af5a
+4f38e5 /*
+2da22e ·* ·InitializeChip(cp, ctx): ·Initialize a chip whose chip context is
+cdf2f7 ·* ·····at cp, using the search parameters at ctx.
+cf495d ·*/
+
+087c0e void InitializeChip(CHIP_CTX *cp, SEARCH_CTX *ctx) {
+cfe13a ··int i,j;
+abaf5a
+
+3c3661 ··if (!QUIET) printf("Initializing board 0x%02X, chip 0x%02X\n",
+a40940 ··········cp->board, cp->chip);
+faae75 ··if (FP_LOG && VERBOSE) fprintf(FP_LOG,
+9c7828 ··········"Initializing board 0x%02X, chip 0x%02X\n", cp->board, cp->chip);
+be1207 ··SetRegister(cp->board, cp->chip, REG_PTXT_BYTE_MASK, 0xFF); ··/* halt chip */
+0b339a ··for (i = 0; i < 32; i++)
+fbd055 ····SetRegister(cp->board, cp->chip, REG_PTXT_VECTOR+i,
+cbb8cc ············ctx->plaintextVector[i]);
+131f76 ··for (i = 0; i < 8; i++)
+64eca4 ····SetRegister(cp->board, cp->chip,REG_PTXT_XOR_MASK+i,
+2689f7 ············ctx->plaintextXorMask[i]);
+001f76 ··for (i = 0; i < 8; i++)
+f98081 ····SetRegister(cp->board, cp->chip, REG_CIPHERTEXT0+i, ctx->ciphertext0[i]);
+d21f76 ··for (i = 0; i < 8; i++)
+174d1c ····SetRegister(cp->board, cp->chip, REG_CIPHERTEXT1+i, ctx->ciphertext1[i]);
+ec1eef ··SetRegister(cp->board, cp->chip, REG_PTXT_BYTE_MASK, ctx->plaintextByteMask);
+e20a1e ··SetRegister(cp->board, cp->chip, REG_SEARCHINFO, ctx->searchInfo);
+0faf5a
+70b777 ··/* TO BE SAFE, VERIFY THAT ALL REGISTERS WERE WRITTEN PROPERLY */
+20f147 ··/* (Each chip only gets initialized once, so this is quick.) */
+060b46 ··j = 0;
+e6339a ··for (i = 0; i < 32; i++)
+f9b65f ····j += CheckRegister(cp->board, cp->chip, REG_PTXT_VECTOR+i,
+beb8cc ············ctx->plaintextVector[i]);
+d18715 ··for (i = 0; i < 8; i++) {
+8fd1da ····j += CheckRegister(cp->board, cp->chip, REG_PTXT_XOR_MASK+i,
+9a89f7 ············ctx->plaintextXorMask[i]);
+
+
+bb5fb5 ····j += CheckRegister(cp->board, cp->chip, REG_CIPHERTEXT0+i,
+610e6a ············ctx->ciphertext0[i]);
+5854f1 ····j += CheckRegister(cp->board, cp->chip, REG_CIPHERTEXT1+i,
+5b91bf ············ctx->ciphertext1[i]);
+7bdf1c ··}
+1b77a6 ··j += CheckRegister(cp->board, cp->chip, REG_PTXT_BYTE_MASK,
+483279 ··········ctx->plaintextByteMask);
+e013d5 ··j += CheckRegister(cp->board, cp->chip, REG_SEARCHINFO, ctx->searchInfo);
+23fed0 ··if (j != 0) {
+
+c5e719 ····printf("Bad register on board 0x%02X, chip 0x%02X. Chip disabled.\n",
+6ad6e1 ············cp->board, cp->chip);
+4e4342 ····if (FP_LOG) fprintf(FP_LOG, "Bad register on board 0x%02X, chip 0x%02X.%s",
+8960af ············cp->board, cp->chip, " Chip disabled.\n");
+dadf1c ··}
+36af5a
+e1791e ··/* UPDATE THE CHIP CONTEXT */
+4ff396 ··cp->initialized = (j == 0) ? 1 : -1; ··········/* initialized or defective */
+b8efe6 }
+79af5a
+96af5a
+c538e5 /*
+a3cc9c ·* ·Service a chip by doing the following:
+274c8c ·* ···- Check if it has halted
+670a9d ·* ···- Check to see if it has finished its region
+ceb01a ·* ···- Restart if it is idle
+--040d 00045bb51768002000c Page 6 of search.c
+47495d ·*/
+a30d32 void ServiceChip(CHIP_CTX *cp, SEARCH_CTX *ctx, FILE *ctxFile) {
+05538a ··int unit;
+5019fa ··long k;
+2aaf5a
+348a5b ··if (cp->initialized < 0)
+0f3471 ····return;
+25af5a
+ec6000 ··/*
+b65d45 ···* ·READ KEYS & RESTART ANY HALTED UNITS
+adf9a6 ···*/
+6700ef ··for (unit = 0; unit < SEARCH_UNITS_PER_CHIP; unit++) {
+ea5e8f ····if (cp->region[unit] >= 0) { ····················/* if currently running */
+2bca7c ······if (!(GetRegister(cp->board, cp->chip, REG_SEARCH_STATUS(unit)) & 1)) {
+29e540 ········CheckAndPrintKey(cp, ctx, unit);
+db6490 ········SetRegister(cp->board, cp->chip, REG_SEARCH_STATUS(unit), 1);
+1d42cc ······}
+cd6fe7 ····}
+efdf1c ··}
+23af5a
+516000 ··/*
+ae51e4 ···* ·See if any units have completed their search regions
+ba3534 ···* ···Note: If I/O bandwidth was a problem and the clock rate of the
+aa4028 ···* ······search system was fixed, we could predict when the keycounter
+7c32c2 ···* ······would flip and avoid this check.
+9af9a6 ···*/
+1600ef ··for (unit = 0; unit < SEARCH_UNITS_PER_CHIP; unit++) {
+fda2b3 ····if (cp->region[unit] < 0)
+b25f6a ······continue;
+fcbaec ····k = GetUnitKeyCounter(cp->board, cp->chip, unit);
+637ad2 ····k -= cp->overFlow[unit];
+0c9fc8 ····if (k < 0)
+db5630 ······k += (1L << 24);
+4c9bfb ····if (VERBOSE && FP_LOG) fprintf(FP_LOG,
+3d961d ··············"Board 0x%02X chip 0x%02X unit 0x%02X is at 0x%06lX "
+91fd7c ··············"(lastDone=0x%06lX, overFlow=%06lX)\n",
+
+a5a2d2 ··············cp->board, cp->chip, unit, k,
+02106a ··············cp->lastDone[unit], cp->overFlow[unit]);
+
+9a7e0d ····if (k < cp->lastDone[unit]) {
+eb7d4e ······if (!QUIET) printf("Board 0x%02X chip 0x%02X unit 0x%02X finished block "
+9e7322 ··············"0x%06lX (lastDone=0x%06lX, got 0x%06lX, overFlow=%06lX)\n",
+394e24 ··············cp->board, cp->chip, unit, cp->region[unit],
+
+cc3197 ··············cp->lastDone[unit], k, cp->overFlow[unit]);
+64bdf0 ······if (FP_LOG) fprintf(FP_LOG, "Unit 0x%02X 0x%02X 0x%02X finished "
+d455fb ··············"0x%06lX (last=%06lX, got %06lX, oFlow=%06lX)\n",
+284e24 ··············cp->board, cp->chip, unit, cp->region[unit],
+
+
+263197 ··············cp->lastDone[unit], k, cp->overFlow[unit]);
+c14588 ······FinishKeyRegion(ctxFile, ctx, cp->region[unit]); ····/* region is done */
+72c33f ······cp->region[unit] = -1; ····························/* unit is now idle */
+ba6a79 ····} else {
+b01b8b ······cp->lastDone[unit] = k;
+de6fe7 ····}
+3edf1c ··}
+faaf5a
+036000 ··/*
+beae98 ···* ·Start any units that are currently stalled
+38f9a6 ···*/
+0000ef ··for (unit = 0; unit < SEARCH_UNITS_PER_CHIP; unit++) {
+8faa03 ····if (cp->region[unit] == -1) {
+7cb961 ······k = ReserveKeyRegion(ctxFile, ctx);
+f9cd11 ······if (k < 0)
+b431a8 ········break; ········································/* no more regions... */
+35db12 ······if (!QUIET) printf("Starting board 0x%02X, chip 0x%02X, unit 0x%02X... ",
+3fe31b ···········cp->board, cp->chip, unit);
+
+bd2b54 ······if (FP_LOG) fprintf(FP_LOG, "Starting unit 0x%02X 0x%02X 0x%02X... ",
+e8e31b ···········cp->board, cp->chip, unit);
+d148cb ······cp->region[unit] = k;
+8faf5a
+7523f8 ······/* LOAD UP THE KEY REGION AND LET 'ER RIP... */
+49945b ······SetRegister(cp->board, cp->chip, REG_SEARCH_KEY(unit)+6,
+6aad2b ··············(unsigned char)((k >> 16) & 0xFF));
+457b3f ······SetRegister(cp->board, cp->chip, REG_SEARCH_KEY(unit)+5,
+--721d 0002227a35d8002000c Page 7 of search.c
+99606b ··············(unsigned char)((k >> 8) & 0xFF));
+4021e3 ······SetRegister(cp->board, cp->chip, REG_SEARCH_KEY(unit)+4,
+593bf5 ··············(unsigned char)(k & 0xFF));
+d50d06 ······SetRegister(cp->board, cp->chip, REG_SEARCH_KEY(unit)+3, 0);
+6a92d3 ······SetRegister(cp->board, cp->chip, REG_SEARCH_KEY(unit)+2, 0);
+353abd ······SetRegister(cp->board, cp->chip, REG_SEARCH_KEY(unit)+1, 0);
+37a568 ······SetRegister(cp->board, cp->chip, REG_SEARCH_KEY(unit)+0, 0);
+f2af5a
+176841 ······SetRegister(cp->board, cp->chip, REG_SEARCH_STATUS(unit), 1); ··/* GO! */
+08af5a
+d3fd1a ······/* READ OUT THE KEY COUNTER (3 BYTES) FOR OVERFLOW SENSING */
+b20f12 ······k = GetUnitKeyCounter(cp->board, cp->chip, unit);
+619957 ······cp->overFlow[unit] = k;
+881b8b ······cp->lastDone[unit] = k;
+282f76 ······if (!QUIET) printf("Region=0x%06lX, overFlow=0x%06lX\n",
+f3eb34 ············cp->region[unit], k);
+0ac312 ······if (FP_LOG) fprintf(FP_LOG, "Region=0x%06lX, overFlow=0x%06lX\n",
+77eb34 ············cp->region[unit], k);
+5a6fe7 ····}
+90df1c ··}
+97efe6 }
+38af5a
+21af5a
+e338e5 /*
+a964e4 ·* ·Read the value of a rapidly-incrementing key counter register.
+58278f ·* ····The function reads the register twice, finds the most-significant
+5e7253 ·* ····bit that changed during the operation, and returns the later
+b24a30 ·* ····(higher) value with all bits to the right of the one that changed
+224233 ·* ····set to zero.
+d494e7 ·* ·The return value is the top 24 bits of the low 32 bits of the
+2740a3 ·* ····key counter -- i.e., key bytes (MSB).. .. .. XX XX XX ..(LSB)
+
+57495d ·*/
+5a0094 long GetUnitKeyCounter(int board, int chip, int unit) {
+559ab5 ··long v1, v2, m;
+31565f ··do {
+76f04f ····v1 = ((long)GetRegister(board, chip, REG_SEARCH_KEY(unit)+3)) << 16;
+0b190c ····v1 |= ((long)GetRegister(board, chip, REG_SEARCH_KEY(unit)+2)) << 8;
+56d778 ····v1 |= ((long)GetRegister(board, chip, REG_SEARCH_KEY(unit)+1));
+9bb868 ····v2 = ((long)GetRegister(board, chip, REG_SEARCH_KEY(unit)+3)) << 16;
+9a512b ····v2 |= ((long)GetRegister(board, chip, REG_SEARCH_KEY(unit)+2)) << 8;
+996273 ····v2 |= ((long)GetRegister(board, chip, REG_SEARCH_KEY(unit)+1));
+
+184051 ··} while (v1 > v2);
+f9fc72 ··for (m = 0x800000L; m != 0; m >>= 1) {
+63e73f ····if ((v1 & m) != (v2 & m)) {
+9012d1 ······v2 = (v2 & (0xFFFFFFL - m + 1));
+6688e1 ······break;
+696fe7 ····}
+99df1c ··}
+aa0597 ··return (v2);
+2aefe6 }
+6daf5a
+00af5a
+b238e5 /*
+8e23dc ·* ·Get the key out of a halted unit and print it to the screen/logs
+d0495d ·*/
+5caa69 void CheckAndPrintKey(CHIP_CTX *cp, SEARCH_CTX *ctx, int unit) {
+8a5ec8 ··unsigned char key[7];
+4c4fa7 ··unsigned char binKey[56];
+bcd5f5 ··char buf[128];
+0c193c ··int i,j, goodKey;
+e1af5a
+73aec4 ··for (i = 0; i < 7; i++)
+
+615cd8 ····key[i] = (unsigned char)GetRegister(cp->board, cp->chip,
+ebdf14 ············REG_SEARCH_KEY(unit)+i);
+1e8cfc ··if (--(key[0]) == 0xFF) ··································/* Decrement key */
+804d72 ····if (--(key[1]) == 0xFF)
+bad460 ······if (--(key[2]) == 0xFF)
+57a964 ········--key[3];
+c8815b ··for (i = 0; i < 56; i++)
+b6f7c3 ····binKey[i] = (key[i/8] >> (i&7)) & 1;
+e3b642 ··for (i = 7; i >= 0; i--) {
+221e9a ····j = binKey[i*7]*2 + binKey[i*7+1]*4 + binKey[i*7+2]*8 + binKey[i*7+3]*16 +
+--3b12 000f2b672408002000c Page 8 of search.c
+a35717 ········binKey[i*7+4]*32 + binKey[i*7+5]*64 + binKey[i*7+6]*128;
+9b3764 ····sprintf(buf+14-2*i, "%02X", j);
+5bdf1c ··}
+a9af5a
+5076d5 ··if (QUIET)
+19c6bc ····printf("Halt in %02X.%02X.%02X, K=%s P=", cp->board, cp->chip, unit, buf);
+be3a1e ··else {
+80b718 ····printf("BOARD 0x%02X, CHIP 0x%02X, UNIT 0x%02X HALTED!\n ···K56 = ",
+99c03b ············cp->board, cp->chip, unit);
+889ac7 ····for (i = 6; i >= 0; i--) printf("%02X", key[i]);
+
+9d52d1 ····printf("\n ···K64 = %s\n", buf);
+8adf1c ··}
+5ecce4 ··if (FP_LOG) {
+4757b8 ····fprintf(FP_LOG, "Halt@ %02X.%02X.%02X, K=",
+82c03b ············cp->board, cp->chip, unit);
+2a1890 ····for (i = 6; i >= 0; i--) fprintf(FP_LOG, "%02X", key[i]);
+8ba909 ····if (VERBOSE) fprintf(FP_LOG, ", K64=%s", buf);
+ccdf1c ··}
+31af5a
+eedd3c ··goodKey = CheckKey(binKey, ctx); ·····················/* prints plaintexts */
+efaf5a
+7005cd ··if (QUIET) printf(goodKey ? " (OK!)\n" : " (BAD)\n");
+
+352ace ··else printf(" ···***** KEY IS %s *****\n", goodKey ? " OKAY " : "BAD");
+7d1792 ··if (FP_LOG) fprintf(FP_LOG, goodKey ? " (=OK!)\n" : " (=BAD)\n");
+24b77b ··fflush(stdout);
+8384bd ··if (FP_LOG) fflush(FP_LOG);
+35efe6 }
+41af5a
+2daf5a
+d238e5 /*
+0b1cdc ·* ·Let the user see what's going on.
+f3495d ·*/
+6bfd4b int ServiceKeyboard(SEARCH_CTX *ctx) {
+c31df9 ··int k, i, board, chip, reg, val;
+08431e ··char buffer[128];
+e6af5a
+57c536 ··while (kbhit()) {
+d70480 ····k = toupper(getch());
+7d037e ····if (k == '?') {
+b83116 ······printf("Keystroke options:\n ···ESC=quit search\n");
+2dbdd0 ······printf(" ···R=read a chip\n ···SPACE=status\n ···P=pause\n");
+c7e45d ······printf(" ···S=set register\n");
+d7aa86 ······printf("Press a command letter, ENTER to continue\n");
+fcbc76 ······while (!kbhit()) {}
+
+045f6a ······continue;
+4a6fe7 ····}
+0eb946 ····if (k == 'P') {
+a98ae3 ······fprintf(stderr, " ·--- PAUSED ---\n(Press a command letter, ");
+ff44cc ······fprintf(stderr, "ENTER to continue, or ? for help.)\n");
+43bc76 ······while (!kbhit()) {}
+8a5f6a ······continue;
+926fe7 ····}
+a30d23 ····if (k == 27) {
+70cb2a ······fprintf(stderr, " ·-- ESC PRESSED! HIT 'Y' TO CONFIRM HALT --\n");
+8c5d92 ······if (toupper(getch()) == 'Y') {
+
+14ea98 ········fprintf(stderr, "Halting...\n");
+
+f28ef9 ········return (-1);
+9e42cc ······}
+5e4ac1 ······fprintf(stderr, " ··(Not halting.)\n");
+c85f6a ······continue;
+d46fe7 ····}
+517c47 ····if (k == ' ') {
+0a5669 ······fprintf(stderr, "There are %ld search units running\n", ctx->totalUnits);
+97531b ······fprintf(stderr, "Of %ld blocks: %ld done, %ld unstarted, %ld pending\n",
+a34f0b ············1L<<24, ctx->totalFinishedKeyBlocks, ctx->totalUnstartedKeyBlocks,
+99b056 ············ctx->totalPendingKeyBlocks);
+cce226 ······fprintf(stderr, "The next key block to start is 0x%06lX.\n",
+c1657e ··············ctx->nextUnstartedKeyBlock);
+afb365 ······fprintf(stderr, "Press a command letter or ENTER to continue\n");
+5cbc76 ······while (!kbhit()) {}
+256fe7 ····}
+f2b110 ····if (k == 'R') {
+--ec05 0009a3bfee08002000c Page 9 of search.c
+e2fbb8 ······fprintf(stderr, "Enter board and chip (in hex): ");
+e27c75 ······fgets(buffer, 127, stdin);
+91f579 ······board = chip = -1;
+1aea10 ······sscanf(buffer, "%x %x", &board, &chip);
+20e47c ······if (board < 0 || board > 255 || chip < 0 || chip > 255) {
+
+c9e3e0 ········fprintf(stderr, "Bad board (0x%02X) or chip (0x%02X)\n", board, chip);
+311474 ········continue;
+6042cc ······}
+707553 ······for (i = 0; i < 256; i++) {
+f98149 ········if ((i & 15) == 0)
+85d1e0 ··········printf("\n0x%02X 0x%02X 0x%02X:", board, chip, i);
+28fc62 ········printf(" %02X", GetRegister(board, chip, i));
+0c42cc ······}
+d046a0 ······printf("\n");
+41b365 ······fprintf(stderr, "Press a command letter or ENTER to continue\n");
+7dbc76 ······while (!kbhit()) {}
+555f6a ······continue;
+406fe7 ····}
+2eb53b ····if (k == 'S') {
+
+
+a57f96 ······fprintf(stderr, "Enter board chip reg value (all hex): ");
+af7c75 ······fgets(buffer, 127, stdin);
+d40ef2 ······board = chip = reg = val = -1;
+629b24 ······sscanf(buffer, "%x %x %x %x", &board, &chip, &reg, &val);
+
+cffcea ······if (board >= 0 && chip >= 0 && reg >= 0 && val >= 0) {
+55a015 ········fprintf(stderr, "Writing 0x%02X to 0x%02X.0x%02X reg 0x%02X\n",
+287597 ············val, board, chip, reg);
+
+0391e8 ········SetRegister(board, chip, reg, val);
+b142cc ······}
+
+a69b63 ······fprintf(stderr, "Press a command letter or ENTER to continue.\n");
+7cbc76 ······while (!kbhit()) {}
+b05f6a ······continue;
+dc6fe7 ····}
+c5df1c ··}
+77c86a ··return (0);
+fdefe6 }
+02af5a
+85af5a
+a638e5 /*
+554279 ·* ·If needed, this function can be used to decide whether keys are
+f53655 ·* ·····actually good or not to reject false positives.
+c4ca0f ·* ·Returns 1 if the key is not bad, zero if it is wrong.
+80495d ·*/
+
+c318aa int CheckKey(unsigned char key[56], SEARCH_CTX *ctx) {
+
+bb169a ··bool ctxt[64],ptxt0[64],ptxt1[64];
+45ac6d ··unsigned char p0[8],p1[8];
+937d24 ··int i,c;
+7faf5a
+5148b0 ··/* Compute the plaintext and try to print it to the screen */
+085c33 ··for (i = 0; i < 64; i++)
+8e67cf ····ctxt[i] = (ctx->ciphertext0[i/8] >> (i&7)) & 1;
+
+fd0c6e ··DecryptDES((bool*)key, ptxt0, ctxt, 0);
+1b8715 ··for (i = 0; i < 8; i++) {
+5e24a8 ····p0[i] = (unsigned char)(ptxt0[i*8+0]+ptxt0[i*8+1]*2+ptxt0[i*8+2]*4+
+a028a1 ···········ptxt0[i*8+3]*8+ptxt0[i*8+4]*16+ptxt0[i*8+5]*32+ptxt0[i*8+6]*64+
+a14997 ···········ptxt0[i*8+7]*128);
+9ddf1c ··}
+871f76 ··for (i = 0; i < 8; i++)
+161698 ····p0[i] ^= ctx->plaintextXorMask[i];
+c2eed0 ··if (!QUIET) {
+1449b2 ····printf(" ···Plaintext0 =");
+216b40 ····for (i = 7; i>=0; i--) printf(" %02X", p0[i]);
+
+2c7bdf ····printf(" ··(\"");
+dd9984 ····for (i = 7; i>=0; i--)
+ce1bc2 ······printf("%c", (p0[i] < 32) ? '?' : p0[i]);
+5bbc64 ····printf("\")\n");
+5bdf1c ··}
+9ba0a6 ··if (QUIET) for (i = 7; i>=0; i--) printf("%02X", p0[i]);
+e4036d ··if (FP_LOG) fprintf(FP_LOG, ", ptxt=");
+c74e9a ··if (FP_LOG) for (i = 7; i>=0; i--) fprintf(FP_LOG, "%02X", p0[i]);
+60af5a
+9a5c33 ··for (i = 0; i < 64; i++)
+9ace92 ····ctxt[i] = (ctx->ciphertext1[i/8] >> (i&7)) & 1;
+--fcb9 0011107d9008002000c Page 10 of search.c
+3509c3 ··DecryptDES((bool*)key, ptxt1, ctxt, 0);
+b18715 ··for (i = 0; i < 8; i++) {
+c72b26 ····p1[i] = (unsigned char)(ptxt1[i*8+0]+ptxt1[i*8+1]*2+ptxt1[i*8+2]*4+
+9df932 ···········ptxt1[i*8+3]*8+ptxt1[i*8+4]*16+ptxt1[i*8+5]*32+ptxt1[i*8+6]*64+
+c301bd ···········ptxt1[i*8+7]*128);
+f7df1c ··}
+839a9d ··if (ctx->searchInfo & 1) { ················/* if CBC mode, XOR w/ 1st ctxt */
+7e0371 ····for (i = 0; i < 8; i++)
+d78c4c ······p1[i] ^= ctx->ciphertext0[i];
+
+eedf1c ··}
+4bef0f ··if (!QUIET) printf(" ···Plaintext1 =");
+b2991b ··if (QUIET) printf("/");
+e2a99a ··if (FP_LOG) fprintf(FP_LOG, "/");
+615a96 ··if (!QUIET) for (i = 7; i>=0; i--) printf(" %02X", p1[i]);
+
+4c3f73 ··if (QUIET) for (i = 7; i>=0; i--) printf("%02X", p1[i]);
+aad14f ··if (FP_LOG) for (i = 7; i>=0; i--) fprintf(FP_LOG, "%02X", p1[i]);
+54eed0 ··if (!QUIET) {
+
+867bdf ····printf(" ··(\"");
+659984 ····for (i = 7; i>=0; i--)
+18d65f ······printf("%c", (p1[i] < 32) ? '?' : p1[i]);
+8bbc64 ····printf("\")\n");
+1adf1c ··}
+edaf5a
+70b5e8 ··/* Reject key if doesn't contain good characters */
+14ca29 ··for(i = 0; i < 8;i++) {
+900762 ····if (((ctx->plaintextByteMask) >> i) & 1)
+fb5f6a ······continue;
+
+a14d40 ····c = p0[i];
+2e24c1 ····if (((ctx->plaintextVector[c/8] >> (c & 7)) & 1) == 0)
+08df24 ······return (0);
+2f496b ····c = p1[i];
+2624c1 ····if (((ctx->plaintextVector[c/8] >> (c & 7)) & 1) == 0)
+d9df24 ······return (0);
+29df1c ··}
+eaaf5a
+9e6000 ··/*
+66bb06 ···* ·INSERT ADDITIONAL CODE HERE TO REJECT FALSE POSITIVES
+8ef9a6 ···*/
+82d4d1 ··return (1);
+06efe6 }
+11af5a
+--2752 00185ee2d9a8002000d Page 1 of search.h
+8d2d03 /*****************************************************************************
+58bbd7 ·* search.h ·································································*
+b0c275 ·* ························Header file for search.c ·························*
+a129eb ·* ··········································································*
+7d09fc ·* ···Written 1998 by Cryptography Research (http://www.cryptography.com) ···*
+b28aaf ·* ······and Paul Kocher for the Electronic Frontier Foundation (EFF). ······*
+e4caeb ·* ······Placed in the public domain by Cryptography Research and EFF. ······*
+584992 ·* ·THIS IS UNSUPPORTED FREE SOFTWARE. USE AND DISTRIBUTE AT YOUR OWN RISK. ·*
+4529eb ·* ··········································································*
+a4c755 ·* ·IMPORTANT: U.S. LAW MAY REGULATE THE USE AND/OR EXPORT OF THIS PROGRAM. ·*
+a529eb ·* ··········································································*
+cd489b ·*****************************************************************************
+7b29eb ·* ··········································································*
+aa6eef ·* ··REVISION HISTORY: ······················································*
+0d29eb ·* ··········································································*
+6e28d9 ·* ··Version 1.0: ·Initial release by Cryptography Research to EFF. ·········*
+e829eb ·* ··········································································*
+fbd8c3 ·*****************************************************************************/
+24af5a
+01915a #ifndef __SEARCH_H
+835ec3 #define __SEARCH_H
+32af5a
+42f0f7 typedef struct {
+28e10b ··/* PARAMETERS DEFINING THE SEARCH (THESE GO IN THE SEARCH CONTEXT FILE) */
+613b99 ··unsigned char plaintextVector[256/8];
+9b6f32 ··unsigned char plaintextXorMask[8];
+69ed17 ··unsigned char ciphertext0[8];
+15e93c ··unsigned char ciphertext1[8];
+c6b1b4 ··unsigned char plaintextByteMask;
+360356 ··unsigned char searchInfo;
+83af5a
+354b87 ··/* PARAMETERS ABOUT THE SEARCH PROCESS */
+d8cecc ··long totalUnits; ····································/* total search units */
+2dd51a ··long nextUnstartedKeyBlock; ···························/* top 24 bits only */
+9a86cd ··long totalFinishedKeyBlocks; ············/* number of completed key blocks */
+e769ab ··long totalUnstartedKeyBlocks; ···········/* number of blocks left to start */
+ae947a ··long totalPendingKeyBlocks; ···················/* number of blocks running */
+9a5317 } SEARCH_CTX;
+f5af5a
+8b7454 #endif
+85af5a
