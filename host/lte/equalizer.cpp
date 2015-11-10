@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include "lte_phy.h"
-#include "refs/dmrs.h"
+#include "dmrs.h"
 
 static void MatrixProd(int d1, int d2, int d3, float M1[], float M2[], float oM[])
 {

@@ -1,29 +1,47 @@
-include ../../common/makefile.config
+TARGETS = simple_ul_rx.out
 
-TARGETS = SimpleULRx.out
+SRC = test.cpp simple_ul_rx.cpp \
+	  lte_phy.cpp parse_args.cpp \
+	  OFDM.cpp res_mapper.cpp equalizer.cpp \
+	  fft.cpp dmrs.cpp \
+	  gauss.cpp general_func.cpp check.cpp 
 
-SRC = SimpleULRx.cpp test.cpp
-SRC += $(SRC_DIR)/lte_phy.cpp $(SRC_DIR)/parse_args.cpp
-SRC += $(SRC_DIR)/OFDM/OFDM.cpp $(SRC_DIR)/ResMapping/ResMapper.cpp $(SRC_DIR)/Equalizing/Equalizer.cpp
-SRC += $(LIB_DIR)/gauss.cpp $(LIB_DIR)/GeneralFunc.cpp $(LIB_DIR)/refs/dmrs.cpp $(LIB_DIR)/timer/timer.cpp $(LIB_DIR)/check/check.cpp $(LIB_DIR)/timer/timer.cpp
+SRC += ../timer/timer.c
 
 OBJS := $(patsubst %.cpp,%.o, $(SRC))
+OBJS := $(patsubst %.c,%.o, $(OBJS))
 
-INC_FLAGS += -I. -I.. -I$(SRC_DIR) -I$(LIB_DIR)
-INC_FLAGS += -I$(SRC_DIR)/OFDM -I$(SRC_DIR)/ResMapping -I$(SRC_DIR)/Equalizing
+CXXFLAGS := -g -Wall
+CFLAGS := -g -Wall
 
-LINKFLAGS += -L$(LIB_DIR)/fft -lfft -lpthread
+LINKFLAGS :=
+
+ifeq ($(PG), 1)
+	CXXFLAGS += -pg	
+	CFLAGS += -pg	
+	LINKFLAGS += -pg
+endif
+
+
+INC_FLAGS += -I. -I../timer
+INC_FLAGS += -I../papi-rapl
+
+CXXFLAGS += $(INC_FLAGS)
+CFLAGS += $(INC_FLAGS)
+
+LINKFLAGS += -lpthread
+LINKFLAGS += -L../papi-rapl -lraplpower
 
 #CXXFLAGS += -DPTH
 
-
-SimpleULRx.out: $(OBJS)
-	$(MAKE) -C $(LIB_DIR)/fft libfft.a
+simple_ul_rx.out: $(OBJS)
 	$(CXX) $^ $(LINKFLAGS) -o $@
 
 %.o: %.cpp
 	$(CXX) -c $< -o $@ $(CXXFLAGS)
 
+%.o: %.c
+	$(CC) -c $< -o $@ $(CFLAGS)
+
 clean:
 	rm -rf *.o $(TARGETS)
-

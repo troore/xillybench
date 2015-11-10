@@ -1,11 +1,16 @@
 
 #include <stdio.h>
+
 #include "lte_phy.h"
 #include "parse_args.h"
-#include "GeneralFunc.h"
+#include "general_func.h"
 
-#include "SimpleULRx.h"
-#include "timer/timer.h"
+#include "simple_ul_rx.h"
+
+extern "C" {
+#include "timer.h"
+#include "rapl_power.h"
+}
 
 #define NUM_THREADS_SIMPLE_RX 3
 
@@ -14,16 +19,16 @@ int num_frames;
 
 void test_equalizer_chain_seq(LTE_PHY_PARAMS *lte_phy_params)
 {
-	double tstart, tend, ttime;
+//	double tstart, tend, ttime;
 	
 	GeneRandomInput((lte_phy_params + 0)->ofdemod_in, (lte_phy_params + 0)->ofdemod_in_buf_sz, "./testsuite/SubCarrierMapInputReal", "./testsuite/SubCarrierMapInputImag");
 
-	tstart = dtime();
+//	tstart = dtime();
 	
 	equalizer_chain_seq(&(lte_phy_params[0]));
 
-	tend = dtime();
-	ttime = tend - tstart;
+//	tend = dtime();
+//	ttime = tend - tstart;
 //	printf("%.3fms\n", ttime);
 
 	WriteOutputToFiles((lte_phy_params + 0)->eq_out, (lte_phy_params + 0)->eq_out_buf_sz, "./testsuite/testLSCELSEqOutputReal", "./testsuite/testLSCELSEqOutputImag");
@@ -31,19 +36,21 @@ void test_equalizer_chain_seq(LTE_PHY_PARAMS *lte_phy_params)
 
 void test_equalizer_chain_pth(LTE_PHY_PARAMS *lte_phy_params)
 {
-	double tstart, tend, ttime;
+//	double tstart, tend, ttime;
 	
 	GeneRandomInput((lte_phy_params + 0)->ofdemod_in, (lte_phy_params + 0)->ofdemod_in_buf_sz, "./testsuite/SubCarrierMapInputReal", "./testsuite/SubCarrierMapInputImag");
 	GeneRandomInput((lte_phy_params + 1)->ofdemod_in, (lte_phy_params + 1)->ofdemod_in_buf_sz, "./testsuite/SubCarrierMapInputReal", "./testsuite/SubCarrierMapInputImag");
 	GeneRandomInput((lte_phy_params + 2)->ofdemod_in, (lte_phy_params + 2)->ofdemod_in_buf_sz, "./testsuite/SubCarrierMapInputReal", "./testsuite/SubCarrierMapInputImag");
 
-	tstart = dtime();
+//	tstart = dtime();
 	
+	rapl_power_start();
 	equalizer_chain_pth(lte_phy_params);
+	rapl_power_stop();
 
-	tend = dtime();
-	ttime = tend - tstart;
-	printf("%.3fms\n", ttime);
+//	tend = dtime();
+//	ttime = tend - tstart;
+//	printf("%.3fms\n", ttime);
 
 	WriteOutputToFiles((lte_phy_params + 0)->eq_out, (lte_phy_params + 0)->eq_out_buf_sz, "./testsuite/testLSCELSEqOutputReal", "./testsuite/testLSCELSEqOutputImag");
 	WriteOutputToFiles((lte_phy_params + 1)->eq_out, (lte_phy_params + 1)->eq_out_buf_sz, "./testsuite/testLSCELSEqOutputReal", "./testsuite/testLSCELSEqOutputImag");

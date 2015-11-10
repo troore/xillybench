@@ -1,9 +1,8 @@
 
 #include <stdlib.h>
 
-#include "ResMapper.h"
+#include "res_mapper.h"
 
-//#include "refs/dmrs.h"
 #include "lte_phy.h"
 
 //#include <iostream>

@@ -7,7 +7,6 @@
 
 #include "lte_phy.h"
 #include "test.h"
-#include "util.h"
 
 static const char *opt_str = "f:t:r:m:n:h";
 

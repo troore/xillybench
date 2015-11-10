@@ -7,7 +7,35 @@
 #define PI	3.14159265358979323846264338327950288
 
 #include "fft.h"
-#include "util.h"
+
+static int BitReverse(int src, int size)
+{
+	int tmp = src;
+	int des = 0;
+	for (int i=size-1; i>=0; i--)
+	{
+		des = ((tmp & 1) << i) | des;
+		tmp = tmp >> 1;
+	}
+	return des;
+}
+
+static int pow2(int n)
+{
+	return 1 << n;
+}
+
+static int log2(int n)
+{
+	int i = 0;
+
+	while (n > 1)
+	{
+		n /= 2;
+		i++;
+	}
+	return i;
+}
 
 void fft_recur(int n, float (*a)[2], float (*y)[2], int direction)
 {

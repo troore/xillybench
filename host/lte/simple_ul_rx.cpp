@@ -8,14 +8,17 @@
 
 #include "lte_phy.h"
 
-#include "Equalizer.h"
-#include "ResMapper.h"
+#include "equalizer.h"
+#include "res_mapper.h"
 #include "OFDM.h"
-#include "refs/dmrs.h"
-#include "timer/timer.h"
+#include "dmrs.h"
 
 #include "test.h"
-#include "util.h"
+
+extern "C" {
+#include "timer.h"
+#include "rapl_power.h"
+}
 
 pthread_mutex_t thread_counter_mutex;
 pthread_cond_t thread_counter_cv;
@@ -41,7 +44,7 @@ void *thread_fun_eq(void *thread_params)
 {
 	LTE_PHY_PARAMS *lte_phy_params = (LTE_PHY_PARAMS *)thread_params;
 	
-	int i, j;
+	int i;
 
 	for (i = 2; i < num_frames; i++) {
 		Equalizing(lte_phy_params, lte_phy_params->eq_in, lte_phy_params->eq_out);
@@ -51,6 +54,8 @@ void *thread_fun_eq(void *thread_params)
 		// In fact, there should be input to the thread_fun_ofdemod,
 		// but we use old data instead. It doesn't affect performance and power.
 	}
+
+	return NULL;
 }
 
 
@@ -70,6 +75,8 @@ void *thread_fun_resdm(void *thread_params)
 				lte_phy_params->eq_in[j] = lte_phy_params->resdm_out[j];
 		}
 	}
+
+	return NULL;
 }
 
 
@@ -89,6 +96,8 @@ void *thread_fun_ofdemod(void *thread_params)
 				lte_phy_params->resdm_in[j] = lte_phy_params->ofdemod_out[j];
 		}
 	}
+
+	return NULL;
 }
 
 
@@ -102,18 +111,24 @@ void equalizer_chain_seq(LTE_PHY_PARAMS *lte_phy_params)
 	
 //	SubCarrierMapping(lte_phy_params, lte_phy_params->resm_in, lte_phy_params->resm_out);
 //	ofmodulating(lte_phy_params, lte_phy_params->resm_out, lte_phy_params->ofmod_out);
+//	ttime = 0.0;
+	rapl_power_start();
 	for (i = 0; i < num_frames; i++) {
-//		tstart = dtime();
+	//	tstart = dtime();
 		ofdemodulating(lte_phy_params, lte_phy_params->ofdemod_in, lte_phy_params->ofdemod_out);
-//		tend = dtime();
-//		printf("%.3fms\n", tend - tstart);
+	//	tend = dtime();
+	//	ttime = ttime + (tend - tstart);
+	//	tstart = dtime();
 		SubCarrierDemapping(lte_phy_params, lte_phy_params->ofdemod_out, lte_phy_params->resdm_out);
-//		tstart = dtime();
-//		printf("%.3fms\n", tstart - tend);
+	//	tend = dtime();
+	//	ttime = ttime + (tend - tstart);
+	//	tstart = dtime();
 		Equalizing(lte_phy_params, lte_phy_params->resdm_out, lte_phy_params->eq_out);
-//		tend = dtime();
-//		printf("%.3fms\n", tend - tstart);
+	//	tend = dtime();
+	//	ttime = ttime + (tend - tstart);
 	}
+	rapl_power_stop();
+//	printf("%.3fms\n", ttime);
 }
 
 void equalizer_chain_pth(LTE_PHY_PARAMS *lte_phy_params)
