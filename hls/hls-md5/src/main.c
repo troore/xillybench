@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
 	MD5Update(&md5, encrypt, strlen((char *)encrypt));
 	MD5Final(&md5, decrypt);
 
+	printf("%d\n", strlen(encrypt));
+
 	printf("%s\n", encrypt);
 //	printf("%s\n", decrypt);
 	for (i = 0; i < 16; i++)

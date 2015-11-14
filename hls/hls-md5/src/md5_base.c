@@ -1,13 +1,24 @@
 #include <string.h>		/* for memcpy() */
-#include <stdio.h>	/* for printf() */
 
 #include "md5.h"
-#include "timer.h"
 
 /*
  * Note: this code is harmless on little-endian machines.
  */
-void byteReverse(unsigned char *buf, unsigned longs)
+void byteReverse(unsigned char *buf, uint32 longs)
+{
+	int i;
+	uint32 t;
+
+	for (i = 0; i < longs; i++) {
+		t = (uint32) ((unsigned) buf[3] << 8 | buf[2]) << 16 |
+			((unsigned) buf[1] << 8 | buf[0]);
+		*(uint32 *)buf = t;
+		buf += 4;
+	}
+}
+
+void byteReverse_bounded(unsigned char buf[64])
 {
 	int i;
 	uint32 t;
@@ -15,15 +26,17 @@ void byteReverse(unsigned char *buf, unsigned longs)
 	int h;
 
 	for (h = 0; h < NFS; h++) {
-	for (i = 0; i < longs; i++) {
+	for (i = 0; i < 16; i++) {
 		t = (uint32) ((unsigned) buf[3] << 8 | buf[2]) << 16 |
 			((unsigned) buf[1] << 8 | buf[0]);
-		*(uint32 *) buf = t;
+		*(uint32 *)buf = t;
 		buf += 4;
 	}
-	buf -= (4 * longs);
+	
+	buf -= (4 * 16);
 	}
 }
+
 
 /*
  * Start MD5 accumulation.  Set bit count to 0 and buffer to mysterious
@@ -47,7 +60,6 @@ void MD5Init(struct MD5Context *ctx)
 void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
 {
 	uint32 t;
-	unsigned len_64;
 
 	/* Update bitcount */
 
@@ -77,8 +89,7 @@ void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
 
 	/* Process data in 64-byte chunks */
 
-	len_64 = (len / 64) * 64;
-	MD5Iterate(ctx->in, ctx->buf, buf, len_64);
+	MD5Iterate(ctx->in, ctx->buf, buf);
 	/*
 	while (len >= 64) {
 		memcpy(ctx->in, buf, 64);
@@ -92,36 +103,21 @@ void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
 	/* Handle any remaining bytes of data. */
 
 //	memcpy(ctx->in, buf, len);
-	memcpy(ctx->in, buf + len_64, (len - len_64));
 }
 
-void MD5Iterate(unsigned char ctx_in[64], uint32 ctx_buf[4], unsigned char const *buf, unsigned len)
+void MD5Iterate(unsigned char ctx_in[64], uint32 ctx_buf[4], unsigned char const buf[N])
 {
 	int i, j;
 //	uint32 n_iters = len / 64;
 	uint32 n_iters = 10;
 
-
-	double start, finish, elapsed_time;
-
-	elapsed_time = 0.0;
 	for (i = 0; i < n_iters; i++) {
 		for (j = 0; j < 64; j++)
 			ctx_in[j] = buf[i * 64 + j];
 
-	//	start = dtime();
-		byteReverse(ctx_in, 16);
-	//	finish = dtime();
-	//	elapsed_time += (finish - start);
-		start = dtime();
+		byteReverse_bounded(ctx_in);
 		MD5Transform(ctx_buf, (uint32 *)ctx_in);
-		finish = dtime();
-		elapsed_time += (finish - start);
-	//	buf += 64;
-	//	len -= 64;
 	}
-
-	printf("%.3fms\n", elapsed_time);
 }
 
 /*

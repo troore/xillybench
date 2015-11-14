@@ -1,9 +1,10 @@
 TARGETS := md5.out
 
-SRCS := main.c md5.c
+SRCS := main.c md5.c ../timer/timer.c
 OBJS := $(patsubst %.c,%.o,$(SRCS))
 
-CFLAGS := -g -Wall
+INCDIRS := -I../timer
+CFLAGS := -g -Wall $(INCDIRS)
 LINKFLAGS :=
 
 md5.out: $(OBJS)

@@ -26,6 +26,7 @@ void xillybus_wrapper(int *in, int *out) {
 	ofdemodulating(a, b);
 
 	for (i = 0; i < M; i++) {
+	//	*out++ = *((int *)(&b[i])); // synthesis fail
 		tmp2 = b[i];
 		*out++ = *((int *)(&tmp2));
 	}

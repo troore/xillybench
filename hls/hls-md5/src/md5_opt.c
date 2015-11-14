@@ -1,29 +1,70 @@
 #include <string.h>		/* for memcpy() */
-#include <stdio.h>	/* for printf() */
 
 #include "md5.h"
-#include "timer.h"
 
 /*
  * Note: this code is harmless on little-endian machines.
  */
-void byteReverse(unsigned char *buf, unsigned longs)
+void byteReverse(unsigned char *buf, uint32 longs)
 {
 	int i;
 	uint32 t;
 
-	int h;
-
-	for (h = 0; h < NFS; h++) {
 	for (i = 0; i < longs; i++) {
 		t = (uint32) ((unsigned) buf[3] << 8 | buf[2]) << 16 |
 			((unsigned) buf[1] << 8 | buf[0]);
-		*(uint32 *) buf = t;
+		*(uint32 *)buf = t;
 		buf += 4;
 	}
-	buf -= (4 * longs);
+}
+
+void byteReverse_bounded(unsigned char buf[64])
+{
+//#pragma HLS ARRAY_PARTITION variable=buf block factor=4 dim=1
+
+//#pragma HLS RESOURCE variable=buf core=RAM_2P_BRAM
+
+	int i;
+//	uint32 t;
+	uint32 t1, t2, t3, t4, t5, t6, t7, t8, t9, t10;
+	uint32 id0, id1, id2, id3;
+
+	int h;
+
+	for (h = 0; h < NFS; h++) {
+	for (i = 0; i < 16; i++) {
+#pragma HLS PIPELINE
+
+		/*
+		t = (uint32) ((unsigned) buf[i * 4 + 3] << 8 | buf[i * 4 + 2]) << 16 |
+			((unsigned) buf[i * 4 + 1] << 8 | buf[i * 4 + 0]);
+			*/
+
+		id3 = i * 4 + 3;
+		t1 = (unsigned)(buf[id3]);
+		t2 = t1 << 8;
+		id2 = i * 4 + 2;
+		t3 = (unsigned)buf[id2];
+		t4 = t3 | t2;
+		t5 = t4 << 16;
+
+		id1 = i * 4 + 1;
+		t6 = (unsigned)(buf[id1]);
+		t7 = t6 << 8;
+		id0 = i * 4 + 0;
+		t8 = (unsigned)(buf[id0]);
+		t9 = t7 | t8;
+		t10 = t9 | t5;
+
+	//	*(uint32 *)buf = t;
+	//	*(uint32 *)(buf + i * 4) = t;
+		*(uint32 *)(buf + i * 4) = t10;
+	}
+	
+//	buf -= (4 * 16);
 	}
 }
+
 
 /*
  * Start MD5 accumulation.  Set bit count to 0 and buffer to mysterious
@@ -47,7 +88,6 @@ void MD5Init(struct MD5Context *ctx)
 void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
 {
 	uint32 t;
-	unsigned len_64;
 
 	/* Update bitcount */
 
@@ -77,8 +117,7 @@ void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
 
 	/* Process data in 64-byte chunks */
 
-	len_64 = (len / 64) * 64;
-	MD5Iterate(ctx->in, ctx->buf, buf, len_64);
+	MD5Iterate(ctx->in, ctx->buf, buf);
 	/*
 	while (len >= 64) {
 		memcpy(ctx->in, buf, 64);
@@ -92,36 +131,26 @@ void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
 	/* Handle any remaining bytes of data. */
 
 //	memcpy(ctx->in, buf, len);
-	memcpy(ctx->in, buf + len_64, (len - len_64));
 }
 
-void MD5Iterate(unsigned char ctx_in[64], uint32 ctx_buf[4], unsigned char const *buf, unsigned len)
+void MD5Iterate(unsigned char ctx_in[64], uint32 ctx_buf[4], unsigned char const buf[N])
 {
 	int i, j;
+	uint32 p[16];
 //	uint32 n_iters = len / 64;
 	uint32 n_iters = 10;
 
-
-	double start, finish, elapsed_time;
-
-	elapsed_time = 0.0;
 	for (i = 0; i < n_iters; i++) {
 		for (j = 0; j < 64; j++)
 			ctx_in[j] = buf[i * 64 + j];
 
-	//	start = dtime();
-		byteReverse(ctx_in, 16);
-	//	finish = dtime();
-	//	elapsed_time += (finish - start);
-		start = dtime();
-		MD5Transform(ctx_buf, (uint32 *)ctx_in);
-		finish = dtime();
-		elapsed_time += (finish - start);
-	//	buf += 64;
-	//	len -= 64;
+		byteReverse_bounded(ctx_in);
+		for (j = 0; j < 16; j++) {
+			p[j] = *((uint32 *)(ctx_in + j * 4));
+		}
+	//	MD5Transform(ctx_buf, (uint32 *)ctx_in);
+		MD5Transform(ctx_buf, p);
 	}
-
-	printf("%.3fms\n", elapsed_time);
 }
 
 /*

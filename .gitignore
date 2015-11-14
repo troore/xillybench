@@ -5,6 +5,7 @@
 *.log
 *.app
 .autopilot
+*prj
 syn
 impl
 csim

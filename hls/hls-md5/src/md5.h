@@ -18,7 +18,10 @@ void MD5Update(struct MD5Context *context, unsigned char const *buf,
 void MD5Final(struct MD5Context *context, unsigned char digest[16]);
 void MD5Transform(uint32 buf[4], uint32 const in[16]);
 
-void MD5Iterate(unsigned char ctx_in[64], uint32 ctx_buf[4], unsigned char const *buf, unsigned len);
+void MD5Iterate(unsigned char ctx_in[64], uint32 ctx_buf[4], unsigned char const buf[N]);
+
+void byteReverse(unsigned char *buf, uint32 longs);
+void byteReverse_bounded(unsigned char buf[64]);
 
 /*
  * This is needed to make RSAREF happy on some MS-DOS compilers.
