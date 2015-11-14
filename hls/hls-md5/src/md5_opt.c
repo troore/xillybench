@@ -20,14 +20,16 @@ void byteReverse(unsigned char *buf, uint32 longs)
 
 void byteReverse_bounded(unsigned char buf[64])
 {
+#pragma HLS ARRAY_PARTITION variable=buf cyclic factor=2 dim=1
 //#pragma HLS ARRAY_PARTITION variable=buf block factor=4 dim=1
 
-//#pragma HLS RESOURCE variable=buf core=RAM_2P_BRAM
 
 	int i;
 //	uint32 t;
-	uint32 t1, t2, t3, t4, t5, t6, t7, t8, t9, t10;
-	uint32 id0, id1, id2, id3;
+	uint32 t[16];
+
+//	uint32 t1, t2, t3, t4, t5, t6, t7, t8, t9, t10;
+//	uint32 id0, id1, id2, id3;
 
 	int h;
 
@@ -35,11 +37,15 @@ void byteReverse_bounded(unsigned char buf[64])
 	for (i = 0; i < 16; i++) {
 #pragma HLS PIPELINE
 
-		/*
-		t = (uint32) ((unsigned) buf[i * 4 + 3] << 8 | buf[i * 4 + 2]) << 16 |
-			((unsigned) buf[i * 4 + 1] << 8 | buf[i * 4 + 0]);
-			*/
 
+	//	t = (uint32) ((unsigned) buf[i * 4 + 3] << 8 | buf[i * 4 + 2]) << 16 |
+	//		((unsigned) buf[i * 4 + 1] << 8 | buf[i * 4 + 0]);
+
+		t[i] = (uint32) ((unsigned) buf[i * 4 + 3] << 8 | buf[i * 4 + 2]) << 16 |
+			((unsigned) buf[i * 4 + 1] << 8 | buf[i * 4 + 0]);
+
+
+		/*
 		id3 = i * 4 + 3;
 		t1 = (unsigned)(buf[id3]);
 		t2 = t1 << 8;
@@ -55,12 +61,18 @@ void byteReverse_bounded(unsigned char buf[64])
 		t8 = (unsigned)(buf[id0]);
 		t9 = t7 | t8;
 		t10 = t9 | t5;
+		*/
 
-	//	*(uint32 *)buf = t;
+		//*(uint32 *)buf = t;
 	//	*(uint32 *)(buf + i * 4) = t;
-		*(uint32 *)(buf + i * 4) = t10;
+	//	*(uint32 *)(buf + i * 4) = t10;
 	}
 	
+	for (i = 0; i < 16; i++) {
+#pragma HLS PIPELINE
+		*(uint32 *)(buf + i * 4) = t[i];
+	}
+
 //	buf -= (4 * 16);
 	}
 }
