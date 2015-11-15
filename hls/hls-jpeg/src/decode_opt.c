@@ -11,8 +11,6 @@
 #include "jpeg2bmp.h"
 #include "chenidct.h"
 
-#include "timer.h"
-
 char p_jinfo_data_precision;
 short p_jinfo_image_height;
 short p_jinfo_image_width;
@@ -70,7 +68,7 @@ const int zigzag_index[64] = {
  * input imatrix and places the output in omatrix.
  */
 	void
-IZigzagMatrix (int *imatrix, int *omatrix)
+IZigzagMatrix (int imatrix[DCTSIZE2], int omatrix[DCTSIZE2])
 {
 	int i;
 	
@@ -79,6 +77,8 @@ IZigzagMatrix (int *imatrix, int *omatrix)
 	for (h = 0; h < 1; h++) {
 	for (i = 0; i < DCTSIZE2; i++)
 	{
+#pragma HLS PIPELINE
+
 	//	*(omatrix++) = imatrix[zigzag_index[i]];
 		omatrix[i] = imatrix[zigzag_index[i]];
 	}
@@ -91,18 +91,19 @@ IZigzagMatrix (int *imatrix, int *omatrix)
  * and puts the output int qmatrix.
  */
 	void
-IQuantize (int *matrix, unsigned int *qmatrix)
+IQuantize (int matrix[DCTSIZE2], unsigned int qmatrix[DCTSIZE2])
 {
-	/*
 	int *mptr;
 
 	for (mptr = matrix; mptr < matrix + DCTSIZE2; mptr++)
 	{
+#pragma HLS PIPELINE
+
 		*mptr = *mptr * (*qmatrix);
 		qmatrix++;
 	}
-	*/
 
+	/*
 	int i;
 	int matrix_buf[DCTSIZE2];
 
@@ -116,6 +117,7 @@ IQuantize (int *matrix, unsigned int *qmatrix)
 	for (i = 0; i < DCTSIZE2; i++) {
 		matrix[i] = matrix_buf[i];
 	}
+	*/
 }
 
 
@@ -124,16 +126,17 @@ IQuantize (int *matrix, unsigned int *qmatrix)
  * This results in strictly positive values for all pixel coefficients.
  */
 	void
-PostshiftIDctMatrix (int *matrix, int shift)
+PostshiftIDctMatrix (int matrix[DCTSIZE2], int shift)
 {
-	/*
 	int *mptr;
 	for (mptr = matrix; mptr < matrix + DCTSIZE2; mptr++)
 	{
+#pragma HLS PIPELINE
+
 		*mptr += shift;
 	}
-	*/
 
+	/*
 	int i;
 	int matrix_buf[DCTSIZE2];
 
@@ -148,6 +151,7 @@ PostshiftIDctMatrix (int *matrix, int shift)
 	for (i = 0; i < DCTSIZE2; i++) {
 		matrix[i] = matrix_buf[i];
 	}
+	*/
 }
 
 
@@ -156,13 +160,14 @@ PostshiftIDctMatrix (int *matrix, int shift)
  * value greater than 255 (4095) or less than 0.
  */
 	void
-BoundIDctMatrix (int *matrix, int Bound)
+BoundIDctMatrix (int matrix[DCTSIZE2], int Bound)
 {
-	/*
 	int *mptr;
 
 	for (mptr = matrix; mptr < matrix + DCTSIZE2; mptr++)
 	{
+#pragma HLS PIPELINE
+
 		if (*mptr < 0)
 		{
 			*mptr = 0;
@@ -172,8 +177,8 @@ BoundIDctMatrix (int *matrix, int Bound)
 			*mptr = Bound;
 		}
 	}
-	*/
 
+	/*
 	int i;
 	int matrix_buf[DCTSIZE2];
 
@@ -190,6 +195,7 @@ BoundIDctMatrix (int *matrix, int Bound)
 	for (i = 0; i < DCTSIZE2; i++) {
 		matrix[i] = matrix_buf[i];
 	}
+	*/
 }
 
 
@@ -387,33 +393,17 @@ decode_block (int comp_no, int *out_buf, int *HuffBuff)
 	p_quant_tbl =
 		&p_jinfo_quant_tbl_quantval[(int)p_jinfo_comps_info_quant_tbl_no[comp_no]][DCTSIZE2];
 
-//	start = dtime();
 	DecodeHuffMCU (HuffBuff, comp_no);
-//	finish = dtime();
 
-//	start = dtime();
 	IZigzagMatrix (HuffBuff, QuantBuff);
-//	finish = dtime();
 
-//	start = dtime();
 	IQuantize (QuantBuff, p_quant_tbl);
-//	finish = dtime();
 
-//	start = dtime();
 	ChenIDct (QuantBuff, out_buf);
-//	finish = dtime();
 
-//	start = dtime();
 	PostshiftIDctMatrix (out_buf, IDCT_SHIFT);
-//	finish = dtime();
 
-//	start = dtime();
 	BoundIDctMatrix (out_buf, IDCT_BOUND);
-//	finish = dtime();
-
-	elapsed_time = finish - start;
-
-	printf("%.3fms\n", elapsed_time);
 }
 
 

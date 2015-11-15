@@ -246,12 +246,12 @@ DecodeHuffman (int *Xhuff_huffval, int Dhuff_ml,
  * Decode one MCU
  */
 	void
-DecodeHuffMCU (int *out_buf, int num_cmp)
+DecodeHuffMCU (int out_buf[DCTSIZE2], int num_cmp)
 {
 	int s, diff, tbl_no, *mptr, k, n, r;
 	int h;
 
-	for (h = 0; h < 100000; h++) {
+	for (h = 0; h < 1; h++) {
 		/*
 		 * Decode DC
 		 */

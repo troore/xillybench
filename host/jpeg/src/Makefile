@@ -6,12 +6,11 @@ SRCS := main.c \
 	decode.c \
 	huffman.c \
 	jfif_read.c \
-	marker.c \
-	../timer/timer.c
+	marker.c
 
 OBJS := $(patsubst %.c,%.o,$(SRCS))
 
-INCDIRS := -I../timer
+INCDIRS :=
 CFLAGS := -g -Wall $(INCDIRS)
 LINKFLAGS :=
 

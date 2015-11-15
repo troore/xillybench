@@ -11,7 +11,7 @@ int buf_getb ();
 int DecodeHuffman (int *Xhuff_huffval, int Dhuff_ml,
 		int *Dhuff_maxcode, int *Dhuff_mincode, int *Dhuff_valptr);
 
-void DecodeHuffMCU (int *out_buf, int num_cmp);
+void DecodeHuffMCU (int out_buf[DCTSIZE2], int num_cmp);
 
 extern unsigned char *CurHuffReadBuf;
 

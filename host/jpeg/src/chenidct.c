@@ -16,6 +16,7 @@
 #define c5d16 284L
 #define c7d16 100L
 
+
 /*
  *
  * ChenIDCT() implements the Chen inverse dct. Note that there are two
@@ -31,9 +32,6 @@ ChenIDct (int *x, int *y)
 	register int b0, b1, b2, b3;
 	register int c0, c1, c2, c3;
 
-	int h;
-
-	for (h = 0; h < 100000; h++) {
 	/* Loop over columns */
 
 	for (i = 0; i < 8; i++)
@@ -176,7 +174,6 @@ ChenIDct (int *x, int *y)
 
 	for (i = 0, aptr = y; i < 64; i++, aptr++)
 		*aptr = (((*aptr < 0) ? (*aptr - 8) : (*aptr + 8)) / 16);
-	}
 }
 
 /*END*/

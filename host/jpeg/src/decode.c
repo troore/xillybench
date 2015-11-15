@@ -11,8 +11,6 @@
 #include "jpeg2bmp.h"
 #include "chenidct.h"
 
-#include "timer.h"
-
 char p_jinfo_data_precision;
 short p_jinfo_image_height;
 short p_jinfo_image_width;
@@ -73,15 +71,12 @@ const int zigzag_index[64] = {
 IZigzagMatrix (int *imatrix, int *omatrix)
 {
 	int i;
-	
-	int h;
 
-	for (h = 0; h < 1; h++) {
 	for (i = 0; i < DCTSIZE2; i++)
 	{
-	//	*(omatrix++) = imatrix[zigzag_index[i]];
-		omatrix[i] = imatrix[zigzag_index[i]];
-	}
+
+		*(omatrix++) = imatrix[zigzag_index[i]];
+
 	}
 }
 
@@ -93,28 +88,12 @@ IZigzagMatrix (int *imatrix, int *omatrix)
 	void
 IQuantize (int *matrix, unsigned int *qmatrix)
 {
-	/*
 	int *mptr;
 
 	for (mptr = matrix; mptr < matrix + DCTSIZE2; mptr++)
 	{
 		*mptr = *mptr * (*qmatrix);
 		qmatrix++;
-	}
-	*/
-
-	int i;
-	int matrix_buf[DCTSIZE2];
-
-	int h;
-
-	for (h = 0; h < 1; h++) {
-	for (i = 0; i < DCTSIZE2; i++) {
-		matrix_buf[i] = matrix[i] * qmatrix[i];
-	}
-	}
-	for (i = 0; i < DCTSIZE2; i++) {
-		matrix[i] = matrix_buf[i];
 	}
 }
 
@@ -126,27 +105,10 @@ IQuantize (int *matrix, unsigned int *qmatrix)
 	void
 PostshiftIDctMatrix (int *matrix, int shift)
 {
-	/*
 	int *mptr;
 	for (mptr = matrix; mptr < matrix + DCTSIZE2; mptr++)
 	{
 		*mptr += shift;
-	}
-	*/
-
-	int i;
-	int matrix_buf[DCTSIZE2];
-
-	int h;
-
-	for (h = 0; h < 100000; h++) {
-	for (i = 0; i < DCTSIZE2; i++) {
-		matrix_buf[i] = matrix[i] + shift;
-	}
-	}
-
-	for (i = 0; i < DCTSIZE2; i++) {
-		matrix[i] = matrix_buf[i];
 	}
 }
 
@@ -158,7 +120,6 @@ PostshiftIDctMatrix (int *matrix, int shift)
 	void
 BoundIDctMatrix (int *matrix, int Bound)
 {
-	/*
 	int *mptr;
 
 	for (mptr = matrix; mptr < matrix + DCTSIZE2; mptr++)
@@ -172,24 +133,6 @@ BoundIDctMatrix (int *matrix, int Bound)
 			*mptr = Bound;
 		}
 	}
-	*/
-
-	int i;
-	int matrix_buf[DCTSIZE2];
-
-	int h;
-
-	for (h = 0; h < 1; h++) {
-	for (i = 0; i < DCTSIZE2; i++) {
-		if (matrix[i] < 0)
-			matrix_buf[i] = 0;
-		else if (matrix[i] > Bound)
-			matrix_buf[i] = Bound;
-	}
-	}
-	for (i = 0; i < DCTSIZE2; i++) {
-		matrix[i] = matrix_buf[i];
-	}
 }
 
 
@@ -198,6 +141,7 @@ WriteOneBlock (int *store, unsigned char *out_buf, int width, int height,
 		int voffs, int hoffs)
 {
 	int i, e;
+
 
 	/* Find vertical buffer offs. */
 	for (i = voffs; i < voffs + DCTSIZE; i++)
@@ -223,6 +167,8 @@ WriteOneBlock (int *store, unsigned char *out_buf, int width, int height,
 			break;
 		}
 	}
+
+
 }
 
 /*
@@ -379,54 +325,33 @@ YuvToRgb (int p, int *y_buf, int *u_buf, int *v_buf)
 	void
 decode_block (int comp_no, int *out_buf, int *HuffBuff)
 {
-	double start, finish, elapsed_time;
-
 	int QuantBuff[DCTSIZE2];
 	unsigned int *p_quant_tbl;
 
+	DecodeHuffMCU (HuffBuff, comp_no);
+
+	IZigzagMatrix (HuffBuff, QuantBuff);
+
 	p_quant_tbl =
 		&p_jinfo_quant_tbl_quantval[(int)p_jinfo_comps_info_quant_tbl_no[comp_no]][DCTSIZE2];
-
-//	start = dtime();
-	DecodeHuffMCU (HuffBuff, comp_no);
-//	finish = dtime();
-
-//	start = dtime();
-	IZigzagMatrix (HuffBuff, QuantBuff);
-//	finish = dtime();
-
-//	start = dtime();
 	IQuantize (QuantBuff, p_quant_tbl);
-//	finish = dtime();
 
-//	start = dtime();
 	ChenIDct (QuantBuff, out_buf);
-//	finish = dtime();
 
-//	start = dtime();
 	PostshiftIDctMatrix (out_buf, IDCT_SHIFT);
-//	finish = dtime();
 
-//	start = dtime();
-	BoundIDctMatrix (out_buf, IDCT_BOUND);
-//	finish = dtime();
+	BoundIDctMatrix (out_buf, IDCT_BOUNT);
 
-	elapsed_time = finish - start;
-
-	printf("%.3fms\n", elapsed_time);
 }
-
 
 	void
 decode_start (int *out_data_image_width, int *out_data_image_height,
 		int *out_data_comp_vpos, int *out_data_comp_hpos)
 {
 	int i;
-//	int CurrentMCU = 0;
-	int HuffBuff[DCTSIZE2];
-#define FF 1
-	int IDCTBuff[FF][DCTSIZE2];
-
+	int CurrentMCU = 0;
+	int HuffBuff[NUM_COMPONENT][DCTSIZE2];
+	int IDCTBuff[6][DCTSIZE2];
 
 	/* Read buffer */
 	CurHuffReadBuf = p_jinfo_jpeg_data;
@@ -434,15 +359,103 @@ decode_start (int *out_data_image_width, int *out_data_image_height,
 	/*
 	 * Initial value of DC element is 0
 	 */
-	HuffBuff[0] = 0;
-
-//	printf ("Decode 4:1:1 NumMCU = %d\n", p_jinfo_NumMCU);
-	/*
-	 * 4_1_1
-	 */
-	for (i = 0; i < FF; i++)
+	for (i = 0; i < NUM_COMPONENT; i++)
 	{
-		decode_block (0, IDCTBuff[i], HuffBuff);
+		HuffBuff[i][0] = 0;
 	}
 
+	/*
+	 * Set the size of image to output buffer
+	 */
+	*out_data_image_width = p_jinfo_image_width;
+	*out_data_image_height = p_jinfo_image_height;
+
+	/*
+	 * Initialize output buffer
+	 */
+	for (i = 0; i < RGB_NUM; i++)
+	{
+		out_data_comp_vpos[i] = 0;
+		out_data_comp_hpos[i] = 0;
+	}
+
+
+	if (p_jinfo_smp_fact == SF1_1_1)
+	{
+		printf ("Decode 1:1:1 NumMCU = %d\n", p_jinfo_NumMCU);
+
+		/*
+		 * 1_1_1
+		 */
+		while (CurrentMCU < p_jinfo_NumMCU)
+		{
+
+			for (i = 0; i < NUM_COMPONENT; i++)
+			{
+				decode_block (i, IDCTBuff[i], HuffBuff[i]);
+			}
+
+
+			YuvToRgb (0, IDCTBuff[0], IDCTBuff[1], IDCTBuff[2]);
+			/*
+			 * Write
+			 */
+			for (i = 0; i < RGB_NUM; i++)
+			{
+				WriteBlock (&rgb_buf[0][i][0],
+						&out_data_comp_vpos[i],
+						&out_data_comp_hpos[i], &OutData_comp_buf[i][0]);
+			}
+			CurrentMCU++;
+		}
+
+	}
+	else
+	{
+		printf ("Decode 4:1:1 NumMCU = %d\n", p_jinfo_NumMCU);
+		/*
+		 * 4_1_1
+		 */
+		while (CurrentMCU < p_jinfo_NumMCU)
+		{
+			/*
+			 * Decode Y element
+			 * Decoding Y, U and V elements should be sequentially conducted for the use of Huffman table
+			 */
+
+			for (i = 0; i < 4; i++)
+			{
+				decode_block (0, IDCTBuff[i], HuffBuff[0]);
+			}
+
+			/* Decode U */
+			decode_block (1, IDCTBuff[4], HuffBuff[1]);
+
+			/* Decode V */
+			decode_block (2, IDCTBuff[5], HuffBuff[2]);
+
+
+			/* Transform from Yuv into RGB */
+
+			for (i = 0; i < 4; i++)
+			{
+				YuvToRgb (i, IDCTBuff[i], IDCTBuff[4], IDCTBuff[5]);
+			}
+
+
+			for (i = 0; i < RGB_NUM; i++)
+			{
+				Write4Blocks (&rgb_buf[0][i][0],
+						&rgb_buf[1][i][0],
+						&rgb_buf[2][i][0],
+						&rgb_buf[3][i][0],
+						&out_data_comp_vpos[i],
+						&out_data_comp_hpos[i], &OutData_comp_buf[i][0]);
+			}
+
+
+			CurrentMCU += 4;
+		}
+	}
 }
+

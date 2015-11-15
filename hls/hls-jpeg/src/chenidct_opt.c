@@ -1,4 +1,6 @@
 
+#include "decode.h"
+
 #define LS(r,s) ((r) << (s))
 #define RS(r,s) ((r) >> (s))	/* Caution with rounding... */
 
@@ -23,21 +25,29 @@
  * defined (and storage allocated) before this routine is called.
  */
 	void
-ChenIDct (int *x, int *y)
+ChenIDct (int x[DCTSIZE2], int y[DCTSIZE2])
 {
+#pragma HLS ARRAY_PARTITION variable=x block factor=2 dim=1
+#pragma HLS ARRAY_PARTITION variable=y block factor=2 dim=1
+
 	register int i;
 	register int *aptr;
 	register int a0, a1, a2, a3;
 	register int b0, b1, b2, b3;
 	register int c0, c1, c2, c3;
 
-	int h;
+//	int h;
 
-	for (h = 0; h < 100000; h++) {
+//	for (h = 0; h < 1; h++) {
 	/* Loop over columns */
 
 	for (i = 0; i < 8; i++)
 	{
+#pragma HLS UNROLL factor=8
+
+
+//#pragma HLS PIPELINE
+
 		aptr = x + i;
 		b0 = LS (*aptr, 2);
 		aptr += 8;
@@ -111,6 +121,10 @@ ChenIDct (int *x, int *y)
 
 	for (i = 0; i < 8; i++)
 	{
+#pragma HLS UNROLL factor=8
+
+//#pragma HLS PIPELINE
+
 		aptr = y + LS (i, 3);
 		b0 = *(aptr++);
 		a0 = *(aptr++);
@@ -175,8 +189,10 @@ ChenIDct (int *x, int *y)
 	 */
 
 	for (i = 0, aptr = y; i < 64; i++, aptr++)
-		*aptr = (((*aptr < 0) ? (*aptr - 8) : (*aptr + 8)) / 16);
-	}
+
+#pragma HLS PIPELINE
+*aptr = (((*aptr < 0) ? (*aptr - 8) : (*aptr + 8)) / 16);
+//	}
 }
 
 /*END*/

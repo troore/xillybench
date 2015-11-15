@@ -29,10 +29,14 @@
 #define SF1_1_1  0
 #define SF4_1_1  2
 
-void IZigzagMatrix (int *imatrix, int *omatrix);
-void IQuantize (int *matrix, unsigned int *qmatrix);
-void PostshiftIDctMatrix (int *matrix, int shift);
-void BoundIDctMatrix (int *matrix, int Bound);
+//void IZigzagMatrix (int *imatrix, int *omatrix);
+void IZigzagMatrix (int imatrix[DCTSIZE2], int omatrix[DCTSIZE2]);
+//void IQuantize (int *matrix, unsigned int *qmatrix);
+void IQuantize (int matrix[DCTSIZE2], unsigned int qmatrix[DCTSIZE2]);
+//void PostshiftIDctMatrix (int *matrix, int shift);
+void PostshiftIDctMatrix (int matrix[DCTSIZE2], int shift);
+//void BoundIDctMatrix (int *matrix, int Bound);
+void BoundIDctMatrix (int matrix[DCTSIZE2], int Bound);
 void WriteBlock (int *store, int *p_out_vpos, int *p_out_hpos,
 		unsigned char *p_out_buf);
 void Write4Blocks (int *store1, int *store2, int *store3, int *store4,

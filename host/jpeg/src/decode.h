@@ -22,7 +22,7 @@
  * Define the sample precision as 8
  */
 #define IDCT_SHIFT 128
-#define IDCT_BOUND 255
+#define IDCT_BOUNT 255
 #define MARKER_MARKER 0xff
 
 /* SAMPLING_FACTOR */

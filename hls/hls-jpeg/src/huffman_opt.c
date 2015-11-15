@@ -110,6 +110,8 @@ buf_getv (int n)
 	p = n - read_position;
 	while (p > 0)
 	{
+#pragma HLS PIPELINE
+
 		if (read_position > 23)
 		{			/* If byte buffer contains almost entire word */
 			rv = (current_read_byte << p);	/* Manipulate buffer */
@@ -224,6 +226,8 @@ DecodeHuffman (int *Xhuff_huffval, int Dhuff_ml,
 	code = buf_getb ();
 	for (l = 1; code > Dhuff_maxcode[l]; l++)
 	{
+#pragma HLS PIPELINE
+
 		code = (code << 1) + buf_getb ();
 	}
 
@@ -246,12 +250,12 @@ DecodeHuffman (int *Xhuff_huffval, int Dhuff_ml,
  * Decode one MCU
  */
 	void
-DecodeHuffMCU (int *out_buf, int num_cmp)
+DecodeHuffMCU (int out_buf[DCTSIZE2], int num_cmp)
 {
 	int s, diff, tbl_no, *mptr, k, n, r;
 	int h;
 
-	for (h = 0; h < 100000; h++) {
+	for (h = 0; h < 1; h++) {
 		/*
 		 * Decode DC
 		 */
@@ -285,11 +289,15 @@ DecodeHuffMCU (int *out_buf, int num_cmp)
 		/* Set all values to zero */
 		for (mptr = out_buf + 1; mptr < out_buf + DCTSIZE2; mptr++)
 		{
+#pragma HLS PIPELINE
+
 			*mptr = 0;
 		}
 
 		for (k = 1; k < DCTSIZE2;)
-		{				/* JPEG Mistake */
+		{
+//#pragma HLS PIPELINE
+				/* JPEG Mistake */
 			r = DecodeHuffman (&p_jinfo_ac_xhuff_tbl_huffval[tbl_no][0],
 					p_jinfo_ac_dhuff_tbl_ml[tbl_no],
 					&p_jinfo_ac_dhuff_tbl_maxcode[tbl_no][0],

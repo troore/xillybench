@@ -151,7 +151,7 @@ huff_make_dhuff_tb (int *p_xhtbl_bits, int p_dhtbl_ml,
 	int i, j, p, code, size, l;
 	int huffsize[257];
 	int huffcode[257];
-	//	int lastp;
+//	int lastp;
 
 	/*
 	 * Get size
@@ -165,7 +165,7 @@ huff_make_dhuff_tb (int *p_xhtbl_bits, int p_dhtbl_ml,
 	}
 
 	huffsize[p] = 0;
-	//	lastp = p;
+//	lastp = p;
 
 	p = 0;
 	code = 0;
@@ -249,83 +249,69 @@ DecodeHuffman (int *Xhuff_huffval, int Dhuff_ml,
 DecodeHuffMCU (int *out_buf, int num_cmp)
 {
 	int s, diff, tbl_no, *mptr, k, n, r;
-	int h;
 
-	for (h = 0; h < 100000; h++) {
-		/*
-		 * Decode DC
-		 */
+	/*
+	 * Decode DC
+	 */
+	tbl_no = p_jinfo_comps_info_dc_tbl_no[num_cmp];
+	s = DecodeHuffman (&p_jinfo_dc_xhuff_tbl_huffval[tbl_no][0],
+			p_jinfo_dc_dhuff_tbl_ml[tbl_no],
+			&p_jinfo_dc_dhuff_tbl_maxcode[tbl_no][0],
+			&p_jinfo_dc_dhuff_tbl_mincode[tbl_no][0],
+			&p_jinfo_dc_dhuff_tbl_valptr[tbl_no][0]);
 
-		tbl_no = p_jinfo_comps_info_dc_tbl_no[num_cmp];
-		s = DecodeHuffman (&p_jinfo_dc_xhuff_tbl_huffval[tbl_no][0],
-				p_jinfo_dc_dhuff_tbl_ml[tbl_no],
-				&p_jinfo_dc_dhuff_tbl_maxcode[tbl_no][0],
-				&p_jinfo_dc_dhuff_tbl_mincode[tbl_no][0],
-				&p_jinfo_dc_dhuff_tbl_valptr[tbl_no][0]);
+	if (s)
+	{
+		diff = buf_getv (s);
+		s--;
+		if ((diff & bit_set_mask[s]) == 0)
+		{
+			diff |= extend_mask[s];
+			diff++;
+		}
 
-		//	printf("HAHA %d\n", s);
+		diff += *out_buf;		/* Change the last DC */
+		*out_buf = diff;
+	}
+
+	/*
+	 * Decode AC
+	 */
+	/* Set all values to zero */
+	for (mptr = out_buf + 1; mptr < out_buf + DCTSIZE2; mptr++)
+	{
+		*mptr = 0;
+	}
+
+	for (k = 1; k < DCTSIZE2;)
+	{				/* JPEG Mistake */
+		r = DecodeHuffman (&p_jinfo_ac_xhuff_tbl_huffval[tbl_no][0],
+				p_jinfo_ac_dhuff_tbl_ml[tbl_no],
+				&p_jinfo_ac_dhuff_tbl_maxcode[tbl_no][0],
+				&p_jinfo_ac_dhuff_tbl_mincode[tbl_no][0],
+				&p_jinfo_ac_dhuff_tbl_valptr[tbl_no][0]);
+
+		s = r & 0xf;		/* Find significant bits */
+		n = (r >> 4) & 0xf;	/* n = run-length */
 
 		if (s)
 		{
-			diff = buf_getv (s);
-			s--;
-			if ((diff & bit_set_mask[s]) == 0)
-			{
-				diff |= extend_mask[s];
-				diff++;
-			}
-
-			diff += *out_buf;		/* Change the last DC */
-			*out_buf = diff;
-		}
-
-		/*
-		 * Decode AC
-		 */
-		/* Set all values to zero */
-		for (mptr = out_buf + 1; mptr < out_buf + DCTSIZE2; mptr++)
-		{
-			*mptr = 0;
-		}
-
-		for (k = 1; k < DCTSIZE2;)
-		{				/* JPEG Mistake */
-			r = DecodeHuffman (&p_jinfo_ac_xhuff_tbl_huffval[tbl_no][0],
-					p_jinfo_ac_dhuff_tbl_ml[tbl_no],
-					&p_jinfo_ac_dhuff_tbl_maxcode[tbl_no][0],
-					&p_jinfo_ac_dhuff_tbl_mincode[tbl_no][0],
-					&p_jinfo_ac_dhuff_tbl_valptr[tbl_no][0]);
-
-			s = r & 0xf;		/* Find significant bits */
-			n = (r >> 4) & 0xf;	/* n = run-length */
-
-			if (s)
-			{
-				if ((k += n) >= DCTSIZE2)	/* JPEG Mistake */
-					break;
-				out_buf[k] = buf_getv (s);	/* Get s bits */
-				s--;			/* Align s */
-				if ((out_buf[k] & bit_set_mask[s]) == 0)
-				{			/* Also (1 << s) */
-					out_buf[k] |= extend_mask[s];	/* Also  (-1 << s) + 1 */
-					out_buf[k]++;	/* Increment 2's c */
-				}
-				k++;			/* Goto next element */
-			}
-			else if (n == 15)		/* Zero run length code extnd */
-				k += 16;
-			else
-			{
+			if ((k += n) >= DCTSIZE2)	/* JPEG Mistake */
 				break;
+			out_buf[k] = buf_getv (s);	/* Get s bits */
+			s--;			/* Align s */
+			if ((out_buf[k] & bit_set_mask[s]) == 0)
+			{			/* Also (1 << s) */
+				out_buf[k] |= extend_mask[s];	/* Also  (-1 << s) + 1 */
+				out_buf[k]++;	/* Increment 2's c */
 			}
+			k++;			/* Goto next element */
 		}
-		/*
-		 * backups
-		 */
-		out_buf[0] = 0;
-		read_position = -1; // changed in buf_getb()
-		current_read_byte = 0; // changed in buf_getv()
-		CurHuffReadBuf = p_jinfo_jpeg_data; // changed in pgetc()
+		else if (n == 15)		/* Zero run length code extnd */
+			k += 16;
+		else
+		{
+			break;
+		}
 	}
-
 }
