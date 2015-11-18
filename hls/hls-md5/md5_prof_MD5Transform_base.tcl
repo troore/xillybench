@@ -5,7 +5,7 @@
 ############################################################
 open_project md5_prof_MD5Transform_base_prj
 set_top MD5Transform
-add_files ./src/md5.c -cflags "-I./src"
+add_files ./src/md5_base.c -cflags "-I./src"
 add_files -tb ./src/main.c -cflags "-I./src"
 
 open_solution "solution1"
@@ -16,5 +16,5 @@ config_interface -all ap_fifo -expose_global
 csim_design
 csynth_design
 #cosim_design -trace_level none
-#export_design
+export_design
 exit

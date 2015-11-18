@@ -2,6 +2,7 @@
 
 #include "aes.h"
 #include "timer.h"
+#include "rapl_power.h"
 
 //int type;
 int nb;
@@ -202,8 +203,6 @@ ByteSub_ShiftRow (int statemt[32], int nb)
 {
 	int temp;
 
-	int h;
-
 	switch (nb)
 	{
 		case 4:
@@ -324,6 +323,9 @@ InversShiftRow_ByteSub (int statemt[32], int nb)
 {
 	int temp;
 
+	int h;
+
+	for (h = 0; h < 100000; h++) {
 	switch (nb)
 	{
 		case 4:
@@ -429,6 +431,7 @@ InversShiftRow_ByteSub (int statemt[32], int nb)
 			statemt[24] = invSbox[statemt[24] >> 4][statemt[24] & 0xf];
 			statemt[28] = invSbox[statemt[28] >> 4][statemt[28] & 0xf];
 			break;
+	}
 	}
 }
 
@@ -696,20 +699,22 @@ encrypt (int statemt[32], int key[32], int type)
 decrypt_round1(int statemt[32], int nb)
 {
 	int i;
-	double start, finish, elapsed_time;
+//	double start, finish, elapsed_time;
 
 	for (i = 1; i <= 1; ++i)
 	{
-		start = dtime();
-		AddRoundKey_InversMixColumn (statemt, nb, 1); // every frame does frame #1
-		finish = dtime();
-		elapsed_time = finish - start;
 //		start = dtime();
+		AddRoundKey_InversMixColumn (statemt, nb, 1); // every frame does frame #1
+//		finish = dtime();
+//		elapsed_time = finish - start;
+//		start = dtime();
+		rapl_power_start();
 		InversShiftRow_ByteSub (statemt, nb);
+		rapl_power_stop();
 //		finish = dtime();
 //		elapsed_time = finish - start;
 	}
-	printf("%.3fms\n", elapsed_time);
+//	printf("%.3fms\n", elapsed_time);
 }
 
 	int

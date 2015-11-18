@@ -5,6 +5,8 @@
 
 #include "dct.h"
 
+int fdr, fdw;
+
 void dct_1d(dct_data_t *src, dct_data_t *dst)
 {
 	unsigned int k, n;
@@ -26,16 +28,9 @@ void dct_2d(dct_data_t *in_block, dct_data_t *out_block)
 {
 	dct_data_t row_outbuf[DCT_SIZE * DCT_SIZE];
 //	dct_data_t col_outbuf[DCT_SIZE][DCT_SIZE], col_inbuf[DCT_SIZE][DCT_SIZE];
-	int fdr, fdw;
 	unsigned i, j;
 	int h;
 
-	fdr = open("/dev/xillybus_read_32", O_RDONLY);
-	fdw = open("/dev/xillybus_write_32", O_WRONLY);
-	if ((fdr < 0) || (fdw < 0)) {
-		perror("Failed to open Xillybus device file(s)");
-		exit(1);
-	}
 	write(fdw, (void *)in_block, N * sizeof(dct_data_t));
 	read(fdr, (void *)row_outbuf, N * sizeof(dct_data_t));
 
@@ -54,8 +49,6 @@ void dct_2d(dct_data_t *in_block, dct_data_t *out_block)
 		}
 	}
 
-	close(fdr);
-	close(fdw);
 }
 
 void read_data(dct_data_t *input, dct_data_t *buf)
@@ -90,6 +83,15 @@ void dct(dct_data_t *input, dct_data_t *output)
 	dct_data_t buf_2d_in[DCT_SIZE * DCT_SIZE];
 	dct_data_t buf_2d_out[DCT_SIZE * DCT_SIZE];
 
+//	int fdr, fdw;
+
+	fdr = open("/dev/xillybus_read_32", O_RDONLY);
+	fdw = open("/dev/xillybus_write_32", O_WRONLY);
+	if ((fdr < 0) || (fdw < 0)) {
+		perror("Failed to open Xillybus device file(s)");
+		exit(1);
+	}
+
 	for (i = 0; i < FF; i++) {
 		// Read input data. Fill the internal buffer.
 		read_data(input + i * N, buf_2d_in);
@@ -99,5 +101,8 @@ void dct(dct_data_t *input, dct_data_t *output)
 		// Write out the results.
 		write_data(buf_2d_out, output + i * N);
 	}
+
+	close(fdr);
+	close(fdw);
 }
 

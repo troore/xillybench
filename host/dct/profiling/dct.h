@@ -2,7 +2,7 @@
 #define __DCT_PORF_H__
 
 //#define DW 16
-#define DW 10000
+#define DW 1000000
 //#define N 1024/DW
 #define N 64
 #define NUM_TRANS 16
@@ -15,14 +15,14 @@ typedef short dct_data_t;
 #define CONST_BITS  13
 #define DESCALE(x,n)  (((x) + (1 << ((n)-1))) >> n)
 
-void dct_prof(short input[N], short output[N]);
-void dct_1d_prof(dct_data_t src[DCT_SIZE], dct_data_t dst[DCT_SIZE]);
+void dct(short input[N], short output[N]);
+void dct_1d(dct_data_t src[DCT_SIZE], dct_data_t dst[DCT_SIZE]);
 void read_data(short input[N], short buf[DCT_SIZE][DCT_SIZE]);
 void write_data(short buf[DCT_SIZE][DCT_SIZE], short output[N]);
-void dct_2d_prof(short in_block[DCT_SIZE][DCT_SIZE],
+void dct_2d(short in_block[DCT_SIZE][DCT_SIZE],
 			short out_block[DCT_SIZE][DCT_SIZE]);
 
-void transpose_prof(short in_block[DCT_SIZE][DCT_SIZE],
+void transpose(short in_block[DCT_SIZE][DCT_SIZE],
 			   short out_block[DCT_SIZE][DCT_SIZE]);
 
 #endif // __

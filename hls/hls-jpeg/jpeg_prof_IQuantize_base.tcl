@@ -7,7 +7,7 @@ open_project jpeg_prof_IQuantize_base_prj
 set_top IQuantize
 add_files ./src/decode_base.c -cflags "-I./src"
 add_files -tb ./src/main.c -cflags "-I./src"
-add_files -tb ./src/chenidct.c -cflags "-I./src"
+add_files -tb ./src/chenidct_base.c -cflags "-I./src"
 add_files -tb ./src/jfif_read.c -cflags "-I./src"
 add_files -tb ./src/jpeg2bmp.c -cflags "-I./src"
 add_files -tb ./src/marker.c -cflags "-I./src"

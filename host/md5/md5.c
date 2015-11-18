@@ -3,6 +3,7 @@
 
 #include "md5.h"
 #include "timer.h"
+#include "rapl_power.h"
 
 /*
  * Note: this code is harmless on little-endian machines.
@@ -99,12 +100,12 @@ void MD5Iterate(unsigned char ctx_in[64], uint32 ctx_buf[4], unsigned char const
 {
 	int i, j;
 //	uint32 n_iters = len / 64;
-	uint32 n_iters = 10;
+	uint32 n_iters = 1;
 
 
-	double start, finish, elapsed_time;
+//	double start, finish, elapsed_time;
 
-	elapsed_time = 0.0;
+//	elapsed_time = 0.0;
 	for (i = 0; i < n_iters; i++) {
 		for (j = 0; j < 64; j++)
 			ctx_in[j] = buf[i * 64 + j];
@@ -113,15 +114,17 @@ void MD5Iterate(unsigned char ctx_in[64], uint32 ctx_buf[4], unsigned char const
 		byteReverse(ctx_in, 16);
 	//	finish = dtime();
 	//	elapsed_time += (finish - start);
-		start = dtime();
+	//	start = dtime();
+		rapl_power_start();
 		MD5Transform(ctx_buf, (uint32 *)ctx_in);
-		finish = dtime();
-		elapsed_time += (finish - start);
+		rapl_power_stop();
+	//	finish = dtime();
+	//	elapsed_time += (finish - start);
 	//	buf += 64;
 	//	len -= 64;
 	}
 
-	printf("%.3fms\n", elapsed_time);
+//	printf("%.3fms\n", elapsed_time);
 }
 
 /*

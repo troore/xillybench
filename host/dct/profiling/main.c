@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "dct_prof.h"
+#include "dct.h"
 //#include "timer.h"
 
 int main(int argc, char *argv[])
@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 	}
 	fclose(fp);
 
-	dct_prof(a, b);
+	dct(a, b);
 
 	return 0;
 }

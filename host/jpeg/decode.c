@@ -12,6 +12,7 @@
 #include "chenidct.h"
 
 #include "timer.h"
+#include "rapl_power.h"
 
 char p_jinfo_data_precision;
 short p_jinfo_image_height;
@@ -76,7 +77,7 @@ IZigzagMatrix (int *imatrix, int *omatrix)
 	
 	int h;
 
-	for (h = 0; h < 1; h++) {
+	for (h = 0; h < 100000; h++) {
 	for (i = 0; i < DCTSIZE2; i++)
 	{
 	//	*(omatrix++) = imatrix[zigzag_index[i]];
@@ -108,7 +109,7 @@ IQuantize (int *matrix, unsigned int *qmatrix)
 
 	int h;
 
-	for (h = 0; h < 1; h++) {
+	for (h = 0; h < 100000; h++) {
 	for (i = 0; i < DCTSIZE2; i++) {
 		matrix_buf[i] = matrix[i] * qmatrix[i];
 	}
@@ -179,7 +180,7 @@ BoundIDctMatrix (int *matrix, int Bound)
 
 	int h;
 
-	for (h = 0; h < 1; h++) {
+	for (h = 0; h < 100000; h++) {
 	for (i = 0; i < DCTSIZE2; i++) {
 		if (matrix[i] < 0)
 			matrix_buf[i] = 0;
@@ -379,7 +380,7 @@ YuvToRgb (int p, int *y_buf, int *u_buf, int *v_buf)
 	void
 decode_block (int comp_no, int *out_buf, int *HuffBuff)
 {
-	double start, finish, elapsed_time;
+//	double start, finish, elapsed_time;
 
 	int QuantBuff[DCTSIZE2];
 	unsigned int *p_quant_tbl;
@@ -388,7 +389,10 @@ decode_block (int comp_no, int *out_buf, int *HuffBuff)
 		&p_jinfo_quant_tbl_quantval[(int)p_jinfo_comps_info_quant_tbl_no[comp_no]][DCTSIZE2];
 
 //	start = dtime();
+
+//	rapl_power_start();
 	DecodeHuffMCU (HuffBuff, comp_no);
+//	rapl_power_stop();
 //	finish = dtime();
 
 //	start = dtime();
@@ -408,12 +412,14 @@ decode_block (int comp_no, int *out_buf, int *HuffBuff)
 //	finish = dtime();
 
 //	start = dtime();
+	rapl_power_start();
 	BoundIDctMatrix (out_buf, IDCT_BOUND);
+	rapl_power_stop();
 //	finish = dtime();
 
-	elapsed_time = finish - start;
+//	elapsed_time = finish - start;
 
-	printf("%.3fms\n", elapsed_time);
+//	printf("%.3fms\n", elapsed_time);
 }
 
 

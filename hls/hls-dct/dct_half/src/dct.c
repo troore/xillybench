@@ -97,6 +97,7 @@ WR_Loop_Col:
 void dct(dct_data_t input[N], dct_data_t output[N])
 {
    dct_data_t buf_2d_in[DCT_SIZE][DCT_SIZE];
+
 //#pragma HLS ARRAY_PARTITION variable=buf_2d_in complete dim=2
    dct_data_t buf_2d_out[DCT_SIZE][DCT_SIZE];
 

@@ -7,7 +7,7 @@ open_project jpeg_prof_DecodeHuffMCU_opt_prj
 set_top DecodeHuffMCU
 add_files ./src/huffman_opt.c -cflags "-I./src"
 add_files -tb ./src/main.c -cflags "-I./src"
-add_files -tb ./src/chenidct.c -cflags "-I./src"
+add_files -tb ./src/chenidct_base.c -cflags "-I./src"
 add_files -tb ./src/jfif_read.c -cflags "-I./src"
 add_files -tb ./src/jpeg2bmp.c -cflags "-I./src"
 add_files -tb ./src/marker.c -cflags "-I./src"
@@ -20,6 +20,6 @@ config_interface -all ap_fifo -expose_global
 
 csim_design
 csynth_design
-#cosim_design -trace_level none
-#export_design
+cosim_design -trace_level none
+export_design
 exit

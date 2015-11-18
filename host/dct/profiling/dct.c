@@ -1,8 +1,9 @@
 #include <stdio.h>
-#include "dct_prof.h"
+#include "dct.h"
 #include "timer.h"
+#include "rapl_power.h"
 
-void dct_1d_prof(dct_data_t src[DCT_SIZE], dct_data_t dst[DCT_SIZE])
+void dct_1d(dct_data_t src[DCT_SIZE], dct_data_t dst[DCT_SIZE])
 {
 	unsigned int k, n;
 	int tmp;
@@ -19,17 +20,17 @@ void dct_1d_prof(dct_data_t src[DCT_SIZE], dct_data_t dst[DCT_SIZE])
 	}
 }
 
-void dct_2d_prof(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
+void dct_2d(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
 			dct_data_t out_block[DCT_SIZE][DCT_SIZE])
 {
 	int i;
 
 	for (i = 0; i < DCT_SIZE; i++) {
-		dct_1d_prof(in_block[i], out_block[i]);
+		dct_1d(in_block[i], out_block[i]);
 	}
 }
 
-void transpose_prof(dct_data_t in_block[DCT_SIZE][DCT_SIZE], 
+void transpose(dct_data_t in_block[DCT_SIZE][DCT_SIZE], 
 		dct_data_t out_block[DCT_SIZE][DCT_SIZE])
 {
 	int i, j;
@@ -60,32 +61,34 @@ void write_data(short buf[DCT_SIZE][DCT_SIZE], short output[N])
 }
 
 
-void dct_prof(short input[N], short output[N])
+void dct(short input[N], short output[N])
 {
 	int i;
 	short buf_2d_in[DCT_SIZE][DCT_SIZE];
 	short buf_2d_buf[DCT_SIZE][DCT_SIZE];
 	short buf_2d_out[DCT_SIZE][DCT_SIZE];
 
-	double start, finish, elapsed_time;
+//	double start, finish, elapsed_time;
 
 	read_data(input, buf_2d_in);
 
 //	start = dtime();
 
 	for (i = 0; i < DW; i++) {
-		dct_2d_prof(buf_2d_in, buf_2d_buf);
+		dct_2d(buf_2d_in, buf_2d_buf);
 	}
 
 //	finish = dtime();
 //	elapsed_time = finish - start;
-	start = dtime();
+//	start = dtime();
+	rapl_power_start();
 	for (i = 0; i < DW; i++) {
-		transpose_prof(buf_2d_buf, buf_2d_out);
+		transpose(buf_2d_buf, buf_2d_out);
 	}
-	finish = dtime();
-	elapsed_time = finish - start;
+	rapl_power_stop();
+//	finish = dtime();
+//	elapsed_time = finish - start;
 	write_data(buf_2d_out, output);
 
-	printf("%.3fms\n", elapsed_time);
+//	printf("%.3fms\n", elapsed_time);
 }

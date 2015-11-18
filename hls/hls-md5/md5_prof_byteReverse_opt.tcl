@@ -16,5 +16,5 @@ config_interface -all ap_fifo -expose_global
 csim_design
 csynth_design
 #cosim_design -trace_level none
-#export_design
+export_design
 exit

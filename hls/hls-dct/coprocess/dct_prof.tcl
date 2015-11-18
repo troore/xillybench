@@ -4,8 +4,8 @@
 ## Copyright (C) 2013 Xilinx Inc. All rights reserved.
 ############################################################
 open_project prof_prj
-set_top dct_2d
-#set_top transpose
+#set_top dct_2d
+set_top transpose
 add_files ./src/dct.c -cflags "-I./"
 add_files -tb ./src/dct_test.c -cflags "-I./"
 add_files -tb ./src/in.dat -cflags "-I./"

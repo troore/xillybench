@@ -1,12 +1,14 @@
 
 TARGETS := a.out
 
-CFLAGS := -g -Wall
-
-CFLAGS += -I./ -I../../timer
-
-SRCS := main.c dct_prof.c ../../timer/timer.c
+SRCS := main.c dct.c ../../timer/timer.c
 OBJS := $(patsubst %.c,%.o,$(SRCS))
+
+CFLAGS := -g -Wall
+LINKFLAGS := -L../../papi-rapl -lraplpower
+
+CFLAGS += -I./ -I../../timer -I../../papi-rapl
+
 
 a.out: $(OBJS)
 	$(CC) -o $@ $^ $(LINKFLAGS)

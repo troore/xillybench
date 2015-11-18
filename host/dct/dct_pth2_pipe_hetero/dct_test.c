@@ -11,7 +11,7 @@ int main()
 	int retval = 0, i, j;
 	FILE *fp;
 
-	double start, finish, elapsed_time;
+//	double start, finish, elapsed_time;
 
 	for (i = 0; i < FF; i++) {
 		fp = fopen("../in.dat", "r");
@@ -23,14 +23,14 @@ int main()
 		fclose(fp);
 	}
 
-	start = dtime();
-//	rapl_power_start();
+//	start = dtime();
+	rapl_power_start();
 	dct(a, b);
-//	rapl_power_stop();
-	finish = dtime();
-	elapsed_time = finish - start;
+	rapl_power_stop();
+//	finish = dtime();
+//	elapsed_time = finish - start;
 
-	printf("%.3fms\n", elapsed_time);
+//	printf("%.3fms\n", elapsed_time);
 
 	return retval;
 }

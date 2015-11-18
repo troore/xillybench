@@ -23,15 +23,17 @@ DCT_Inner_Loop:
 void dct_2d(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
       dct_data_t out_block[DCT_SIZE][DCT_SIZE])
 {
+#pragma HLS ARRAY_PARTITION variable=in_block complete dim=2
+
 	unsigned i;
-	unsigned k;
-	for (k = 0; k < /*DW*/SFN; k++) {
+//	unsigned k;
+//	for (k = 0; k < /*DW*/SFN; k++) {
 	// DCT rows
 Row_DCT_Loop:
 	for(i = 0; i < DCT_SIZE; i++) {
 		dct_1d(in_block[i], out_block[i]);
 	}
-	}
+//	}
 }
 
 void dct(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
@@ -41,6 +43,8 @@ void dct(dct_data_t in_block[DCT_SIZE][DCT_SIZE],
    dct_data_t row_outbuf[DCT_SIZE][DCT_SIZE];
    dct_data_t col_outbuf[DCT_SIZE][DCT_SIZE];
    dct_data_t col_inbuf[DCT_SIZE][DCT_SIZE];
+#pragma HLS ARRAY_PARTITION variable=col_inbuf complete dim=2
+
 //#pragma HLS ARRAY_PARTITION variable=col_inbuf complete dim=2
 //   unsigned i, j;
 
