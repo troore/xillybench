@@ -31,15 +31,18 @@ void dct_2d(dct_data_t *in_block, dct_data_t *out_block)
 	unsigned i, j;
 	int h;
 
+	/*
 	write(fdw, (void *)in_block, N * sizeof(dct_data_t));
 	read(fdr, (void *)row_outbuf, N * sizeof(dct_data_t));
+	*/
 
 	// DCT rows
-	/*
+	for (h = 0; h < SFN; h++) {
 	for(i = 0; i < DCT_SIZE; i++) {
 		dct_1d(in_block + i * DCT_SIZE, row_outbuf + i * DCT_SIZE);
 	}
-	*/
+	}
+	/*
 	for (h = 0; h < SFN; h++) {
 	// Transpose data in order to re-use 1D DCT code
 	for (j = 0; j < DCT_SIZE; j++)
@@ -48,6 +51,9 @@ void dct_2d(dct_data_t *in_block, dct_data_t *out_block)
 			out_block[j * DCT_SIZE + i] = row_outbuf[i * DCT_SIZE + j];
 		}
 	}
+	*/
+	write(fdw, (void *)row_outbuf, N * sizeof(dct_data_t));
+	read(fdr, (void *)out_block, N * sizeof(dct_data_t));
 
 }
 

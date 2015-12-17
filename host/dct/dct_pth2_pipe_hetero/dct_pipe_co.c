@@ -102,6 +102,7 @@ void *dct_2d_pth(void *params)
 	int h;
 	Params *p = (Params *)params;
 
+	/*
 	int fdr, fdw;
 
 	fdr = open("/dev/xillybus_read_32", O_RDONLY);
@@ -110,17 +111,18 @@ void *dct_2d_pth(void *params)
 		perror("Failed to open Xillybus device file(s)");
 		exit(1);
 	}
+	*/
 
 	for (i = 1; i < FF; i++) {
-		/*
 		for (h = 0; h < SFN; h++) {
 		for (j = 0; j < DCT_SIZE; j++) {
 			dct_1d(p->pin_block + j * DCT_SIZE, p->pout_block + j * DCT_SIZE);
 		}
 		}
-		*/
+		/*
 		write(fdw, (void *)p->pin_block , N * sizeof(dct_data_t));
 		read(fdr, (void *)p->pout_block , N * sizeof(dct_data_t));
+		*/
 		
 		sync_threads();
 		
@@ -131,8 +133,10 @@ void *dct_2d_pth(void *params)
 		//	sync_threads();
 	}
 
+	/*
 	close(fdr);
 	close(fdw);
+	*/
 
 	return NULL;
 }
@@ -152,12 +156,25 @@ void *transpose_pth(void *params)
 	int h;
 	TP0Params *p = (TP0Params *)params;
 
+	int fdr, fdw;
+
+	fdr = open("/dev/xillybus_read_32", O_RDONLY);
+	fdw = open("/dev/xillybus_write_32", O_WRONLY);
+	if ((fdr < 0) || (fdw < 0)) {
+		perror("Failed to open Xillybus device file(s)");
+		exit(1);
+	}
+
 	for (i = 1; i < FF; i++) {
+		/*
 		for (h = 0; h < SFN; h++) {
 		for (j = 0; j < DCT_SIZE; j++)
 			for(k = 0; k < DCT_SIZE; k++)
 				p->pout_block[j * DCT_SIZE + k] = p->pin_block[k * DCT_SIZE + j];
 		}
+		*/
+		write(fdw, (void *)p->pin_block , N * sizeof(dct_data_t));
+		read(fdr, (void *)p->pout_block , N * sizeof(dct_data_t));
 
 		sync_threads();
 		
@@ -171,6 +188,9 @@ void *transpose_pth(void *params)
 
 		//	sync_threads();
 	}
+
+	close(fdr);
+	close(fdw);
 
 	return NULL;
 }

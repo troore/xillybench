@@ -75,6 +75,9 @@ reg                sys_rst_n;
 wire               ep_sys_clk;
 wire               rp_sys_clk;
 
+
+localparam EXT_PIPE_SIM = "FALSE";
+
 //
 // PCI-Express Serial Interconnect
 //
@@ -90,7 +93,8 @@ wire  [7:0]  rp_pci_exp_txp;
 
 xilinx_pcie_2_1_ep_7x # (
 
-  .PL_FAST_TRAIN("TRUE")
+  .PL_FAST_TRAIN("TRUE"),
+  .EXT_PIPE_SIM(EXT_PIPE_SIM)
 
 )
 EP (

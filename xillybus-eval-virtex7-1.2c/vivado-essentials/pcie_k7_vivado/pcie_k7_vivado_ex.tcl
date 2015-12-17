@@ -25,10 +25,10 @@ proc _filter_supported_targets {targets ip} {
   }
   return $res
 }
-generate_target [_filter_supported_targets {instantiation_template synthesis simulation} [get_ips pcie_k7_vivado]] [get_ips pcie_k7_vivado]
+generate_target [_filter_supported_targets {instantiation_template synthesis simulation implementation shared_logic} [get_ips pcie_k7_vivado]] [get_ips pcie_k7_vivado]
 
 # Add example synthesis HDL files
-add_files -scan_for_includes -fileset [current_fileset] \
+add_files -scan_for_includes -quiet -fileset [current_fileset] \
   [list [file join $srcIpDir example_design/EP_MEM.v]] \
   [list [file join $srcIpDir example_design/PIO_EP_MEM_ACCESS.v]] \
   [list [file join $srcIpDir example_design/PIO_EP.v]] \
@@ -42,17 +42,17 @@ add_files -scan_for_includes -fileset [current_fileset] \
   [list [file join $srcIpDir example_design/support/pcie_k7_vivado_pipe_clock.v]]
 
 # Add example miscellaneous synthesis files
-add_files -fileset [current_fileset] \
+add_files -quiet -fileset [current_fileset] \
   [list [file join $srcIpDir hierarchy.txt]]
 
 # Add example XDC files
-add_files -fileset [current_fileset -constrset] \
+add_files -quiet -fileset [current_fileset -constrset] \
   [list [file join $srcIpDir example_design/xilinx_pcie_7x_ep_x8g1_VC707.xdc]]
 
 
 # Add example simulation HDL files
 if { [catch {current_fileset -simset} exc] } { create_fileset -simset sim_1 }
-add_files -scan_for_includes -fileset [current_fileset -simset] \
+add_files -quiet -scan_for_includes -fileset [current_fileset -simset] \
   [list [file join $srcIpDir simulation/dsport/pci_exp_expect_tasks.vh]] \
   [list [file join $srcIpDir simulation/dsport/pci_exp_usrapp_cfg.v]] \
   [list [file join $srcIpDir simulation/dsport/pci_exp_usrapp_com.v]] \
@@ -83,11 +83,6 @@ set_property USED_IN_SYNTHESIS false [get_files [file join $srcIpDir simulation/
 set_property USED_IN_SYNTHESIS false [get_files [file join $srcIpDir simulation/tests/tests.vh]]
 set_property USED_IN_SYNTHESIS false [get_files [file join $srcIpDir simulation/dsport/pcie_2_1_rport_7x.v]]
 set_property USED_IN_SYNTHESIS false [get_files [file join $srcIpDir simulation/dsport/xilinx_pcie_2_1_rport_7x.v]]
-
-# Add example miscellaneous simulation files
-if { [catch {current_fileset -simset} exc] } { create_fileset -simset sim_1 }
-add_files -fileset [current_fileset -simset] \
-  [list [file join $srcIpDir hierarchy.txt]]
 
 # Import all files while preserving hierarchy
 import_files

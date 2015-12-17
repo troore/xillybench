@@ -325,7 +325,7 @@ InversShiftRow_ByteSub (int statemt[32])
 
 	int h;
 
-	for (h = 0; h < 100000; h++) {
+	for (h = 0; h < NSF; h++) {
 			temp = invSbox[statemt[29] >> 4][statemt[29] & 0xf];
 			statemt[29] = invSbox[statemt[25] >> 4][statemt[25] & 0xf];
 			statemt[25] = invSbox[statemt[21] >> 4][statemt[21] & 0xf];
@@ -446,7 +446,7 @@ AddRoundKey_InversMixColumn (int statemt[32], int n)
 
 	int h;
 
-	for (h = 0; h < 100000; h++) {
+	for (h = 0; h < NSF; h++) {
 	for (j = 0; j < 8; ++j)
 	{
 		statemt[j * 4] ^= word[0][j + nb * n];

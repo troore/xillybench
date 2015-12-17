@@ -59,9 +59,10 @@
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module xilinx_pcie_2_1_ep_7x # (
   parameter PL_FAST_TRAIN       = "FALSE", // Simulation Speedup
+  parameter EXT_PIPE_SIM        = "FALSE",  // This Parameter has effect on selecting Enable External PIPE Interface in GUI.
   parameter PCIE_EXT_CLK        = "TRUE",    // Use External Clocking Module
   parameter PCIE_EXT_GT_COMMON  = "FALSE",
-  parameter REF_CLK_FREQ        = 0,
+  parameter REF_CLK_FREQ        = 0,     // 0 - 100 MHz, 1 - 125 MHz, 2 - 250 MHz
   parameter C_DATA_WIDTH        = 64, // RX/TX interface data width
   parameter KEEP_WIDTH          = C_DATA_WIDTH / 8 // TSTRB width
 ) (
@@ -182,6 +183,7 @@ module xilinx_pcie_2_1_ep_7x # (
   IBUF   sys_reset_n_ibuf (.O(sys_rst_n_c), .I(sys_rst_n));
 
   IBUFDS_GTE2 refclk_ibuf (.O(sys_clk), .ODIV2(), .I(sys_clk_p), .CEB(1'b0), .IB(sys_clk_n));
+
 
   OBUF   led_0_obuf (.O(led_0), .I(sys_rst_n_c));
   OBUF   led_1_obuf (.O(led_1), .I(!user_reset));

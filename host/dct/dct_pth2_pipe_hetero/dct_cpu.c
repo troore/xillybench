@@ -31,14 +31,12 @@ void dct_2d(dct_data_t *in_block, dct_data_t *out_block)
 	for(i = 0; i < DCT_SIZE; i++) {
 		dct_1d(in_block + i * DCT_SIZE, row_outbuf + i * DCT_SIZE);
 	}
-	/*
 	// Transpose data in order to re-use 1D DCT code
 	for (j = 0; j < DCT_SIZE; j++)
 		for(i = 0; i < DCT_SIZE; i++) {
 		//	col_inbuf[j][i] = row_outbuf[i][j];
 			out_block[j * DCT_SIZE + i] = row_outbuf[i * DCT_SIZE + j];
 		}
-		*/
 	/*
 	// DCT columns
 	for (i = 0; i < DCT_SIZE; i++) {

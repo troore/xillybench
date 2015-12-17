@@ -68,6 +68,7 @@ module pcie_2_1_rport_7x # (
     parameter        CFG_SUBSYS_ID = 16'h0007,
 
     // PCIE_2_1 params
+    parameter         EXT_PIPE_SIM = "FALSE",
     parameter        REF_CLK_FREQ = 0,
     parameter        PCIE_EXT_CLK = "FALSE",
     parameter        PIPE_PIPELINE_STAGES = 0,
@@ -801,7 +802,7 @@ module pcie_2_1_rport_7x # (
   assign pl_phy_lnk_up = pl_phy_lnk_up_q;
 
   // Register block outputs pl_received_hot_rst and phy_lnk_up to ease timing on block output
-  assign sys_or_hot_rst = !sys_rst_n || pl_received_hot_rst_q;
+  assign sys_or_hot_rst = !sys_rst_n || ((UPSTREAM_FACING == "TRUE") && pl_received_hot_rst_q);
   always @(posedge user_clk_out)
   begin
     if (!sys_rst_n) begin
@@ -1537,6 +1538,16 @@ pcie_k7_vivado_pcie_top # (
     .pipe_rx7_valid_gt                          ( pipe_rx7_valid_gt          )
 
   );
+  assign  common_commands_out = 12'b0;  
+  assign  pipe_tx_0_sigs      = 23'b0;   
+  assign  pipe_tx_1_sigs      = 23'b0; 
+  assign  pipe_tx_2_sigs      = 23'b0; 
+  assign  pipe_tx_3_sigs      = 23'b0; 
+  assign  pipe_tx_4_sigs      = 23'b0; 
+  assign  pipe_tx_5_sigs      = 23'b0; 
+  assign  pipe_tx_6_sigs      = 23'b0; 
+  assign  pipe_tx_7_sigs      = 23'b0; 
+
 
   //------------------------------------------------------------------------------------------------------------------//
   // **** V7/K7/A7 GTX Wrapper ****                                                                                   //

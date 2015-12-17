@@ -50,9 +50,6 @@
 // Project    : Series-7 Integrated Block for PCI Express
 // File       : PIO_TX_ENGINE.v
 // Version    : 3.0
-//-- Description: Local-Link Transmit Unit.
-//--
-//--------------------------------------------------------------------------------
 
 `timescale 1ps/1ps
 
@@ -94,15 +91,16 @@ module PIO_TX_ENGINE    #(
   output [10:0]                   rd_addr,
   output reg [3:0]                rd_be,
   input  [31:0]                   rd_data,
-
   input [15:0]                    completer_id
 
 );
 
-localparam PIO_CPLD_FMT_TYPE = 7'b10_01010;
-localparam PIO_CPL_FMT_TYPE  = 7'b00_01010;
-localparam PIO_TX_RST_STATE  = 1'b0;
-localparam PIO_TX_CPLD_QW1   = 1'b1;
+localparam PIO_CPLD_FMT_TYPE      = 7'b10_01010;
+localparam PIO_CPL_FMT_TYPE       = 7'b00_01010;
+localparam PIO_TX_RST_STATE       = 2'b00;
+localparam PIO_TX_CPLD_QW1_FIRST  = 2'b01;
+localparam PIO_TX_CPLD_QW1_TEMP   = 2'b10;
+localparam PIO_TX_CPLD_QW1        = 2'b11;
 
   // Local registers
 
@@ -112,7 +110,8 @@ localparam PIO_TX_CPLD_QW1   = 1'b1;
   reg                     req_compl_q;
   reg                     req_compl_wd_q;
 
-
+  reg                     compl_busy_i;
+ 
   // Local wires
 
   wire                    compl_wd;
@@ -164,38 +163,6 @@ localparam PIO_TX_CPLD_QW1   = 1'b1;
     end // if rst_n
   end
 
-//  generate
-//    if (C_DATA_WIDTH == 128) begin : init_128
-//
-//  reg                     req_compl_q2;
-//  reg                     req_compl_wd_q2;
-//
-//      always @ ( posedge clk ) begin
-//        if (!rst_n ) 
-//        begin
-//          req_compl_q2      <= #TCQ 1'b0;
-//          req_compl_wd_q2   <= #TCQ 1'b0;
-//        end // if (!rst_n ) 
-//        else
-//        begin
-//          req_compl_q2      <= #TCQ req_compl_q;
-//          req_compl_wd_q2   <= #TCQ req_compl_wd_q;
-//        end // if (rst_n ) 
-//      end
-//    end
-//  endgenerate
-
-// Calculate lower address based on  byte enable
-     
-//  generate
-//    if (C_DATA_WIDTH == 64) begin : cd_64
-//      assign compl_wd = req_compl_wd_q;
-//    end
-//    else if (C_DATA_WIDTH == 128) begin : cd_128
-//      assign compl_wd = req_compl_wd_q2;
-//    end
-//  endgenerate
-
     always @ (rd_be or req_addr or compl_wd) begin
     casex ({compl_wd, rd_be[3:0]})
        5'b1_0000 : lower_addr = {req_addr[6:2], 2'b00};
@@ -211,7 +178,7 @@ localparam PIO_TX_CPLD_QW1   = 1'b1;
     
   generate
     if (C_DATA_WIDTH == 64) begin : gen_cpl_64
-      reg                     state;
+      reg         [1:0]            state;
 
       assign compl_wd = req_compl_wd_q;
 
@@ -223,21 +190,49 @@ localparam PIO_TX_CPLD_QW1   = 1'b1;
           s_axis_tx_tvalid  <= #TCQ 1'b0;
           s_axis_tx_tdata   <= #TCQ {C_DATA_WIDTH{1'b0}};
           s_axis_tx_tkeep   <= #TCQ {KEEP_WIDTH{1'b0}};
+         
           compl_done        <= #TCQ 1'b0;
+          compl_busy_i      <= #TCQ 1'b0;
           state             <= #TCQ PIO_TX_RST_STATE;
         end // if (!rst_n ) 
         else
         begin
-
+          compl_done        <= #TCQ 1'b0;
+          // -- Generate compl_busy signal...
+          if (req_compl_q ) 
+            compl_busy_i <= 1'b1;
           case ( state )
             PIO_TX_RST_STATE : begin
 
-              if (req_compl_q) 
+              if (compl_busy_i) 
+              begin
+                
+                s_axis_tx_tdata   <= #TCQ {C_DATA_WIDTH{1'b0}};
+                s_axis_tx_tkeep   <= #TCQ 8'hFF;
+                s_axis_tx_tlast   <= #TCQ 1'b0;
+                s_axis_tx_tvalid  <= #TCQ 1'b0;
+                  if (s_axis_tx_tready)
+                    state             <= #TCQ PIO_TX_CPLD_QW1_FIRST;
+                  else
+                  state             <= #TCQ PIO_TX_RST_STATE;
+               end
+              else
               begin
 
+                s_axis_tx_tlast   <= #TCQ 1'b0;
+                s_axis_tx_tvalid  <= #TCQ 1'b0;
+                s_axis_tx_tdata   <= #TCQ 64'b0;
+                s_axis_tx_tkeep   <= #TCQ 8'hFF;
+                compl_done        <= #TCQ 1'b0;
+                state             <= #TCQ PIO_TX_RST_STATE;
+
+              end // if !(compl_busy) 
+              end // PIO_TX_RST_STATE
+
+            PIO_TX_CPLD_QW1_FIRST : begin
+              if (s_axis_tx_tready) begin
+
                 s_axis_tx_tlast  <= #TCQ 1'b0;
-                s_axis_tx_tvalid <= #TCQ 1'b1;
-                // Swap DWORDS for AXI
                 s_axis_tx_tdata  <= #TCQ {                      // Bits
                                       completer_id,             // 16
                                       {3'b0},                   // 3
@@ -258,27 +253,19 @@ localparam PIO_TX_CPLD_QW1   = 1'b1;
                                       };
                 s_axis_tx_tkeep   <= #TCQ 8'hFF;
 
-                // Wait in this state if the PCIe core does not accept
-                // the first beat of the packet
-                if (s_axis_tx_tready)
-                  state             <= #TCQ PIO_TX_CPLD_QW1;
-                else
-                  state             <= #TCQ PIO_TX_RST_STATE;
-
-              end // if (req_compl_q) 
-              else
-              begin
-
-                s_axis_tx_tlast   <= #TCQ 1'b0;
-                s_axis_tx_tvalid  <= #TCQ 1'b0;
-                s_axis_tx_tdata   <= #TCQ 64'b0;
-                s_axis_tx_tkeep   <= #TCQ 8'hFF;
-                compl_done        <= #TCQ 1'b0;
+                state             <= #TCQ PIO_TX_CPLD_QW1_TEMP;
+                end
+            else
                 state             <= #TCQ PIO_TX_RST_STATE;
 
-              end // if !(req_compl_q) 
+               end //PIO_TX_CPLD_QW1_FIRST
 
-            end // PIO_TX_RST_STATE
+
+            PIO_TX_CPLD_QW1_TEMP : begin   
+                s_axis_tx_tvalid <= #TCQ 1'b1;
+                state             <= #TCQ PIO_TX_CPLD_QW1;
+            end
+
 
             PIO_TX_CPLD_QW1 : begin
 
@@ -307,6 +294,7 @@ localparam PIO_TX_CPLD_QW1   = 1'b1;
 
 
                 compl_done        <= #TCQ 1'b1;
+                compl_busy_i      <= #TCQ 1'b0;
                 state             <= #TCQ PIO_TX_RST_STATE;
 
               end // if (s_axis_tx_tready)

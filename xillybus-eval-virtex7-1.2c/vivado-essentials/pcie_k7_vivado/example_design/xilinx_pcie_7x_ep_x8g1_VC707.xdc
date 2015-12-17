@@ -75,7 +75,7 @@
 # Timing Constraints
 ###############################################################################
 #
-create_clock -name sys_clk -period 10 [get_pins refclk_ibuf/O]
+create_clock -name sys_clk -period 10 [get_ports sys_clk_p]
 #
 # 
 set_false_path -to [get_pins {pcie_k7_vivado_support_i/pipe_clock_i/pclk_i1_bufgctrl.pclk_i1/S0}]
@@ -84,6 +84,7 @@ set_false_path -to [get_pins {pcie_k7_vivado_support_i/pipe_clock_i/pclk_i1_bufg
 #
 set_case_analysis 1 [get_pins {pcie_k7_vivado_support_i/pipe_clock_i/pclk_i1_bufgctrl.pclk_i1/S0}]
 set_case_analysis 0 [get_pins {pcie_k7_vivado_support_i/pipe_clock_i/pclk_i1_bufgctrl.pclk_i1/S1}]
+set_property DONT_TOUCH true [get_cells -of [get_nets -of [get_pins {pcie_k7_vivado_support_i/pipe_clock_i/pclk_i1_bufgctrl.pclk_i1/S0}]]]
 #
 #
 
@@ -131,6 +132,7 @@ set_property LOC AR37 [get_ports led_2]
 set_property IOSTANDARD LVCMOS18 [get_ports led_3]
 # USER CLK HEART BEAT = led_3
 set_property LOC AT37 [get_ports led_3]
+set_false_path -to [get_ports -filter {NAME=~led_*}]
 
 
 ###############################################################################

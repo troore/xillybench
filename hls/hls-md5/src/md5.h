@@ -2,7 +2,7 @@
 #define __MD5_H_
 
 #define N 64 // text length
-#define NFS 100000 // number of frames in a superframe
+#define NFS 1 // number of frames in a superframe
 
 typedef unsigned int uint32;
 

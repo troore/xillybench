@@ -2,6 +2,8 @@
 #ifndef __AES_H_
 #define __AES_H_
 
+#define NSF 1
+
 /* key generate */
 int KeySchedule (int, int *);
 int SubByte (int);
