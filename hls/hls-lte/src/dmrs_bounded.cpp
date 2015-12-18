@@ -3,10 +3,6 @@
 #include <math.h>
 #include "lte_phy.h"
 
-#define N_LAYER 2
-#define N_DFT 1200
-#define NZC 1193
-
 #define PI 3.14159265358979
 
 void geneDMRS(float pDMRS[2 * LTE_PHY_N_ANT_MAX * LTE_PHY_DFT_SIZE_MAX * 2],
@@ -14,6 +10,9 @@ void geneDMRS(float pDMRS[2 * LTE_PHY_N_ANT_MAX * LTE_PHY_DFT_SIZE_MAX * 2],
 			  int N_dft)
 {
 #pragma HLS ARRAY_PARTITION variable=pDMRS cyclic factor=2 dim=1
+
+#define N_LAYER 2
+#define N_DFT 75
 	int i;
 	
 	int pPrimeTable[6][2];
@@ -24,7 +23,7 @@ void geneDMRS(float pDMRS[2 * LTE_PHY_N_ANT_MAX * LTE_PHY_DFT_SIZE_MAX * 2],
 	int RSu, RSv;
 	double qbar, q;
 //	std::complex<double> px[1200];
-	double px[1200][2];
+	double px[N_DFT][2];
 
 	pPrimeTable[0][0] = 75;		pPrimeTable[0][1] = 73;
 	pPrimeTable[1][0] = 150;	pPrimeTable[1][1] = 149;
@@ -35,7 +34,8 @@ void geneDMRS(float pDMRS[2 * LTE_PHY_N_ANT_MAX * LTE_PHY_DFT_SIZE_MAX * 2],
 
 	zc_flag = 1;
 	idx = 0;
-/*
+
+	/*
 	look_up_prime_table_loop:while (zc_flag)
 	{
 #pragma HLS PIPELINE
@@ -49,7 +49,8 @@ void geneDMRS(float pDMRS[2 * LTE_PHY_N_ANT_MAX * LTE_PHY_DFT_SIZE_MAX * 2],
 			idx++;
 		}
 	}
-*/
+	*/
+#define NZC 73
 	Nzc = NZC;
 
 //	printf("geneDMRS: %d %d %d\n", N_layer, N_dft, Nzc);
@@ -68,7 +69,7 @@ void geneDMRS(float pDMRS[2 * LTE_PHY_N_ANT_MAX * LTE_PHY_DFT_SIZE_MAX * 2],
 
 
 	double theta_pre = -PI * q / (double)Nzc;
-	calculate_px_array_loop:for (int m = 0; m < /*Nzc*/ NZC; m++)
+	calculate_px_array_loop:for (int m = 0; m < Nzc /*NZC*/; m++)
 	{
 #pragma HLS PIPELINE
 		double theta = theta_pre *  m * (m + 1.0);

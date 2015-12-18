@@ -2,7 +2,8 @@
 
 #projdirs='hls-aes hls-dct hls-jpeg hls-md5'
 #hlsdirs='hls-aes'
-hlsdirs='hls-dct/dct_prof'
+#hlsdirs='hls-dct/dct_prof'
+hlsdirs='hls-lte/lte_prof'
 
 for dir in $hlsdirs
 do

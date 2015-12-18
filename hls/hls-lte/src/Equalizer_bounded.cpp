@@ -2,13 +2,17 @@
 #include <stdio.h>
 #include "Equalizer.h"
 #include "lte_phy.h"
-#include "dmrs/dmrs.h"
+#include "dmrs.h"
+
 
 #define NUM_RX_ANTENNA 2
 #define NUM_LAYER 2
 #define NUM_UL_SYMB_SF 14
 #define SZ 2
-#define NUM_DFT 1200
+#define NUM_DFT 75
+
+#define N_EQ_IN		(NUM_LAYER * NUM_UL_SYMB_SF * NUM_DFT)
+#define N_EQ_OUT	(NUM_RX_ANTENNA * (NUM_UL_SYMB_SF - 2) * NUM_DFT)
 
 /*
 static void MatrixProd(int d1, int d2, int d3, float M1[], float M2[], float oM[])
@@ -69,7 +73,8 @@ static void MatrixProd(int d1, int d2, int d3, float M1[], float M2[], float oM[
 
 static void MatrixInv(int sz, float pM[], float pInvM[])
 {
-	float pX[LTE_PHY_N_ANT_MAX * 2 * LTE_PHY_N_ANT_MAX * 2];
+//	float pX[LTE_PHY_N_ANT_MAX * 2 * LTE_PHY_N_ANT_MAX * 2];
+	float pX[NUM_LAYER * 2 * NUM_LAYER * 2];
 //	float pX_tmp[LTE_PHY_N_ANT_MAX * 2 * LTE_PHY_N_ANT_MAX * 2];
 //	float pX_tmp2[LTE_PHY_N_ANT_MAX * 2 * LTE_PHY_N_ANT_MAX * 2];
 
@@ -102,7 +107,8 @@ static void MatrixInv(int sz, float pM[], float pInvM[])
 		}
 	}
 
-	float pCurRow[2  * LTE_PHY_N_ANT_MAX * 2];
+//	float pCurRow[2  * LTE_PHY_N_ANT_MAX * 2];
+	float pCurRow[2  * NUM_LAYER * 2];
 
 	inv2:for (int r = 0; r < SZ; r++)
 	{
@@ -196,23 +202,26 @@ static void MatrixInv(int sz, float pM[], float pInvM[])
 	}
 }
 
-void FDLSEstimation(float pXt[2 * LTE_PHY_N_ANT_MAX * 2],
-				    float pXtDagger[LTE_PHY_N_ANT_MAX * 2 * 2],
-					float pYt[2 * LTE_PHY_N_ANT_MAX * 2],
-					float pHTranspose[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2],
+void FDLSEstimation(float pXt[2 * /*LTE_PHY_N_ANT_MAX*/NUM_LAYER * 2],
+				    float pXtDagger[/*LTE_PHY_N_ANT_MAX*/NUM_LAYER * 2 * 2],
+					float pYt[2 * /*LTE_PHY_N_ANT_MAX*/NUM_RX_ANTENNA * 2],
+					float pHTranspose[/*LTE_PHY_N_ANT_MAX*/NUM_LAYER * /*LTE_PHY_N_ANT_MAX*/NUM_RX_ANTENNA * 2],
 					int NumLayer,
 					int NumRxAntenna)
 {
-	float pXDX[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
+//	float pXDX[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
+	float pXDX[NUM_LAYER * NUM_LAYER * 2];
 
 //	MatrixProd(NumLayer, 2, NumLayer, pXtDagger, pXt, pXDX);
 	MatrixProd(NUM_LAYER, 2, NUM_LAYER, pXtDagger, pXt, pXDX);
 
-	float pInvXDX[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
+//	float pInvXDX[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
+	float pInvXDX[NUM_LAYER * NUM_LAYER * 2];
 
 	MatrixInv(NumLayer, pXDX, pInvXDX);
 
-	float pXDY[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
+//	float pXDY[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
+	float pXDY[NUM_LAYER * NUM_RX_ANTENNA * 2];
 
 //	MatrixProd(NumLayer, 2, NumRxAntenna, pXtDagger, pYt, pXDY);
 	MatrixProd(NUM_LAYER, 2, NUM_RX_ANTENNA, pXtDagger, pYt, pXDY);
@@ -221,25 +230,33 @@ void FDLSEstimation(float pXt[2 * LTE_PHY_N_ANT_MAX * 2],
 	MatrixProd(NUM_LAYER, NUM_LAYER, NUM_RX_ANTENNA, pInvXDX, pXDY, pHTranspose);
 }
 
-void FDLSEqualization(float pInpData[N_EQ_IN_MAX * 2],
-					  float pHTranspose[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2],
+void FDLSEqualization(float pInpData[/*N_EQ_IN_MAX*/ N_EQ_IN * 2],
+					  float pHTranspose[/*LTE_PHY_N_ANT_MAX*/ NUM_LAYER * /*LTE_PHY_N_ANT_MAX*/ NUM_RX_ANTENNA * 2],
 					  int m,
 					  int NumLayer,
 					  int NumRxAntenna,
 					  int MDFTPerUser,
-					  float pOutData[N_EQ_OUT_MAX * 2])
+					  float pOutData[/*N_EQ_OUT_MAX*/N_EQ_OUT * 2])
 {
 	int NumULSymbSF = LTE_PHY_N_SYMB_PER_SUBFR;
 //////////////////// Freq Domain Equalize received Data /////////////////
+	/*
 	float pH[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
 	float pHDagger[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
 	float pHDH[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
 	float pInvHDH[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
 
 	float pHDY[LTE_PHY_N_ANT_MAX * 2];
+	*/
+
+	float pH[NUM_RX_ANTENNA * NUM_LAYER * 2];
+	float pHDagger[NUM_LAYER * NUM_RX_ANTENNA * 2];
+	float pHDH[NUM_LAYER * NUM_LAYER * 2];
+	float pInvHDH[NUM_LAYER * NUM_LAYER * 2];
+
+	float pHDY[NUM_LAYER * 2];
 
 //	printf("FDLSEqualization: %d %d %d\n", NumRxAntenna, NumLayer, NumULSymbSF);
-
 	for (int nrx = 0; nrx < /*NumRxAntenna*/NUM_RX_ANTENNA; nrx++)
 	{
 		for (int layer = 0; layer < /*NumLayer*/NUM_LAYER; layer++)
@@ -262,7 +279,8 @@ void FDLSEqualization(float pInpData[N_EQ_IN_MAX * 2],
 	////////////////// Equalizing Data /////////////////
 	for (int nSymb = 0; nSymb < /*NumULSymbSF*/NUM_UL_SYMB_SF - 2; nSymb++)
 	{
-		float pYData[LTE_PHY_N_ANT_MAX * 2];
+	//	float pYData[LTE_PHY_N_ANT_MAX * 2];
+		float pYData[NUM_RX_ANTENNA * 2];
 		for (int nrx = 0; nrx < /*NumRxAntenna*/ NUM_RX_ANTENNA; nrx++)
 		{
 #pragma HLS PIPELINE
@@ -275,7 +293,8 @@ void FDLSEqualization(float pInpData[N_EQ_IN_MAX * 2],
 	//	MatrixProd(NumLayer, NumRxAntenna, 1, pHDagger, pYData, pHDY);
 		MatrixProd(NUM_LAYER, NUM_RX_ANTENNA, 1, pHDagger, pYData, pHDY);
 
-		float pXData[LTE_PHY_N_ANT_MAX];
+	//	float pXData[LTE_PHY_N_ANT_MAX];
+		float pXData[NUM_LAYER];
 	//	MatrixProd(NumLayer, NumLayer, 1, pInvHDH, pHDY, pXData);
 		MatrixProd(NUM_LAYER, NUM_LAYER, 1, pInvHDH, pHDY, pXData);
 
@@ -293,9 +312,10 @@ void FDLSEqualization(float pInpData[N_EQ_IN_MAX * 2],
 	}
 }
 
-void LSFreqDomain(float pInpData[N_EQ_IN_MAX * 2], float pOutData[N_EQ_OUT_MAX * 2], int MDFT, int NumLayer, int NumRxAntenna)
+void LSFreqDomain(float pInpData[/*N_EQ_IN_MAX*/N_EQ_IN * 2], float pOutData[/*N_EQ_OUT_MAX*/N_EQ_OUT * 2], int MDFT, int NumLayer, int NumRxAntenna)
 {
-	float pDMRS[2 * LTE_PHY_N_ANT_MAX * LTE_PHY_DFT_SIZE_MAX * 2];
+//	float pDMRS[2 * LTE_PHY_N_ANT_MAX * LTE_PHY_DFT_SIZE_MAX * 2];
+	float pDMRS[2 * NUM_LAYER * NUM_DFT * 2];
 
 //	printf("LSFreqDomain: %d %d %d\n", MDFT, NumLayer, NumRxAntenna);
 	//	pDMRS = (*VpUser).GetpDMRS();
@@ -321,7 +341,8 @@ void LSFreqDomain(float pInpData[N_EQ_IN_MAX * 2], float pOutData[N_EQ_OUT_MAX *
 			}
 		}
 
-		float pYt[2 * LTE_PHY_N_ANT_MAX * 2];
+	//	float pYt[2 * LTE_PHY_N_ANT_MAX * 2];
+		float pYt[2 * NUM_RX_ANTENNA * 2];
 
 		for (int slot = 0; slot < 2; slot++)
 		{
@@ -335,7 +356,8 @@ void LSFreqDomain(float pInpData[N_EQ_IN_MAX * 2], float pOutData[N_EQ_OUT_MAX *
 			}
 		}
 
-		float pHTranspose[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
+	//	float pHTranspose[LTE_PHY_N_ANT_MAX * LTE_PHY_N_ANT_MAX * 2];
+		float pHTranspose[NUM_LAYER * NUM_RX_ANTENNA * 2];
 
 		FDLSEstimation(pXt, pXtDagger, pYt, pHTranspose, NumLayer, NumRxAntenna);
 
@@ -343,7 +365,7 @@ void LSFreqDomain(float pInpData[N_EQ_IN_MAX * 2], float pOutData[N_EQ_OUT_MAX *
 	}
 }
 
-void Equalizing(float pInpData[N_EQ_IN_MAX * 2], float pOutData[N_EQ_OUT_MAX * 2], int MDFT, int NumLayer, int NumRxAntenna)
+void Equalizing(float pInpData[/*N_EQ_IN_MAX*/N_EQ_IN * 2], float pOutData[/*N_EQ_OUT_MAX*/N_EQ_OUT * 2], int MDFT, int NumLayer, int NumRxAntenna)
 {
 	//	int MDFT = lte_phy_params->N_dft_sz;
 	//	int NumLayer = lte_phy_params->N_tx_ant;

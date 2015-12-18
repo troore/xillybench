@@ -1,22 +1,11 @@
 
 #include <stdio.h>
 #include <math.h>
+
+#include "lte_phy.h"
 #include "fft.h"
 
-#define NUM_FFT 2048
-
-static int BitReverse(int src, int size)
-{
-	int tmp = src;
-	int des = 0;
-	for (int i=size-1; i>=0; i--)
-	{
-#pragma HLS PIPELINE
-		des = ((tmp & 1) << i) | des;
-		tmp = tmp >> 1;
-	}
-	return des;
-}
+#define NUM_FFT LTE_PHY_FFT_SIZE_1_92MHZ
 
 static inline int pow2(int n)
 {
