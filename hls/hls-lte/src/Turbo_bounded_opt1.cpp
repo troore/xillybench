@@ -500,7 +500,7 @@ void turbo_decoding(float pInpData[/*N_TURBO_OUT_MAX*/ N_TURBO_OUT], int pOutBit
 			// data part
 			for (j = 0; j < BLOCK_SIZE; j++)
 			{
-	#pragma HLS PIPELINE
+	#pragma HLS PIPELINE II=4
 				/*
 				if(j >= cur_blk_len)
 					break;
@@ -576,17 +576,17 @@ void decode_block(float recv_syst1[N_UNCODED + N_TAIL],
 	// Combine the results from recv_syst1 and recv_syst2 (in case some bits are transmitted several times)
 	for (i = 0; i < /*interleaver_size*/INTERLEAVER_SIZE; i++)
 	{
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=4
 		recv_syst[i] = recv_syst1[i] + deint_recv_syst2[i];
 	}
 	for (i = 0; i < /*interleaver_size*/INTERLEAVER_SIZE; i++)
 	{
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=4
 		int_recv_syst[i] = recv_syst2[i] + int_recv_syst1[i];
 	}
 	for (i = /*interleaver_size*/INTERLEAVER_SIZE; i < /*n_tailed*/ N_TAILED; i++)
 	{
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=4
 		recv_syst[i] = recv_syst1[i];
 		int_recv_syst[i] = recv_syst2[i];
 	}
@@ -615,7 +615,7 @@ void decode_block(float recv_syst1[N_UNCODED + N_TAIL],
 
 	for (i = 0; i < /*interleaver_size*/ INTERLEAVER_SIZE; i++)
 	{
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=2
 		L[i] = recv_syst[i] + Le21[i] + Le12[i];
 	//	std::cout << recv_syst1[i] << "\t" << Le21[i] << "\t" << Le12[i] << std::endl;
 		decoded_bits_i[i] = (L[i] > 0.0) ? 1 : -1;
@@ -630,7 +630,6 @@ void log_decoder(float recv_syst[N_UNCODED + N_TAIL],
 		int interleaver_size)
 {
 #pragma HLS ARRAY_PARTITION variable=g_state_trans cyclic factor=2 dim=1
-//#pragma HLS DATAFLOW
 
 	float nom, den, temp0, temp1, exp_temp0, exp_temp1, rp;
 
@@ -716,7 +715,7 @@ void log_decoder(float recv_syst[N_UNCODED + N_TAIL],
 		for (s = 0; s < N_STATES; s++)
 		{
 #pragma HLS DEPENDENCE array inter false
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=4
 			s_prim0 = g_rev_state_trans[s * 2 + 0];
 			s_prim1 = g_rev_state_trans[s * 2 + 1];
 			temp0 = alpha[s_prim0 * (block_length + 1) + k - 1] + gamma[(2 * s_prim0 + 0) * (block_length + 1) + k];
@@ -733,7 +732,7 @@ void log_decoder(float recv_syst[N_UNCODED + N_TAIL],
 		for (l = 0; l < N_STATES; l++)
 		{
 #pragma HLS DEPENDENCE array inter false
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=4
 			alpha[l * (block_length + 1) + k] -= denom[k];
 		}
 	}
@@ -752,7 +751,7 @@ void log_decoder(float recv_syst[N_UNCODED + N_TAIL],
 		for (s_prim = 0; s_prim < N_STATES; s_prim++)
 		{
 #pragma HLS DEPENDENCE array inter false
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=4
 			s0 = g_state_trans[s_prim * 2 + 0];
 			s1 = g_state_trans[s_prim * 2 + 1];
 			//	beta[s_prim * (block_length + 1) + k - 1] = com_log(beta[s0 * (block_length + 1) + k] + gamma[(2 * s_prim + 0) * (block_length + 1) + k], beta[s1 * (block_length + 1) + k] + gamma[(2 * s_prim + 1) * (block_length + 1) + k]);
@@ -761,7 +760,7 @@ void log_decoder(float recv_syst[N_UNCODED + N_TAIL],
 		// Normalization of beta
 		for (l = 0; l < N_STATES; l++)
 		{
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=4
 #pragma HLS DEPENDENCE array inter false
 			beta[l * (block_length + 1) + k - 1] -= denom[k];
 		}
@@ -777,14 +776,14 @@ void log_decoder(float recv_syst[N_UNCODED + N_TAIL],
 		for (s_prim = 0; s_prim < N_STATES; s_prim++)
 		{
 #pragma HLS DEPENDENCE array inter false
-#pragma HLS PIPELINE
+#pragma HLS PIPELINE II=4
 			s0 = g_state_trans[s_prim * 2 + 0];
 			s1 = g_state_trans[s_prim * 2 + 1];
 			exp_temp0 = 0.0;
 			exp_temp1 = 0.0;
 			for (j = 0; j < (N_GENS - 1); j++)
 			{
-#pragma HLS UNROLL
+//#pragma HLS UNROLL
 				rp = recv_parity[kk * (N_GENS - 1) + j];
 				int index = s_prim * (N_GENS - 1) * 2 + j * 2;
 				if (0 == g_output_parity[index + 0])
