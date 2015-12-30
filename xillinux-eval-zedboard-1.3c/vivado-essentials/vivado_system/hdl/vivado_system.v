@@ -1,7 +1,7 @@
 //Copyright 1986-2014 Xilinx, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2014.4 (lin64) Build 1071353 Tue Nov 18 16:47:07 MST 2014
-//Date        : Fri Dec 11 12:24:16 2015
+//Date        : Wed Dec 23 12:27:02 2015
 //Host        : cecaraw running 64-bit openSUSE 13.2 (Harlequin) (x86_64)
 //Command     : generate_target vivado_system.bd
 //Design      : vivado_system

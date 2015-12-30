@@ -1,7 +1,7 @@
 #ifndef __MM_H_
 #define __MM_H_
 
-#define N	(1 << 8)
+#define N	(1 << 7)
 
 // Prototype of top level function for C-synthesis
 /*
