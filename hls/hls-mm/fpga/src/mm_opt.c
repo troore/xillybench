@@ -16,10 +16,10 @@ void mm_opt(int *a, int *b, int *c)
 	int b_copy[N * N];
 	int tmp = 0;
 	int i, j, k;
-//	int h;
+	int h;
 
-//	for (h = 0; h < 10000; h++) {
-	// Iterate over the rowa of the A matrix
+	for (h = 0; h < 1000; h++) {
+// Iterate over the rowa of the A matrix
 Row: for (i = 0; i < N; i++) {
 		 // Iterate over the columns of the B matrix
 Col: for (j = 0; j < N; j++) {
@@ -30,7 +30,7 @@ Col: for (j = 0; j < N; j++) {
 		 if (j == 0)
 			 Cache_Row: for (k = 0; k < N; k++)
 			 {
-			//	 a_row[k] = a[i][k];
+				 //	 a_row[k] = a[i][k];
 				 a_row[k] = a[i * N + k];
 			 }
 
@@ -38,18 +38,18 @@ Col: for (j = 0; j < N; j++) {
 		 if (i == 0)
 			 Cache_Col: for (k = 0; k < N; k++)
 			 {
-			//	 b_copy[k][j] = b[k][j];
+				 //	 b_copy[k][j] = b[k][j];
 				 b_copy[k * N + j] = b[k * N + j];
 			 }
 
 Product: for (k = 0; k < N; k++) {
-		//	 tmp += a_row[k] * b_copy[k][j];
+			 //	 tmp += a_row[k] * b_copy[k][j];
 			 tmp += a_row[k] * b_copy[k * N + j];
 		 }
-		// c[i][j] = tmp;
+		 // c[i][j] = tmp;
 		 c[i * N + j] = tmp;
 	 }
 	 }
-//	}
+	 	}
 }
 
