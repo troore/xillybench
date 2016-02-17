@@ -1,11 +1,9 @@
 #ifndef __DCT_2D_H_
 #define __DCT_2D_H_
 
-//#define DW 10000
-#define SFN 100000
 #define DCT_SIZE 8
 
-#define N 64
+#define N (DCT_SIZE * DCT_SIZE)
 
 #define CONST_BITS  13
 #define DESCALE(x,n)  (((x) + (1 << ((n)-1))) >> n)
