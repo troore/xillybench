@@ -33,6 +33,7 @@ void test_equalizer_chain_seq(LTE_PHY_PARAMS *lte_phy_params)
 	printf("time_total %.3f s\n", ttime / 1000.0);
 
 	WriteOutputToFiles((lte_phy_params + 0)->eq_out, (lte_phy_params + 0)->eq_out_buf_sz, "./testsuite/testLSCELSEqOutputReal", "./testsuite/testLSCELSEqOutputImag");
+	WriteOutputToFiles((lte_phy_params + 0)->eq_out, (lte_phy_params + 0)->eq_out_buf_sz, "./testsuite/testLSCELSEqOutputReal_co", "./testsuite/testLSCELSEqOutputImag_co");
 }
 
 int main(int argc, char *argv[])

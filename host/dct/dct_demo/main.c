@@ -5,10 +5,12 @@
 #include "rapl_power.h"
 
 #include "dct.h"
+#include "dct_wrapper.h"
 
 int main(int argc, char *argv[])
 {
 	dct_data_t a[N], b[N];
+
 	int i;
 	FILE *fp;
 
@@ -22,17 +24,26 @@ int main(int argc, char *argv[])
 	}
 	fclose(fp);
 
-
 	tstart = dtime();
 
 	rapl_power_start();
-	dct(a, b);
+	dct_wrapper(a, b);
 	rapl_power_stop();
 
 	tend = dtime();
 	ttime = tend - tstart;
 
-	printf("Total-time: %.3f s\n", ttime / 1000.0);
+	printf("time_total: %.3f s\n", ttime / 1000.0);
+
+#ifndef CO
+	fp = fopen("../out_host.dat", "w");
+#else
+	fp = fopen("../out_co.dat", "w");
+#endif
+	for (i = 0; i < N; i++) {
+		fprintf(fp, "%d\n", b[i]);
+	}
+	fclose(fp);
 
 	return 0;
 }

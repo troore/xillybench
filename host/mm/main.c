@@ -125,12 +125,13 @@ int main(int argc, char *argv[]) {
 	stop = dtime();
 
 	elapsed_time = stop - start;
-	printf("T1: %.3lf ms\n", elapsed_time);
+
+	printf("time_total: %.3lf s\n", elapsed_time / 1000.0);
+	printf("time_mm: %.3lf s\n", elapsed_time / 1000.0);
 
 	golden_mm_wrapper(in, golden_out);
 
-
-	printf("%d\n", check_results(out, golden_out, N));
+	printf("errno: %d\n", check_results(out, golden_out, N));
 
 	free(in);
 	free(out);

@@ -30,6 +30,8 @@ void ofdemodulating(LTE_PHY_PARAMS *lte_phy_params, float *pInpData, float *pOut
 		exit(1);
 	}
 
+//	system("cpupower --cpu all frequency-set --freq 1.6GHz");
+
 	// Not checking return values of write() and read(). This must be done
 	// in a real-life program to ensure reliability.
 	nw = write(fdw, (void *)pInpData, (2 * N_OFDEMOD_IN) * sizeof(float));
@@ -51,4 +53,5 @@ void ofdemodulating(LTE_PHY_PARAMS *lte_phy_params, float *pInpData, float *pOut
 		donebytes += nr;
 	}
 
+//	system("cpupower --cpu all frequency-set --freq 3.1GHz");
 }
